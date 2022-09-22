@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 import dto.User;
 import util.ConnectionUtil;
@@ -6,11 +6,10 @@ import util.ConnectionUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class UserService {
     //db 열어서 회원가입
-    public User selectOne(String id) throws SQLException {
+    public User selectOne(String id) {
         String sql = "select * from user where id=?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);

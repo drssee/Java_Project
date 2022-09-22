@@ -17,7 +17,7 @@ public enum ConnectionUtil{
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webdb"
-                    ,"root","rlaskagus1!");
+                    ,"root","root");
         } catch (ClassNotFoundException e) {
             System.out.println("error : getConnection() driver클래스를 찾을수 없습니다");
             throw new RuntimeException(e);

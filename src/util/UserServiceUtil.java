@@ -1,6 +1,6 @@
 package util;
 
-import Service.UserService;
+import service.UserService;
 
 public enum UserServiceUtil {
     INSTANCE;
