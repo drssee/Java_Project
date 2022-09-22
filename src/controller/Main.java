@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         Integer result=-1;
         while(result!=0)
         result = Main_Home.mainMenu();
@@ -20,12 +20,10 @@ public class Main {
                     List<String> id_pwd = Login.login();
                     if(id_pwd.size()!=2){
                         System.out.println("다시 입력해 주세요");
-                        Login.login();
+                        id_pwd = Login.login();
                     }
                     String id = id_pwd.get(0);
                     String pwd = id_pwd.get(id_pwd.size()-1);
-                    User user = new User(id,pwd);
-
                     //서비스 호출해서 유저정보 가져오기
                 }
                 else if(result==2){//회원가입

@@ -9,12 +9,7 @@ public enum ConnectionUtil{
     INSTANCE;
     private DataSource ds;
     ConnectionUtil(){
-//        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webdb"
-//                , "root", "root")) {
-//            Class.forName("org.jdbc.cj.mysql.com");
-//        } catch (Exception e){
-//
-//        }
+
     }
 
     public Connection getConnection(){
@@ -24,8 +19,11 @@ public enum ConnectionUtil{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webdb"
                     ,"root","rlaskagus1!");
         } catch (ClassNotFoundException e) {
+            System.out.println("error : getConnection() driver클래스를 찾을수 없습니다");
             throw new RuntimeException(e);
         } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error : getConnection()");
             throw new RuntimeException(e);
         }
         return connection;
