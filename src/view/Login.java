@@ -13,16 +13,13 @@ public class Login {
     }
     public static Map<String,String> login(){
         Map<String,String> id_pwd = new HashMap<>();
-//        List<String> id_pwd = new ArrayList<>();//map?<String,String> 아이디비밀번호 검증
         String tmp = "";
         System.out.print("1.id를 입력해주세요");
-        tmp=InputUtil.INSTANCE.inputStr(4,12);
-        System.out.println("id "+tmp);
+        tmp=InputUtil.INSTANCE.inputStr(3,12);
         id_pwd.put("id",tmp);
         System.out.println();
         System.out.print("2.pwd를 입력해주세요");
-        tmp=InputUtil.INSTANCE.inputStr(6,18);
-        System.out.println("pwd "+tmp);
+        tmp=InputUtil.INSTANCE.inputStr(5,18);
         id_pwd.put("pwd",tmp);
         return id_pwd;
     }

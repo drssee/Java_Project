@@ -7,25 +7,17 @@ import java.sql.SQLException;
 
 public enum ConnectionUtil{
     INSTANCE;
-    private DataSource ds;
+
     ConnectionUtil(){
 
     }
 
-    public Connection getConnection(){
-        Connection connection = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webdb"
-                    ,"root","root");
-        } catch (ClassNotFoundException e) {
-            System.out.println("error : getConnection() driver클래스를 찾을수 없습니다");
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("error : getConnection()");
-            throw new RuntimeException(e);
-        }
+    public Connection getConnection() throws Exception {//예외는 컨트롤러에서 처리
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webdb"
+                ,"root","root");
+
         return connection;
     }
 }

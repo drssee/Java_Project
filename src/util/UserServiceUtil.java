@@ -4,7 +4,7 @@ import service.UserService;
 
 public enum UserServiceUtil {
     INSTANCE;
-    UserService userService;
+    public UserService userService;
     UserServiceUtil(){
         userService = new UserService();
     }

@@ -4,7 +4,6 @@ package view;
 import util.InputUtil;
 
 public class Main_Home {
-    Integer result;
 
     public Main_Home(){
 

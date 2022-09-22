@@ -1,10 +1,12 @@
 package util;
 
+import view.Errorable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public enum InputUtil {
+public enum InputUtil implements Errorable {
     //입력횟수 초과하면 프로그램 꺼지는 기능
     INSTANCE;
     BufferedReader bufferedReader;
@@ -17,7 +19,7 @@ public enum InputUtil {
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("error : close()");
+            printError(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -29,16 +31,21 @@ public enum InputUtil {
         try {
             tmp = bufferedReader.readLine();
             if(tmp==null||"".equals(tmp)||tmp.length()!=1||(tmp.charAt(0)<'0'||tmp.charAt(0)>numC)){
-                System.out.println("올바른 메뉴를 입력해주세요");
+                printError("올바른 메뉴를 입력해주세요");
                 tmp = String.valueOf(inputMenuNum(maxNum));
             }
             result = Integer.valueOf(tmp);
-        } catch (NumberFormatException e) {
-            System.out.println("error(NumberFormatException) : input()");//형식
+        }
+        catch (NumberFormatException e) {
+            printError(e.getMessage());
             return -1;
         } catch (IOException e) {
-            System.out.println("error(IOException) : input()");
+            printError(e.getMessage());
             return -1;
+        } catch (Exception e){
+            e.printStackTrace();
+            printError(e.getMessage());
+            return null;
         }
         return result;
     }
@@ -48,16 +55,24 @@ public enum InputUtil {
         try {
             tmp = bufferedReader.readLine();
             if(tmp==null||"".equals(tmp)||tmp.length()<minNum||tmp.length()>maxNum){
-                System.out.println(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
+                printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
                 tmp = inputStr(minNum,maxNum);
             }
-        } catch (NumberFormatException e) {
-            System.out.println("error : input()");
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            System.out.println("error : input()");
+        }
+        catch (NumberFormatException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            printError(e.getMessage());
+            return null;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            printError(e.getMessage());
+            return null;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            printError(e.getMessage());
+            return null;
         }
         return tmp;
     }

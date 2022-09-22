@@ -1,10 +1,12 @@
 package dto;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
+    //선호장르 null가능
     private String id;
     private String pwd;
     private String name;
@@ -60,23 +62,20 @@ public class User {
     }
 
     public void setRegDate(Date regDate) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            this.regDate = df.parse(df.format(regDate));
-        } catch (ParseException e) {
-            System.out.println("error : setRegDate()");
-            throw new RuntimeException(e);
-        }
+        this.regDate = regDate;
     }
 
     @Override
     public String toString() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String regDate_str = df.format(this.regDate);
+
         return "User{" +
                 "id='" + id + '\'' +
                 ", pwd='" + pwd + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", regDate=" + regDate +
+                ", regDate=" + regDate_str +
                 '}';
     }
 }
