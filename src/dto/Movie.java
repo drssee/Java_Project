@@ -1,26 +1,19 @@
 package dto;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Movie {
-    private Integer tno;
     private String title;
     private String story;
     private String director;
     private Integer runtime;
     private Date openDate;
-    private Date schedule;
+    private java.sql.Timestamp schedule;
 
     public Movie() {
-    }
-
-    public Integer getTno() {
-        return tno;
-    }
-
-    public void setTno(Integer tno) {
-        this.tno = tno;
     }
 
     public String getTitle() {
@@ -63,18 +56,17 @@ public class Movie {
         this.openDate = openDate;
     }
 
-    public Date getSchedule() {
+    public Timestamp getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Date schedule) {
+    public void setSchedule(Timestamp schedule) {
         this.schedule = schedule;
     }
 
     @Override
     public String toString() {
         return "Movie{" +
-                "tno=" + tno +
                 ", title='" + title + '\'' +
                 ", story='" + story + '\'' +
                 ", director='" + director + '\'' +

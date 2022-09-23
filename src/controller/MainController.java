@@ -18,9 +18,9 @@ public class MainController implements Errorable {
         while(result!=0){
             if(result==-9){//관리자모드
                 result = adminController.admin();
-                if(result!=-1){
+                if(result==-1){
                     printError();
-                    break;
+                    result = adminController.admin();
                 }
             }//관리자모드
 

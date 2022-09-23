@@ -44,7 +44,8 @@ public class LoginController implements Errorable {
             printError("잘못된 회원 정보입니다");
             return -1;
         }
-        //id는 일치할경우
+
+        //id가 일치할 경우
         else{
             //pwd가 다른경우
             if(!pwd.equals(user.getPwd())){
