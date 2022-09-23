@@ -19,7 +19,8 @@ public class MainController implements Errorable {
             if(result==-9){//관리자모드
                 result = adminController.admin();
                 if(result!=-1){
-                    //-1이면 메뉴선택실패로
+                    printError();
+                    break;
                 }
             }//관리자모드
 

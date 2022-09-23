@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.stream.IntStream;
 
 public class UserService { //서비스 인터페이스 상속
-    User isValidUser(User user){
+    User isValidUser(User user){ //길이체크보단 논리적오류 체크
         //isempty() , isblank() 활용
         if(user.getId()==null||"".equals(user.getId())
                 ||user.getPwd()==null||"".equals(user.getPwd())
@@ -30,18 +30,19 @@ public class UserService { //서비스 인터페이스 상속
         String sql = "select * from user where id=?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         User user = null;
-
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1,id);
-            ResultSet rs = pstmt.executeQuery();
-            rs.next();
-            user = new User();
-            user.setId(rs.getString(1));
-            user.setPwd(rs.getString(2));
-            user.setName(rs.getString(3));
-            user.setPhone(rs.getString(4));
-            user.setEmail(rs.getString(5));
-            user.setRegDate(rs.getDate(6));
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,id);
+        ResultSet rs = pstmt.executeQuery();
+        rs.next();
+        user = new User();
+        user.setId(rs.getString(1));
+        user.setPwd(rs.getString(2));
+        user.setName(rs.getString(3));
+        user.setPhone(rs.getString(4));
+        user.setEmail(rs.getString(5));
+        user.setRegDate(rs.getDate(6));
+        pstmt.close();
+        conn.close();
 
         return isValidUser(user);
 

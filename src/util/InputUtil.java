@@ -5,6 +5,9 @@ import view.Errorable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public enum InputUtil implements Errorable {
     //입력횟수 초과하면 프로그램 꺼지는 기능
@@ -18,9 +21,8 @@ public enum InputUtil implements Errorable {
         try {
             bufferedReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            printError(e.getMessage());
-            throw new RuntimeException(e);
+            printError("close실패");
+            System.exit(0);
         }
     }
     public Integer inputMenuNum(int maxNum){
@@ -31,20 +33,19 @@ public enum InputUtil implements Errorable {
         try {
             tmp = bufferedReader.readLine();
             if(tmp==null||"".equals(tmp)||tmp.length()!=1||(tmp.charAt(0)<'0'||tmp.charAt(0)>numC)){
-                printError("올바른 메뉴를 입력해주세요");
+                printError("올바른 숫자를 입력해주세요");
                 tmp = String.valueOf(inputMenuNum(maxNum));
             }
             result = Integer.valueOf(tmp);
         }
         catch (NumberFormatException e) {
-            printError(e.getMessage());
+            printError("올바른 숫자를 입력해주세요");
             return -1;
         } catch (IOException e) {
-            printError(e.getMessage());
+            printError("입력에 실패하였습니다");
             return -1;
         } catch (Exception e){
-            e.printStackTrace();
-            printError(e.getMessage());
+            printError();
             return -1;
         }
         return result;
@@ -59,21 +60,29 @@ public enum InputUtil implements Errorable {
                 tmp = inputStr(minNum,maxNum);
             }
         }
-        catch (NumberFormatException e) {
-            e.printStackTrace();
-            printError(e.getMessage());
-            return null;
-        }
         catch (IOException e) {
-            e.printStackTrace();
-            printError(e.getMessage());
+            printError("입력에 실패하였습니다");
             return null;
         }
         catch (Exception e){
-            e.printStackTrace();
-            printError(e.getMessage());
+            printError();
             return null;
         }
         return tmp;
+    }
+
+    public Date inputDate(String date){
+//        if(date==null||"".equals(date)){
+//            return null;
+//        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        Date rDate = null;
+        try {
+            rDate = df.parse(date);
+        } catch (ParseException e) {
+            printError("제대로된 형식의 날짜를 입력해주세요");
+            return null;
+        }
+        return rDate;
     }
 }
