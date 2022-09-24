@@ -6,7 +6,7 @@ import view.Home;
 
 import java.util.Map;
 
-public class MainController implements Errorable {
+public class MainController implements Errorable,Controller {
     public MainController(){
 
         Integer result=-1;
@@ -17,9 +17,7 @@ public class MainController implements Errorable {
         outer:
         while(result!=0){
             if(result==-9){//관리자모드
-                result = adminController.admin();
-                if(result==-1){
-                    printError();
+                while(result!=0){
                     result = adminController.admin();
                 }
             }//관리자모드

@@ -7,4 +7,8 @@ public interface Errorable {
     default void printError(String msg) {
         System.out.println(msg);
     }
+
+    static void s_printError(String msg) {
+        System.out.println(msg);
+    }
 }

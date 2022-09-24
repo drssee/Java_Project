@@ -80,7 +80,12 @@ public enum InputUtil implements Errorable {
         try {
             tmp = bufferedReader.readLine();
             if(tmp==null||"".equals(tmp)||tmp.length()<minNum||tmp.length()>maxNum){
-                printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
+                if(minNum==maxNum){
+                    printError(minNum+"자리 문자를 입력해주세요");
+                }
+                else{
+                    printError(minNum+"자리에서 "+maxNum+"자리 사이의 문자를 입력해주세요");
+                }
                 tmp = inputStr(minNum,maxNum);
             }
         }

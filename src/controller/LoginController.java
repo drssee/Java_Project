@@ -8,7 +8,7 @@ import view.Login;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class LoginController implements Errorable {
+public class LoginController implements Errorable,Controller {
     public Integer login(){
         Integer result;
         Map<String,String> id_pwd;
@@ -28,10 +28,10 @@ public class LoginController implements Errorable {
             user = UserServiceUtil.INSTANCE.userService.selectOne(id);
         }
         catch (ClassNotFoundException e){
-            printError("로그인에 실패했습니다(cne)");
+            printError("로그인에 실패했습니다(cne)(프로그램 오류)");
             return -1;
         } catch (SQLException e) {
-            printError("로그인에 실패했습니다(sqe)");
+            printError("로그인에 실패했습니다(sqe)(해당유저가 존재하지 않습니다)");
             return -1;
         }
         catch (Exception e) {
@@ -54,12 +54,10 @@ public class LoginController implements Errorable {
             }
         }
 
-        ////////////////////////////////////////////////아직 안만들었음///////////////////
         if(user.getId().equals("admin")){
             System.out.println("관리자모드 로그인 성공");
             return -9;
         }
-        ///////////////////////////////////////////////////////////////////////////////////
 
         System.out.println("로그인 성공"); //유저모드
         result=-10;

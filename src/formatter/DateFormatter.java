@@ -15,7 +15,7 @@ public enum DateFormatter {
         return df.format(date);
     }
     public String formatDate(Timestamp timestamp){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return df.format(timestamp);
     }
 }

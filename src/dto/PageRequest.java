@@ -10,18 +10,15 @@ public class PageRequest {
 
     private int totalPage;
 
-    private boolean prev;
-
-    private boolean next;
-
     public PageRequest() {
         this.page=1;
-        this.size=10;
+        this.size=5;
     }
 
     public PageRequest(int totalCnt) {
         this();
         this.totalCnt= totalCnt;
+        this.totalPage=(int)(Math.ceil(this.totalCnt/this.size));
     }
 
     public int getPage() {
@@ -58,21 +55,5 @@ public class PageRequest {
 
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
-    }
-
-    public boolean isPrev() {
-        return prev;
-    }
-
-    public void setPrev(boolean prev) {
-        this.prev = prev;
-    }
-
-    public boolean isNext() {
-        return next;
-    }
-
-    public void setNext(boolean next) {
-        this.next = next;
     }
 }

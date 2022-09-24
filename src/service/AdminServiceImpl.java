@@ -24,4 +24,14 @@ public class AdminServiceImpl implements AdminService {
     public Integer getTotalCnt() throws Exception {
         return adminDAO.getCount();
     }
+
+    @Override
+    public Integer updateMovie(Movie movie) throws Exception {
+        return adminDAO.update(movie);
+    }
+
+    @Override
+    public Integer deleteMovie(Movie movie) throws Exception {
+        return adminDAO.delete(movie);
+    }
 }

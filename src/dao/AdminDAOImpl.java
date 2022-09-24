@@ -35,16 +35,16 @@ public class AdminDAOImpl implements AdminDAO {
     @Override
     public List<Movie> selectMovieList(PageRequest pageRequest) throws Exception {
         List<Movie> movieList = new ArrayList<>();
-        Movie movie = new Movie();
         int skip = pageRequest.getSkip();
         int size = pageRequest.getSize();
         String sql = "select * from movie order by tno desc Limit ?,?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1,1);
-        pstmt.setInt(2,2);
+        pstmt.setInt(1,skip);
+        pstmt.setInt(2,size);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
+            Movie movie = new Movie();
             movie.setTno(rs.getInt(1));
             movie.setTitle(rs.getString(2));
             movie.setStory(rs.getString(3));
@@ -69,6 +69,43 @@ public class AdminDAOImpl implements AdminDAO {
         ResultSet rs = pstmt.executeQuery();
         rs.next();
         Integer result = rs.getInt(1);
+        rs.close();
+        pstmt.close();
+        conn.close();
         return result;
+    }
+
+    @Override
+    public Integer update(Movie movie) throws Exception {
+        String sql = "update movie set title = ? , story = ? , director = ? , " +
+                "runtime = ? , opendate = ? , schedule = ? where tno = ?";
+        int rowCnt;
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,movie.getTitle());
+        pstmt.setString(2,movie.getStory());
+        pstmt.setString(3,movie.getDirector());
+        pstmt.setInt(4,movie.getRuntime());
+        pstmt.setDate(5, new java.sql.Date(movie.getOpenDate().getTime()));
+        pstmt.setTimestamp(6, movie.getSchedule());
+        pstmt.setInt(7,movie.getTno());
+        rowCnt = pstmt.executeUpdate();
+        pstmt.close();
+        conn.close();
+
+        return rowCnt;
+    }
+
+    @Override
+    public Integer delete(Movie movie) throws Exception {
+        String sql = "delete from movie where tno = ?";
+        int rowCnt;
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1,movie.getTno());
+        rowCnt = pstmt.executeUpdate();
+        pstmt.close();
+        conn.close();
+        return rowCnt;
     }
 }

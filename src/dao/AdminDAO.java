@@ -11,4 +11,8 @@ public interface AdminDAO {
     List<Movie> selectMovieList(PageRequest pageRequest) throws Exception;
 
     Integer getCount()throws Exception;
+
+    Integer update(Movie movie) throws Exception;
+
+    Integer delete(Movie movie) throws Exception;
 }

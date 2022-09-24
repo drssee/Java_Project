@@ -13,4 +13,8 @@ public interface AdminService {
     List<Movie> getMovieList(PageRequest pageRequest) throws Exception;
 
     Integer getTotalCnt() throws Exception;
+
+    Integer updateMovie(Movie movie) throws Exception;
+
+    Integer deleteMovie(Movie movie) throws Exception;
 }

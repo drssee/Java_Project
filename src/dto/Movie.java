@@ -84,6 +84,6 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "영화제목:"+getTitle()+" 줄거리요약:"+getStory()+" 감독:"+getDirector()+" 런타임:"+getRuntime()+"시간"+" 개봉일:"+ DateFormatter.INSTANCE.formatDate(getOpenDate())+" 상영스케줄:"+ DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+" 등록일:"+ DateFormatter.INSTANCE.formatDate(getRegDate());
+        return "영화제목: "+getTitle()+"/ "+"감독: "+getDirector()+"/ "+"런타임: "+getRuntime()+"시간"+"/ "+ "개봉일: "+DateFormatter.INSTANCE.formatDate(getOpenDate())+"/ "+ "상영스케줄: "+DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+"/ "+ "등록일: "+DateFormatter.INSTANCE.formatDate(getRegDate())+"/ "+"줄거리요약: "+getStory();
     }
 }
