@@ -27,15 +27,15 @@ public class LoginController implements Errorable {
         try {
             user = UserServiceUtil.INSTANCE.userService.selectOne(id);
         }
-//        catch (ClassNotFoundException e){
-//            printError("데이터베이스 연결 실패");
-//            return -1;
-//        } catch (SQLException e) {
-//            printError("SQL문 에러");
-//            return -1;
-//        }
+        catch (ClassNotFoundException e){
+            printError("로그인에 실패했습니다(cne)");
+            return -1;
+        } catch (SQLException e) {
+            printError("로그인에 실패했습니다(sqe)");
+            return -1;
+        }
         catch (Exception e) {
-            printError("로그인에 실패했습니다");
+            printError("로그인에 실패했습니다(e)");
             return -1;
         }
 

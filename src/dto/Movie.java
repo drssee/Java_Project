@@ -1,19 +1,29 @@
 package dto;
 
+import formatter.DateFormatter;
+
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Movie {
+    private Integer tno;
     private String title;
     private String story;
     private String director;
     private Integer runtime;
     private Date openDate;
-    private java.sql.Timestamp schedule;
+    private Timestamp schedule;
+    private Date regDate;
 
     public Movie() {
+    }
+
+    public Integer getTno() {
+        return tno;
+    }
+
+    public void setTno(Integer tno) {
+        this.tno = tno;
     }
 
     public String getTitle() {
@@ -64,20 +74,16 @@ public class Movie {
         this.schedule = schedule;
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                ", title='" + title + '\'' +
-                ", story='" + story + '\'' +
-                ", director='" + director + '\'' +
-                ", runtime='" + runtime + '\'' +
-                ", openDate=" + formatDate(openDate) +
-                ", schedule=" + formatDate(schedule) +
-                '}';
+    public Date getRegDate() {
+        return regDate;
     }
 
-    public String formatDate(Date date){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        return df.format(date);
+    public void setRegDate(Date regDate) {
+        this.regDate = regDate;
+    }
+
+    @Override
+    public String toString() {
+        return "영화제목:"+getTitle()+" 줄거리요약:"+getStory()+" 감독:"+getDirector()+" 런타임:"+getRuntime()+"시간"+" 개봉일:"+ DateFormatter.INSTANCE.formatDate(getOpenDate())+" 상영스케줄:"+ DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+" 등록일:"+ DateFormatter.INSTANCE.formatDate(getRegDate());
     }
 }

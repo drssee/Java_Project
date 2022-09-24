@@ -1,11 +1,11 @@
 package util;
 
-import service.UserService;
+import service.UserServiceImpl;
 
 public enum UserServiceUtil {
     INSTANCE;
-    public UserService userService;
+    public UserServiceImpl userService;
     UserServiceUtil(){
-        userService = new UserService();
+        userService = new UserServiceImpl();
     }
 }

@@ -1,8 +1,7 @@
 package dto;
 
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
+import formatter.DateFormatter;
+
 import java.util.Date;
 
 public class User {
@@ -67,15 +66,6 @@ public class User {
 
     @Override
     public String toString() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String regDate_str = df.format(this.regDate);
-
-        return "User{" +
-                "id='" + id + '\'' +
-                ", pwd='" + pwd + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", regDate=" + regDate_str +
-                '}';
+        return "아이디:"+getId()+" 비밀번호:"+getPwd()+" 이름:"+getName()+" 전화번호:"+getPhone()+" 이메일:"+getEmail()+" 등록일:"+ DateFormatter.INSTANCE.formatDate(getRegDate());
     }
 }

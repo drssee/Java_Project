@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public enum InputUtil implements Errorable {
-    //입력횟수 초과하면 프로그램 꺼지는 기능
     INSTANCE;
     BufferedReader bufferedReader;
     private InputUtil(){
@@ -59,7 +58,7 @@ public enum InputUtil implements Errorable {
             tmp = bufferedReader.readLine();
             if(tmp==null||"".equals(tmp)||minNum>Integer.valueOf(tmp)||maxNum<Integer.valueOf(tmp)){
                 printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
-                tmp = String.valueOf(inputMenuNum(maxNum));
+                tmp = String.valueOf(inputMenuNum(minNum,maxNum));
             }
             result = Integer.valueOf(tmp);
         }
@@ -102,7 +101,7 @@ public enum InputUtil implements Errorable {
             return null;
         }
         Calendar cal = Calendar.getInstance();
-        cal.set(year,month,day,hour,min,0);
+        cal.set(year,month-1,day,hour,min,0);
         return cal;
     }
     public Calendar inputCal(int year,int month,int day){
