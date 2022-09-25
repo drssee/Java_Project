@@ -21,8 +21,18 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public List<Movie> getSearchedMovieList(PageRequest pageRequest, String keyword) throws Exception {
+        return adminDAO.SearchedMovieList(pageRequest,keyword);
+    }
+
+    @Override
     public Integer getTotalCnt() throws Exception {
         return adminDAO.getCount();
+    }
+
+    @Override
+    public Integer getTotalCnt_Searched(String keyword) throws Exception {
+        return adminDAO.getCount_Searched(keyword);
     }
 
     @Override

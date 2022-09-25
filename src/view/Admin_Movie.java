@@ -16,8 +16,8 @@ public class Admin_Movie implements Errorable{
 
     public static Integer AdminMenu(){
         System.out.println("관리자모드");
-        System.out.println("1.영화등록 2.영화목록 3.전체예매자 목록 4.예매자 검색 0.관리자모드종료");
-        return InputUtil.INSTANCE.inputMenuNum(4);
+        System.out.println("1.영화등록 2.영화목록(조회/수정/삭제/검색) 3.전체예매자목록(조회/수정/삭제/검색) 0.관리자모드종료");
+        return InputUtil.INSTANCE.inputMenuNum(3);
     }
 
     public static Movie inputMovie() {
@@ -87,9 +87,10 @@ public class Admin_Movie implements Errorable{
             System.out.println((i+1)+". "+movie);
         }
         System.out.println("현재 페이지 : "+pageRequest.getPage());
-        System.out.print("수정/삭제는 m " +
-                "이전은 p 다음은 n " +
-                "종료는 q");
+        System.out.print("[등록된 영화검색 s] " +
+                "[수정/삭제 m] " +
+                "[이전 p] [다음 n] " +
+                "[관리자메뉴로 w] [관리자모드종료 q]");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         System.out.println();
         return tmp;
@@ -207,6 +208,11 @@ public class Admin_Movie implements Errorable{
         }
         Errorable.s_printError("올바른 문자를 입력해주세요");
         return deleteMovie(movie);
+    }
+
+    public static String input_Search_Keyword() {
+        System.out.print("검색할 키워드를 입력해주세요");
+        return InputUtil.INSTANCE.inputStr(1,12);
     }
 }
 

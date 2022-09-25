@@ -18,7 +18,7 @@ public class PageRequest {
     public PageRequest(int totalCnt) {
         this();
         this.totalCnt= totalCnt;
-        this.totalPage=(int)(Math.ceil(this.totalCnt/this.size));
+        this.totalPage=(int)(Math.ceil(this.totalCnt/(double)this.size));
     }
 
     public int getPage() {

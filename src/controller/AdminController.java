@@ -4,10 +4,12 @@ package controller;
 import dto.Movie;
 import dto.PageRequest;
 import util.AdminServiceUtil;
+import util.InputUtil;
 import view.Admin_Movie;
 import view.Errorable;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminController implements Errorable,Controller {
@@ -17,7 +19,7 @@ public class AdminController implements Errorable,Controller {
         Movie movie;
         while(result!=0){
             result = Admin_Movie.AdminMenu();
-            //1.영화등록 // 2.영화목록(검색,수정) 3.전체예매자목록(검색,수정)
+            //1.영화등록 2.영화목록(조회,수정,삭제,검색) 3.전체예매자목록(조회,수정,삭제,검색) 0.종료
 
             if(result==0){
                 return result;
@@ -27,9 +29,10 @@ public class AdminController implements Errorable,Controller {
                 continue;
             }
 
+            //1.영화등록 2.영화목록 3.전체예매자목록
             switch (result){
+                //1.영화등록
                 case 1:{
-                    //영화등록
                     movie = Admin_Movie.inputMovie();
                     if(movie==null){
                         printError();
@@ -63,21 +66,45 @@ public class AdminController implements Errorable,Controller {
                     System.out.println(movie);
 
                     break;
-                }
+                }//case 1:영화등록
+
+                //2.영화목록
                 case 2:{
-                    System.out.println("현재 등록된 영화 목록");
+                    System.out.println("현재 등록된 영화 목록(조회/수정/삭제)");
                     try {
+                        //초기값
                         Integer totalCnt = AdminServiceUtil.INSTANCE.adminService.getTotalCnt();
                         PageRequest pageRequest = new PageRequest(totalCnt);
-                        List<Movie> movieList;
+                        List<Movie> movieList = new ArrayList<>();
+                        String keyword = "";
                         int curPage;
                         int selected;
                         while(result!=0){
-                            movieList = AdminServiceUtil.INSTANCE.adminService.getMovieList(pageRequest);
+
+                            //검색기능이 활성화되지 않은 경우
+                            if(result!=7) {
+                                movieList = AdminServiceUtil.INSTANCE.adminService.getMovieList(pageRequest);
+                            }
+                            //movielist를 화면에 출력후 메뉴입력받음
                             String tmp = Admin_Movie.movieList(movieList,pageRequest);
+
+                            //현재 페이지 저장을 위한 curPage
                             curPage=pageRequest.getPage();
-                            //m p n q
-                            if(tmp.equalsIgnoreCase("m")){
+
+                            //s(검색) m(수정/삭제) p(이전) n(다음) w(메뉴로) q(모드종료)
+                            if(tmp.equalsIgnoreCase("s")){
+                                keyword=Admin_Movie.input_Search_Keyword();
+                                totalCnt = AdminServiceUtil.INSTANCE.adminService.getTotalCnt_Searched(keyword);
+                                pageRequest = new PageRequest(totalCnt);
+                                movieList = AdminServiceUtil.INSTANCE.adminService.getSearchedMovieList(pageRequest,keyword);
+                                if(movieList.size()==0){
+                                    System.out.println("찾으시는 영화는 존재하지 않습니다");
+                                    break;
+                                }
+                                result = 7;
+                            }//if(tmp.equalsIgnoreCase("s")) //검색 모드
+
+                            else if(tmp.equalsIgnoreCase("m")){
                                 //수정 삭제
                                 selected = Admin_Movie.sel_modify_delete1();
                                 movie=movieList.get(selected-1);
@@ -102,7 +129,7 @@ public class AdminController implements Errorable,Controller {
                                         return -1;
                                     }
                                     System.out.println("영화정보 업데이트에 성공했습니다");
-
+                                    break;
                                 }//if 1.수정
 
                                 //삭제
@@ -118,6 +145,7 @@ public class AdminController implements Errorable,Controller {
                                         }
                                         else if (selected==1){
                                             System.out.println("삭제에 성공했습니다");
+                                            break;
                                         }
                                     }//if 외부
                                     System.out.println("리스트로 돌아갑니다");
@@ -127,27 +155,39 @@ public class AdminController implements Errorable,Controller {
                                 //이전
                                 if(curPage!=1){
                                     pageRequest.setPage(pageRequest.getPage()-1);
+                                    if(result==7){
+                                        movieList=AdminServiceUtil.INSTANCE.adminService.getSearchedMovieList(pageRequest,keyword);
+                                    }
                                 }
                                 else{
                                     printError("더이상 앞으로 갈 수 없습니다");
                                     System.out.println();
                                 }
-                            }
+                            }//if(tmp.equalsIgnoreCase("p")) //이전
                             else if(tmp.equalsIgnoreCase("n")){
                                 //다음
-                                if(curPage!=pageRequest.getTotalPage()){
+                                int totalPage = pageRequest.getTotalPage();
+
+                                if(curPage!=totalPage&&totalPage!=1){
                                     pageRequest.setPage(pageRequest.getPage()+1);
+                                    if(result==7){
+                                        movieList=AdminServiceUtil.INSTANCE.adminService.getSearchedMovieList(pageRequest,keyword);
+                                    }
                                 }
                                 else{
                                     printError("더이상 뒤로 갈 수 없습니다");
                                     System.out.println();
                                 }
-                            }
+                            }//if(tmp.equalsIgnoreCase("n")) //다음
+                            else if(tmp.equalsIgnoreCase("w")){
+                                //관리자모드 처음으로
+                                break;
+                            }//if(tmp.equalsIgnoreCase("w")) //메뉴로
                             else if(tmp.equalsIgnoreCase("q")){
-                                //종료
+                                //관리자모드 종료
                                 result=0;
                                 break;
-                            }
+                            }//if(tmp.equalsIgnoreCase("q")) //모드종료
                             else{
                                 printError("올바른 메뉴를 선택해주세요");
                             }
@@ -166,11 +206,13 @@ public class AdminController implements Errorable,Controller {
                     }
 
                     break;
-                }
+                }//case 2: 등록된 영화 목록 리스트(조회/수정/삭제/검색)
+
+                //3.전체예매자목록
                 case 3:{
 
                     break;
-                }
+                }//case 3: 전체예매자목록(조회,수정,삭제/검색)
             }
         }//while
         return result;

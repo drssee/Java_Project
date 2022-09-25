@@ -1,5 +1,6 @@
 package controller;
 
+import util.InputUtil;
 import view.Errorable;
 import view.Login;
 import view.Home;
@@ -12,15 +13,15 @@ public class MainController implements Errorable,Controller {
         Integer result=-1;
         AdminController adminController = new AdminController();
         LoginController loginController = new LoginController();
-        Map<String,String> id_pwd;
 
         outer:
         while(result!=0){
-            if(result==-9){//관리자모드
+            //관리자모드
+            if(result==-9){
                 while(result!=0){
                     result = adminController.admin();
                 }
-            }//관리자모드
+            }
 
             //메인메뉴
             result = Home.mainMenu();
@@ -31,10 +32,15 @@ public class MainController implements Errorable,Controller {
                 break;
             }
 
+            //메뉴선택성공 1.로그인(로그인,회원가입) 2.현재상영중인영화목록 0.프로그램종료
             switch (result){
-                case 1 : {//로그인
+                //로그인(로그인,회원가입)
+                case 1 : {
                     result = Login.loginMenu();
-                    if(result==1){//로그인
+                    //1.로그인 2.회원가입
+
+                    //1.//로그인
+                    if(result==1){
                         while(result!=0){
                             result = loginController.login();
                             if(result==0){//종료
@@ -53,13 +59,15 @@ public class MainController implements Errorable,Controller {
                         }//while
                     }//if(result==1)로그인
 
-                    else if(result==2){//회원가입
+
+                    //2.회원가입
+                    else if(result==2){
                         System.out.println("회원가입");
                         //서비스 호출해서 회원가입하기
 
                     }
                     break;
-                }
+                }//case 1 로그인(로그인,회원가입) 끝
                 case 2: {//상영중인 영화목록 // 조회하고 예약 하려고 하면 로그인 화면으로
                     System.out.println("상영중인 영화목록");
                     break;
@@ -67,9 +75,9 @@ public class MainController implements Errorable,Controller {
 
                 case 0 : {
                     System.out.println("종료합니다");
+                    InputUtil.INSTANCE.close();
                     break;
                 }
-
             }//switch
         }//while
     }
