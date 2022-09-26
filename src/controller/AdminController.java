@@ -98,7 +98,7 @@ public class AdminController implements Errorable,Controller {
                                 pageRequest = new PageRequest(totalCnt);
                                 movieList = AdminServiceUtil.INSTANCE.adminService.getSearchedMovieList(pageRequest,keyword);
                                 if(movieList.size()==0){
-                                    System.out.println("찾으시는 영화는 존재하지 않습니다");
+                                    printError("찾으시는 영화는 존재하지 않습니다");
                                     break;
                                 }
                                 result = 7;

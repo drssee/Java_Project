@@ -53,9 +53,9 @@ public enum InputUtil implements Errorable {
     public Integer inputMenuNum(int minNum , int maxNum){//min~max 정수 입력받는 메서드
         String tmp="";
         Integer result = 0;
-
         try {
             tmp = bufferedReader.readLine();
+
             if(tmp==null||"".equals(tmp)||minNum>Integer.valueOf(tmp)||maxNum<Integer.valueOf(tmp)){
                 printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
                 tmp = String.valueOf(inputMenuNum(minNum,maxNum));
@@ -64,7 +64,7 @@ public enum InputUtil implements Errorable {
         }
         catch (NumberFormatException e) {
             printError("올바른 숫자를 입력해주세요");
-            return -1;
+            return inputMenuNum(minNum,maxNum);
         } catch (IOException e) {
             printError("입력에 실패하였습니다");
             return -1;
@@ -100,6 +100,28 @@ public enum InputUtil implements Errorable {
         return tmp;
     }
 
+    public String inputStr(int minNum,int maxNum,boolean isNum){
+        String tmp = "";
+        tmp = inputStr(minNum,maxNum);
+        if(!isNumber(tmp)){
+            printError(minNum+"에서 "+maxNum+"사이의 숫자를 입력해주세요");
+            tmp=inputStr(minNum,maxNum,isNum);
+            return tmp;
+        }
+        return tmp;
+    }
+
+    public String inputStr(int minNum,int maxNum,String str){
+        String tmp = "";
+        tmp=inputStr(minNum,maxNum);
+        if(!tmp.contains(str)){
+            printError(minNum+"에서 "+maxNum+"사이의 "+str+"을 포함하는 문자를 입력해주세요");
+            tmp=inputStr(minNum,maxNum,str);
+            return tmp;
+        }
+        return tmp;
+    }
+
     public Calendar inputCal(int year,int month,int day,int hour,int min){
         if(year<1900||year>2024||month<1||month>12||day<1||day>31||hour<0||hour>23||min<0||min>59){
             printError("올바른 형식의 날짜를 입력해주세요");
@@ -111,5 +133,17 @@ public enum InputUtil implements Errorable {
     }
     public Calendar inputCal(int year,int month,int day){
         return inputCal(year,month,day,0,0);
+    }
+
+    public boolean isNumber(String str){
+        try {
+            Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    public boolean isContainsStr(String str){
+        return str.contains(str);
     }
 }

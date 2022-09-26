@@ -31,4 +31,22 @@ public class UserDAOImpl implements UserDAO {
         return user;
 
     }
+
+    @Override
+    public Integer insertUser(User user) throws Exception {
+        String sql = "insert into webdb.user (id, pwd, name, phone, email)\n" +
+                "values (?,?,?,?,?);";
+        int rowCnt;
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,user.getId());
+        pstmt.setString(2,user.getPwd());
+        pstmt.setString(3,user.getName());
+        pstmt.setString(4,user.getPhone());
+        pstmt.setString(5,user.getEmail());
+        rowCnt = pstmt.executeUpdate();
+        pstmt.close();
+        conn.close();
+        return rowCnt;
+    }
 }
