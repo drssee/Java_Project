@@ -4,12 +4,11 @@ import dao.UserDAO;
 import dao.UserDAOImpl;
 import dto.Movie;
 import dto.PageRequest;
+import dto.Reservation;
 import dto.User;
 import util.ConnectionUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.List;
 
 public class UserServiceImpl implements UserService { //서비스 인터페이스 상속
@@ -43,5 +42,15 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     @Override
     public Integer getSearchedTotalCnt(String keyword) throws Exception {
         return userDAO.getSearchedTotalCount(keyword);
+    }
+
+    @Override
+    public List<Reservation> getReservationList(String title,Timestamp schedule) throws Exception {
+        return userDAO.selectAll_reservation(title,schedule);
+    }
+
+    @Override
+    public Integer getReservationCnt(String title, Timestamp schedule) throws Exception {
+        return userDAO.getReservationCount(title,schedule);
     }
 }

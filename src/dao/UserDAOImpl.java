@@ -2,12 +2,14 @@ package dao;
 
 import dto.Movie;
 import dto.PageRequest;
+import dto.Reservation;
 import dto.User;
 import util.ConnectionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,6 +132,44 @@ public class UserDAOImpl implements UserDAO {
         ResultSet rs = pstmt.executeQuery();
         rs.next();
         Integer result = rs.getInt(1);
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return result;
+    }
+
+    @Override
+    public List<Reservation> selectAll_reservation(String title,Timestamp schedule) throws Exception {
+        String sql = "select * from reservation where title = ? and schedule = ?";
+        List<Reservation> reservationList = new ArrayList<>();
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,title);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            Reservation reservation = new Reservation();
+            reservation.setRno(rs.getInt(1));
+            reservation.setTitle(rs.getString(2));
+            reservation.setSchedule(rs.getTimestamp(3));
+            reservation.setSeatNum(rs.getInt(4));
+            reservationList.add(reservation);
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return reservationList;
+    }
+
+    @Override
+    public Integer getReservationCount(String title,Timestamp schedule) throws Exception {
+        String sql = "select count(*) from reservation where title=? and schedule=?";
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,title);
+        pstmt.setTimestamp(2,schedule);
+        ResultSet rs = pstmt.executeQuery();
+        rs.next();
+        int result = rs.getInt(1);
         rs.close();
         pstmt.close();
         conn.close();

@@ -54,6 +54,9 @@ public class LoginController implements Errorable,Controller {
             }
         }
 
+        //로그인에 성공하면 해당 유저를 static 변수에 올린다
+        MainController.isInLogin=true;
+        MainController.loginedUser=user;
 
         //로그인 성공 케이스중 아이디가 admin인 경우
         if(user.getId().equals("admin")){

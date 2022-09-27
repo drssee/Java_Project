@@ -2,6 +2,7 @@ package controller;
 
 import dto.Movie;
 import dto.PageRequest;
+import dto.Reservation;
 import dto.User;
 import util.AdminServiceUtil;
 import util.InputUtil;
@@ -15,7 +16,10 @@ import java.util.Map;
 
 public class MainController implements Errorable,Controller {
     public static boolean isInLogin=false;
+    public static User loginedUser=null;
+    public final static Integer RESERVATION_SIZE = 100;
     Integer result=-1;
+    String tmp = "";
     public MainController(){
 
         AdminController adminController = new AdminController();
@@ -63,12 +67,9 @@ public class MainController implements Errorable,Controller {
                                 continue;
                             }
                             else if(result==-9){//관리자모드 로그인 성공
-                                isInLogin=true;
                                 break;
                             }
                             else if(result==-10){//유저모드 로그인 성공
-                                //로그인 기억 하는 변수
-                                isInLogin=true;
                                 break;
                             }
                         }//while
@@ -110,7 +111,7 @@ public class MainController implements Errorable,Controller {
                                 movieList = UserServiceUtil.INSTANCE.userService.getMovieList(pageRequest);
                             }
 
-                            String tmp = User_Movie.showMovie(movieList, pageRequest);
+                            tmp = User_Movie.showMovie(movieList, pageRequest);
 
                             curPage=pageRequest.getPage();
 
@@ -126,6 +127,37 @@ public class MainController implements Errorable,Controller {
                                     printError();
                                 }
                                 result = 7;
+                            }
+                            else if(tmp.equalsIgnoreCase("m")){
+                                //예매기능
+                                selected = User_Movie.selectMovie(movieList.size());
+                                //선택된 영화를 가져온다
+                                Movie movie=movieList.get(selected-1);
+                                if(movie==null){
+                                    printError();
+                                    continue;
+                                }
+
+                                //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
+                                if(UserServiceUtil.INSTANCE.userService.getReservationCnt(movie.getTitle(),movie.getSchedule())==0){
+                                    System.out.println("모든 좌석이 예매 가능합니다");
+                                    User_Movie.showSeatList();
+                                }
+                                else{
+                                    List<Reservation> reservationList = UserServiceUtil.INSTANCE
+                                            .userService.getReservationList(movie.getTitle(),movie.getSchedule());
+                                    // seatnum의 count가 100을 초과하면
+                                    // (list의 size()>100) 예매 불가
+                                    if(reservationList.size()>=RESERVATION_SIZE){
+                                        printError("더이상 예매가 불가능합니다");
+                                        continue outer;
+                                    }
+                                    //예약 가능한 좌석 확인하고
+                                    System.out.println("예약된 좌석은 X 표시");
+                                    User_Movie.showSeatList(reservationList);
+                                }
+                                //showseatlist에서 좌석입력 받고 결제 하면
+                                //reservation에 insert
                             }
                             else if(tmp.equalsIgnoreCase("p")){
                                 //이전

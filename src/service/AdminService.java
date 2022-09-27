@@ -3,6 +3,7 @@ package service;
 import dao.AdminDAO;
 import dto.Movie;
 import dto.PageRequest;
+import dto.Reservation;
 
 import java.util.List;
 

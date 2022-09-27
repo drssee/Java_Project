@@ -1,8 +1,7 @@
 package controller;
 
-public class Main { //관리자모드 검색기능 -> //회원가입 -> //유저모드예매기능 -> //관리자모드예매관리
-    //날짜입력 문자체크
-    public static void main(String[] args) throws Exception {
+public class Main {
+    public static void main(String[] args) {
         new MainController();
     }//main
 }

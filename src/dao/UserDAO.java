@@ -2,8 +2,10 @@ package dao;
 
 import dto.Movie;
 import dto.PageRequest;
+import dto.Reservation;
 import dto.User;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface UserDAO {
@@ -16,4 +18,8 @@ public interface UserDAO {
 
     Integer getTotalCount() throws Exception;
     Integer getSearchedTotalCount(String keyword) throws Exception;
+
+    List<Reservation> selectAll_reservation(String title,Timestamp schedule) throws Exception;
+
+    Integer getReservationCount(String title,Timestamp schedule) throws Exception;
 }
