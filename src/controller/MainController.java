@@ -1,17 +1,23 @@
 package controller;
 
+import dto.Movie;
+import dto.PageRequest;
+import dto.User;
+import util.AdminServiceUtil;
 import util.InputUtil;
-import view.Errorable;
-import view.Login;
-import view.Home;
+import util.UserServiceUtil;
+import view.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MainController implements Errorable,Controller {
     public static boolean isInLogin=false;
+    Integer result=-1;
     public MainController(){
 
-        Integer result=-1;
         AdminController adminController = new AdminController();
         LoginController loginController = new LoginController();
         RegisterController registerController = new RegisterController();
@@ -38,6 +44,10 @@ public class MainController implements Errorable,Controller {
             switch (result){
                 //로그인(로그인,회원가입)
                 case 1 : {
+                    if(isInLogin){
+                        isInLogin=false;
+                        break;
+                    }
                     result = Login.loginMenu();
                     //1.로그인 2.회원가입
 
@@ -53,12 +63,12 @@ public class MainController implements Errorable,Controller {
                                 continue;
                             }
                             else if(result==-9){//관리자모드 로그인 성공
+                                isInLogin=true;
                                 break;
                             }
                             else if(result==-10){//유저모드 로그인 성공
                                 //로그인 기억 하는 변수
                                 isInLogin=true;
-                                //case:2의 뷰로 바로 이동시킴
                                 break;
                             }
                         }//while
@@ -79,12 +89,94 @@ public class MainController implements Errorable,Controller {
                     }
                     break;
                 }//case 1 로그인(로그인,회원가입) 끝
-                //isinlogin이 true일때만 들어갈수있음
-                case 2: {//상영중인 영화목록 // 조회하고 예약 하려고 하면 로그인 화면으로
-                    //전체 영화목록이 아닌 날짜를 보고 불러와야함
-                    System.out.println("상영중인 영화목록");
-                    break;
-                }
+
+                case 2: {//상영중인 영화목록
+
+                    //isinlogin이 true일때만 들어갈수있음
+                    if(!isInLogin){
+                        printError("먼저 로그인을 해주세요");
+                        break;
+                    }
+                    try {
+                        Integer totalCnt = UserServiceUtil.INSTANCE.userService.getTotalCnt();
+                        PageRequest pageRequest = new PageRequest(totalCnt);
+                        List<Movie> movieList = new ArrayList<>();
+                        String keyword = "";
+                        int curPage;
+                        int selected;
+                        while (result != 0) {
+                            //검색기능이 활성화되지 않은 경우
+                            if(result!=7) {
+                                movieList = UserServiceUtil.INSTANCE.userService.getMovieList(pageRequest);
+                            }
+
+                            String tmp = User_Movie.showMovie(movieList, pageRequest);
+
+                            curPage=pageRequest.getPage();
+
+                            //s m(예약) p n w q
+                            if(tmp.equalsIgnoreCase("s")){
+                                //검색기능
+                                keyword= User_Movie.input_Search_Keyword();
+                                totalCnt = UserServiceUtil.INSTANCE.userService.getSearchedTotalCnt(keyword);
+                                pageRequest = new PageRequest(totalCnt);
+                                movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
+                                if(movieList.size()==0){
+                                    printError("찾으시는 영화는 존재하지 않습니다");
+                                    printError();
+                                }
+                                result = 7;
+                            }
+                            else if(tmp.equalsIgnoreCase("p")){
+                                //이전
+                                if(curPage!=1){
+                                    pageRequest.setPage(pageRequest.getPage()-1);
+                                    if(result==7){
+                                        movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
+                                    }
+                                }
+                                else{
+                                    printError("더이상 앞으로 갈 수 없습니다");
+                                }
+                            }//if(tmp.equalsIgnoreCase("p")) //이전
+                            else if(tmp.equalsIgnoreCase("n")){
+                                //다음
+                                int totalPage = pageRequest.getTotalPage();
+                                if(totalPage==0){
+                                    printError("목록이 없습니다");
+                                }
+                                else if(curPage!=totalPage&&totalPage!=1){
+                                    pageRequest.setPage(pageRequest.getPage()+1);
+                                    if(result==7){
+                                        movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
+                                    }
+                                }
+                                else{
+                                    printError("더이상 뒤로 갈 수 없습니다");
+                                }
+                            }//if(tmp.equalsIgnoreCase("n")) //다음
+                            else if(tmp.equalsIgnoreCase("q")){
+                                result = 1;
+                                continue outer;
+                            }
+                            else{
+                                printError("올바른 메뉴를 선택해주세요");
+                            }
+                        }//while
+                    }//try
+                    catch(ClassNotFoundException e){
+                        printError("해당목록을 조회할수 없습니다(cne)(프로그램 오류)");
+                        continue;
+                    } catch(SQLException e){
+                        printError("해당목록을 조회할수 없습니다(sqe)(해당목록이 존재하지 않습니다)");
+                        continue;
+                    }
+                    catch(Exception e){
+                        printError("해당목록을 조회할수 없습니다(e)");
+                        continue;
+                    }
+
+                }//case2 : 영화목록 조회
 
                 case 0 : {
                     System.out.println("종료합니다");

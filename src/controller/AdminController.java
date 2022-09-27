@@ -161,7 +161,6 @@ public class AdminController implements Errorable,Controller {
                                 }
                                 else{
                                     printError("더이상 앞으로 갈 수 없습니다");
-                                    System.out.println();
                                 }
                             }//if(tmp.equalsIgnoreCase("p")) //이전
                             else if(tmp.equalsIgnoreCase("n")){
@@ -176,7 +175,6 @@ public class AdminController implements Errorable,Controller {
                                 }
                                 else{
                                     printError("더이상 뒤로 갈 수 없습니다");
-                                    System.out.println();
                                 }
                             }//if(tmp.equalsIgnoreCase("n")) //다음
                             else if(tmp.equalsIgnoreCase("w")){

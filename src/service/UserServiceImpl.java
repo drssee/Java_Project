@@ -2,12 +2,15 @@ package service;
 
 import dao.UserDAO;
 import dao.UserDAOImpl;
+import dto.Movie;
+import dto.PageRequest;
 import dto.User;
 import util.ConnectionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 public class UserServiceImpl implements UserService { //서비스 인터페이스 상속
     UserDAO userDAO = new UserDAOImpl();
@@ -20,5 +23,25 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     @Override
     public Integer registerUser(User user) throws Exception {
         return userDAO.insertUser(user);
+    }
+
+    @Override
+    public List<Movie> getMovieList(PageRequest pageRequest) throws Exception {
+        return userDAO.selectAll_byDate(pageRequest);
+    }
+
+    @Override
+    public List<Movie> getSearchedMovieList(PageRequest pageRequest, String keyword) throws Exception {
+        return userDAO.SearchList_byDate(pageRequest,keyword);
+    }
+
+    @Override
+    public Integer getTotalCnt() throws Exception {
+        return userDAO.getTotalCount();
+    }
+
+    @Override
+    public Integer getSearchedTotalCnt(String keyword) throws Exception {
+        return userDAO.getSearchedTotalCount(keyword);
     }
 }

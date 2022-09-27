@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Login {
+public class Login implements View{
     public static Integer loginMenu(){
         System.out.println("로그인 메뉴");
         System.out.println("1.로그인 2.회원가입");
