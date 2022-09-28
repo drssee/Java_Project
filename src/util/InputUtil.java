@@ -103,6 +103,9 @@ public enum InputUtil implements Errorable {
     public String inputStr(int minNum,int maxNum,boolean isNum){
         String tmp = "";
         tmp = inputStr(minNum,maxNum);
+        if(!isNum){
+
+        }
         if(!isNumber(tmp)){
             printError(minNum+"에서 "+maxNum+"사이의 숫자를 입력해주세요");
             tmp=inputStr(minNum,maxNum,isNum);
@@ -111,12 +114,12 @@ public enum InputUtil implements Errorable {
         return tmp;
     }
 
-    public String inputStr(int minNum,int maxNum,String str){
+    public String inputStr(int minNum,int maxNum,String keyword){
         String tmp = "";
         tmp=inputStr(minNum,maxNum);
-        if(!tmp.contains(str)){
-            printError(minNum+"에서 "+maxNum+"사이의 "+str+"을 포함하는 문자를 입력해주세요");
-            tmp=inputStr(minNum,maxNum,str);
+        if(!tmp.contains(keyword)){
+            printError(minNum+"에서 "+maxNum+"사이의 "+keyword+"을 포함하는 문자를 입력해주세요");
+            tmp=inputStr(minNum,maxNum,keyword);
             return tmp;
         }
         return tmp;

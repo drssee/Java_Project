@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MainController implements Errorable,Controller {
     public static boolean isInLogin=false;
@@ -139,13 +140,14 @@ public class MainController implements Errorable,Controller {
                                 }
 
                                 //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
-                                if(UserServiceUtil.INSTANCE.userService.getReservationCnt(movie.getTitle(),movie.getSchedule())==0){
+                                if(UserServiceUtil.INSTANCE.userService.getReservationCnt(movie.getTno())==0){
                                     System.out.println("모든 좌석이 예매 가능합니다");
-                                    User_Movie.showSeatList();
+                                    selected = User_Movie.showSeatList();
                                 }
                                 else{
+                                    //선택한 영화의 리스트 가져옴
                                     List<Reservation> reservationList = UserServiceUtil.INSTANCE
-                                            .userService.getReservationList(movie.getTitle(),movie.getSchedule());
+                                            .userService.getReservationList(movie.getTno());
                                     // seatnum의 count가 100을 초과하면
                                     // (list의 size()>100) 예매 불가
                                     if(reservationList.size()>=RESERVATION_SIZE){
@@ -154,9 +156,21 @@ public class MainController implements Errorable,Controller {
                                     }
                                     //예약 가능한 좌석 확인하고
                                     System.out.println("예약된 좌석은 X 표시");
-                                    User_Movie.showSeatList(reservationList);
+                                    List<Integer> seatNumList = reservationList.stream().map(r->r.getSeatNum()).collect(Collectors.toList());
+                                    selected = User_Movie.showSeatList(seatNumList);
+                                    while(seatNumList.contains(selected)){
+                                        printError("올바른 좌석을 입력해 주세요(중복x)");
+                                        selected = User_Movie.showSeatList(seatNumList);
+                                    }
                                 }
-                                //showseatlist에서 좌석입력 받고 결제 하면
+                                //여기까지 온 selected는 유효한 숫자
+                                if(User_Movie.confirm(movie)){
+                                    //결제기능으로
+                                }
+                                else{
+                                    //메뉴로
+                                }
+                                //user에 결제완료 기억해주고
                                 //reservation에 insert
                             }
                             else if(tmp.equalsIgnoreCase("p")){

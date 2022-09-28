@@ -9,6 +9,9 @@ public class Reservation {
     private String title;
     private Timestamp schedule;
     private int seatNum;
+    private int tno;
+    private String id;
+    private int price;
 
     public Reservation() {
     }
@@ -45,13 +48,40 @@ public class Reservation {
         this.seatNum = seatNum;
     }
 
+    public int getTno() {
+        return tno;
+    }
+
+    public void setTno(int tno) {
+        this.tno = tno;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
-                "rno='" + rno + '\'' +
+                "rno=" + rno +
                 ", title='" + title + '\'' +
-                ", 상영스케줄: "+ DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)" +
-                ", seatNum=" + seatNum +
+                ", schedule=" + schedule +
+                ", seatNum=" + DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)" +
+                ", tno=" + tno +
+                ", id='" + id + '\'' +
+                ", price=" + price +
                 '}';
     }
 }

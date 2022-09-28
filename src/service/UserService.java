@@ -20,7 +20,7 @@ public interface UserService {
 
     public Integer getSearchedTotalCnt(String keyword) throws Exception;
 
-    public List<Reservation> getReservationList(String title,Timestamp schedule) throws Exception;
+    public List<Reservation> getReservationList(int tno) throws Exception;
 
-    public Integer getReservationCnt(String title,Timestamp schedule) throws Exception;
+    public Integer getReservationCnt(int tno) throws Exception;
 }

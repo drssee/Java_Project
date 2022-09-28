@@ -6,9 +6,12 @@ import dto.PageRequest;
 import dto.Reservation;
 import util.InputUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class User_Movie implements View{
     public static String showMovie(List<Movie>movieList, PageRequest pageRequest){
@@ -38,24 +41,31 @@ public class User_Movie implements View{
         return InputUtil.INSTANCE.inputMenuNum(1,size);
     }
 
-    public static void showSeatList(List<Reservation> reservationList){
-        for(int i=1;i<= MainController.RESERVATION_SIZE;i++){
-            if(reservationList.get(i)!=null&&
-                    reservationList.get(i).getSeatNum()==i){
-                System.out.print(" X ");
-            }
-            else if(i<10){
-                System.out.printf(" %2d ",i);
+    public static int showSeatList(List<Integer> seatNumList){
+        List<String> seat = new ArrayList<>();
+        IntStream.rangeClosed(1,100).forEach(i->seat.add(String.valueOf(i)));
+
+
+        for(int i=0;i<seatNumList.size();i++){
+            seat.set((seatNumList.get(i)-1),"X");
+            System.out.println("dddd:"+seat.get(seatNumList.get(i)-1));
+        }
+
+        for(int i=1;i<=seat.size();i++){
+            if(i<=10){
+                System.out.printf(" %2s ",seat.get(i-1));
             }
             else{
-                System.out.print(" "+i+" ");
+                System.out.print(" "+seat.get(i-1)+" ");
             }
             if(i%10==0) {
                 System.out.println();
             }
         }
+        System.out.println("예약할 좌석을 입력해주세요");
+        return InputUtil.INSTANCE.inputMenuNum(1,100);
     }
-    public static void showSeatList(){
+    public static int showSeatList(){
         for(int i=1;i<= MainController.RESERVATION_SIZE;i++){
             if(i<10){
                 System.out.printf(" %2d ",i);
@@ -67,5 +77,25 @@ public class User_Movie implements View{
                 System.out.println();
             }
         }
+        System.out.println("예약할 좌석을 입력해주세요");
+        return InputUtil.INSTANCE.inputMenuNum(1,100);
+    }
+
+    public static boolean confirm(Movie movie) {
+        String tmp = "";
+        System.out.println(movie);
+        System.out.println("선택하신 "+movie.getTitle()+"을 예매하시겠습니까? y/n");
+        tmp=InputUtil.INSTANCE.inputStr(1,1);
+        if(tmp.equalsIgnoreCase("y")){
+            return true;
+        }
+        else if(tmp.equalsIgnoreCase("n")){
+            return false;
+        }
+        else{
+            System.out.println("올바른 문자를 입력해주세요");
+            confirm(movie);
+        }
+        return false;
     }
 }

@@ -12,6 +12,7 @@ public class User {
     private String phone;
     private String email;
     private Date regDate;
+    private int total_payment;
 
     public User() {
     }
@@ -64,8 +65,16 @@ public class User {
         this.regDate = regDate;
     }
 
+    public int getTotal_payment() {
+        return total_payment;
+    }
+
+    public void setTotal_payment(int total_payment) {
+        this.total_payment = total_payment;
+    }
+
     @Override
     public String toString() {
-        return "아이디:"+getId()+" 비밀번호:"+getPwd()+" 이름:"+getName()+" 전화번호:"+getPhone()+" 이메일:"+getEmail()+" 등록일:"+ DateFormatter.INSTANCE.formatDate(getRegDate());
+        return "아이디:"+getId()+" 비밀번호:"+getPwd()+" 이름:"+getName()+" 전화번호:"+getPhone()+" 이메일:"+getEmail()+" 등록일:"+ DateFormatter.INSTANCE.formatDate(getRegDate())+" 총 결제금액:"+getTotal_payment();
     }
 }

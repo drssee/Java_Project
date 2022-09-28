@@ -15,6 +15,8 @@ public class Movie {
     private Timestamp schedule;
     private Date regDate;
 
+    private int price;
+
     public Movie() {
     }
 
@@ -82,8 +84,16 @@ public class Movie {
         this.regDate = regDate;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
-        return "영화제목: "+getTitle()+"/ "+"감독: "+getDirector()+"/ "+"런타임: "+getRuntime()+"시간"+"/ "+ "개봉일: "+DateFormatter.INSTANCE.formatDate(getOpenDate())+"/ "+ "상영스케줄: "+DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+"/ "+ "등록일: "+DateFormatter.INSTANCE.formatDate(getRegDate())+"/ "+"줄거리요약: "+getStory();
+        return "영화제목: "+getTitle()+"/ "+"감독: "+getDirector()+"/ "+"런타임: "+getRuntime()+"시간"+"/ "+ "개봉일: "+DateFormatter.INSTANCE.formatDate(getOpenDate())+"/ "+ "상영스케줄: "+DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+"/ "+ "등록일: "+DateFormatter.INSTANCE.formatDate(getRegDate())+"/ "+"가격: "+getPrice()+"/ "+"줄거리요약: "+getStory();
     }
 }

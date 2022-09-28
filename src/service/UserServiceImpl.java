@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     }
 
     @Override
-    public List<Reservation> getReservationList(String title,Timestamp schedule) throws Exception {
-        return userDAO.selectAll_reservation(title,schedule);
+    public List<Reservation> getReservationList(int tno) throws Exception {
+        return userDAO.selectAll_reservation(tno);
     }
 
     @Override
-    public Integer getReservationCnt(String title, Timestamp schedule) throws Exception {
-        return userDAO.getReservationCount(title,schedule);
+    public Integer getReservationCnt(int tno) throws Exception {
+        return userDAO.getReservationCount(tno);
     }
 }

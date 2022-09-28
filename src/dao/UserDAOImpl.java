@@ -30,6 +30,7 @@ public class UserDAOImpl implements UserDAO {
         user.setPhone(rs.getString(4));
         user.setEmail(rs.getString(5));
         user.setRegDate(rs.getDate(6));
+        user.setTotal_payment(rs.getInt(7));
         rs.close();
         pstmt.close();
         conn.close();
@@ -75,6 +76,7 @@ public class UserDAOImpl implements UserDAO {
             movie.setOpenDate(rs.getDate(6));
             movie.setSchedule(rs.getTimestamp(7));
             movie.setRegDate(rs.getDate(8));
+            movie.setPrice(rs.getInt(9));
             movieList.add(movie);
         }
         rs.close();
@@ -105,6 +107,7 @@ public class UserDAOImpl implements UserDAO {
             movie.setOpenDate(rs.getDate(6));
             movie.setSchedule(rs.getTimestamp(7));
             movie.setRegDate(rs.getDate(8));
+            movie.setPrice(rs.getInt(9));
             movieList.add(movie);
         }
         rs.close();
@@ -139,12 +142,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<Reservation> selectAll_reservation(String title,Timestamp schedule) throws Exception {
-        String sql = "select * from reservation where title = ? and schedule = ?";
+    public List<Reservation> selectAll_reservation(int tno) throws Exception {
+        String sql = "select * from reservation where tno=?";
         List<Reservation> reservationList = new ArrayList<>();
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1,title);
+        pstmt.setInt(1,tno);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
             Reservation reservation = new Reservation();
@@ -152,6 +155,9 @@ public class UserDAOImpl implements UserDAO {
             reservation.setTitle(rs.getString(2));
             reservation.setSchedule(rs.getTimestamp(3));
             reservation.setSeatNum(rs.getInt(4));
+            reservation.setTno(rs.getInt(5));
+            reservation.setId(rs.getString(6));
+            reservation.setPrice(rs.getInt(7));
             reservationList.add(reservation);
         }
         rs.close();
@@ -161,12 +167,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Integer getReservationCount(String title,Timestamp schedule) throws Exception {
-        String sql = "select count(*) from reservation where title=? and schedule=?";
+    public Integer getReservationCount(int tno) throws Exception {
+        String sql = "select count(*) from reservation where tno = ?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1,title);
-        pstmt.setTimestamp(2,schedule);
+        pstmt.setInt(1,tno);
         ResultSet rs = pstmt.executeQuery();
         rs.next();
         int result = rs.getInt(1);

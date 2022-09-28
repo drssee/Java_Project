@@ -19,7 +19,7 @@ public interface UserDAO {
     Integer getTotalCount() throws Exception;
     Integer getSearchedTotalCount(String keyword) throws Exception;
 
-    List<Reservation> selectAll_reservation(String title,Timestamp schedule) throws Exception;
+    List<Reservation> selectAll_reservation(int tno) throws Exception;
 
-    Integer getReservationCount(String title,Timestamp schedule) throws Exception;
+    Integer getReservationCount(int tno) throws Exception;
 }
