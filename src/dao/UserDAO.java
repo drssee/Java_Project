@@ -5,7 +5,6 @@ import dto.PageRequest;
 import dto.Reservation;
 import dto.User;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface UserDAO {
@@ -22,4 +21,6 @@ public interface UserDAO {
     List<Reservation> selectAll_reservation(int tno) throws Exception;
 
     Integer getReservationCount(int tno) throws Exception;
+
+    void reservation(Movie movie,Reservation reservation,User user);
 }

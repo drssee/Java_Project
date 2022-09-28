@@ -3,6 +3,7 @@ package dto;
 import formatter.DateFormatter;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Reservation {
     private int rno;
@@ -13,6 +14,7 @@ public class Reservation {
     private String id;
     private int price;
 
+    private Date regDate;
     public Reservation() {
     }
 
@@ -62,6 +64,14 @@ public class Reservation {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(Date regDate) {
+        this.regDate = regDate;
     }
 
     public int getPrice() {

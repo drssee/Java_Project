@@ -16,7 +16,7 @@ public enum ConnectionUtil{
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webdb"
-                ,"root","root");
+                ,"root","rlaskagus1!");
 
         return connection;
     }

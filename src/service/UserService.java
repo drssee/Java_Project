@@ -23,4 +23,6 @@ public interface UserService {
     public List<Reservation> getReservationList(int tno) throws Exception;
 
     public Integer getReservationCnt(int tno) throws Exception;
+
+    public void reservation(int selected,Movie movie) throws Exception;
 }

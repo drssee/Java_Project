@@ -47,8 +47,7 @@ public class User_Movie implements View{
 
 
         for(int i=0;i<seatNumList.size();i++){
-            seat.set((seatNumList.get(i)-1),"X");
-            System.out.println("dddd:"+seat.get(seatNumList.get(i)-1));
+            seat.set((seatNumList.get(i)-1)," X");
         }
 
         for(int i=1;i<=seat.size();i++){
@@ -84,7 +83,8 @@ public class User_Movie implements View{
     public static boolean confirm(Movie movie) {
         String tmp = "";
         System.out.println(movie);
-        System.out.println("선택하신 "+movie.getTitle()+"을 예매하시겠습니까? y/n");
+        System.out.println("선택하신 "+movie.getTitle()+"을 예매하시겠습니까? "
+                +movie.getPrice()+"원 결제"+"y/n");
         tmp=InputUtil.INSTANCE.inputStr(1,1);
         if(tmp.equalsIgnoreCase("y")){
             return true;

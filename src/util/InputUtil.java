@@ -104,12 +104,21 @@ public enum InputUtil implements Errorable {
         String tmp = "";
         tmp = inputStr(minNum,maxNum);
         if(!isNum){
-
-        }
-        if(!isNumber(tmp)){
-            printError(minNum+"에서 "+maxNum+"사이의 숫자를 입력해주세요");
-            tmp=inputStr(minNum,maxNum,isNum);
-            return tmp;
+            for(int i =0;i<tmp.length();i++){
+                char ch = tmp.charAt(i);
+                if('0'<=ch&&ch<='9'){
+                    printError(minNum+"에서 "+maxNum+"사이의 문자를 입력해주세요");
+                    tmp=inputStr(minNum,maxNum,isNum);
+                    return tmp;
+                }
+            }
+        }//if
+        else{
+            if(!isNumber(tmp)){
+                printError(minNum+"에서 "+maxNum+"사이의 숫자를 입력해주세요");
+                tmp=inputStr(minNum,maxNum,isNum);
+                return tmp;
+            }
         }
         return tmp;
     }

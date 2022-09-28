@@ -1,14 +1,13 @@
 package service;
 
+import controller.MainController;
 import dao.UserDAO;
 import dao.UserDAOImpl;
 import dto.Movie;
 import dto.PageRequest;
 import dto.Reservation;
 import dto.User;
-import util.ConnectionUtil;
 
-import java.sql.*;
 import java.util.List;
 
 public class UserServiceImpl implements UserService { //서비스 인터페이스 상속
@@ -52,5 +51,26 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     @Override
     public Integer getReservationCnt(int tno) throws Exception {
         return userDAO.getReservationCount(tno);
+    }
+
+    @Override
+    public void reservation(int selected,Movie movie) {
+        //user와 reservation 객체를 넘겨준다
+        User user = MainController.loginedUser;
+        user.setTotal_payment(movie.getPrice());
+
+        Reservation reservation = new Reservation();
+        reservation.setTitle(movie.getTitle());
+        reservation.setSchedule(movie.getSchedule());
+        reservation.setSeatNum(selected);
+        reservation.setTno(movie.getTno());
+        reservation.setId(user.getId());
+        reservation.setPrice(movie.getPrice());
+        System.out.println("reservation:"+reservation);
+        if(reservation!=null){
+            userDAO.reservation(movie,reservation,user);
+            return;
+        }
+//        throw new Exception("예약을 진행 할 수 없습니다");
     }
 }

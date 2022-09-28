@@ -164,10 +164,18 @@ public class MainController implements Errorable,Controller {
                                     }
                                 }
                                 //여기까지 온 selected는 유효한 숫자
+                                //selected를 seatnum로 써야함
+                                //reservation 객체를 조립해서 줘야함
                                 if(User_Movie.confirm(movie)){
                                     //결제기능으로
+                                    UserServiceUtil.INSTANCE.userService.reservation(selected,movie);
+                                    System.out.println(loginedUser.getId()+"님 "+movie.getTitle()+
+                                            "의 예매에 성공하셨습니다");
                                 }
                                 else{
+                                    printError(loginedUser.getId()+"님 "+movie.getTitle()+
+                                            "의 예매에 실패하셨습니다");
+                                    printError();
                                     //메뉴로
                                 }
                                 //user에 결제완료 기억해주고
@@ -218,6 +226,7 @@ public class MainController implements Errorable,Controller {
                         continue;
                     }
                     catch(Exception e){
+                        e.printStackTrace();
                         printError("해당목록을 조회할수 없습니다(e)");
                         continue;
                     }

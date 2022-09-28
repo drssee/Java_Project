@@ -6,10 +6,7 @@ import dto.Reservation;
 import dto.User;
 import util.ConnectionUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,5 +176,66 @@ public class UserDAOImpl implements UserDAO {
         pstmt.close();
         conn.close();
         return result;
+    }
+
+    @Override
+    public void reservation(Movie movie,Reservation reservation,User user) {
+        //selected = seatnum
+        //movie = 예약할 영화
+        Connection conn = null;
+        PreparedStatement pstmt_user = null;
+        PreparedStatement pstmt_res = null;
+
+        try {
+            String sql_user = "update webdb.user\n" +
+                    "set total_payment = ?\n" +
+                    "where id = ?";
+            conn = ConnectionUtil.INSTANCE.getConnection();
+            conn.setAutoCommit(false);
+
+            pstmt_user = conn.prepareStatement(sql_user);
+            pstmt_user.setInt(1,user.getTotal_payment());
+            pstmt_user.setString(2,user.getId());
+            pstmt_user.executeUpdate();
+
+            //
+
+            String sql_res = "insert into reservation (title, schedule, seatnum, " +
+                    "tno, id, price)\n" +
+                    "values (?,?,?,?,?,?);";
+            pstmt_res = conn.prepareStatement(sql_res);
+            pstmt_res.setString(1,reservation.getTitle());
+            pstmt_res.setTimestamp(2,reservation.getSchedule());
+            pstmt_res.setInt(3,reservation.getSeatNum());
+            pstmt_res.setInt(4,movie.getTno());
+            pstmt_res.setString(5,user.getId());
+            pstmt_res.setInt(6,movie.getPrice());
+            pstmt_res.executeUpdate();
+
+            conn.commit();
+        } catch (Exception e) {
+            try {
+                e.printStackTrace();
+                conn.rollback();
+                throw new RuntimeException("예약 도중 오류가 발생 했습니다");
+            } catch (SQLException ex) {
+                e.printStackTrace();
+                throw new RuntimeException("예약 도중 오류가 발생 했습니다");
+            }
+        } finally {
+            try {
+                if(pstmt_res!=null){
+                    pstmt_res.close();
+                }
+                if(pstmt_user!=null){
+                    pstmt_user.close();
+                }
+                if(conn!=null){
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("reservation clsose error");
+            }
+        }
     }
 }
