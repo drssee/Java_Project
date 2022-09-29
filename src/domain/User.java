@@ -13,6 +13,7 @@ public class User {
     private String email;
     private Date regDate;
     private int total_payment;
+    private Date modDate;
 
     public User() {
     }
@@ -71,6 +72,14 @@ public class User {
 
     public void setTotal_payment(int total_payment) {
         this.total_payment = total_payment;
+    }
+
+    public Date getModDate() {
+        return modDate;
+    }
+
+    public void setModDate(Date modDate) {
+        this.modDate = modDate;
     }
 
     @Override

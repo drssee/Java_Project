@@ -9,7 +9,9 @@ import util.UserServiceUtil;
 import view.*;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,11 +95,7 @@ public class MainController implements Errorable,Controller {
 
                 case 2: {//상영중인 영화목록
 
-                    //isinlogin이 true일때만 들어갈수있음
-                    if(!isInLogin){
-                        printError("먼저 로그인을 해주세요");
-                        break;
-                    }
+
                     try {
                         Integer totalCnt = UserServiceUtil.INSTANCE.userService.getTotalCnt();
                         PageRequest pageRequest = new PageRequest(totalCnt);
@@ -129,6 +127,19 @@ public class MainController implements Errorable,Controller {
                                 result = 7;
                             }
                             else if(tmp.equalsIgnoreCase("m")){
+                                //isinlogin이 true일때만 들어갈수있음
+                                if(!isInLogin){
+                                    printError("먼저 로그인을 해주세요");
+                                    break;
+                                }
+                                //로그인된 유저의 모든 예약정보를 가져온다
+                                List<Reservation> reservations_byUser = UserServiceUtil.INSTANCE
+                                        .userService.getReservationList_byUser(loginedUser.getId());
+                                if(reservations_byUser.size()>=5){
+                                    printError("1인당 최대 5개의 영화가 예매 가능합니다");
+                                    continue;
+                                }
+
                                 //예매기능
                                 selected = User_Movie.selectMovie(movieList.size());
                                 //선택된 영화를 가져온다
@@ -138,22 +149,22 @@ public class MainController implements Errorable,Controller {
                                     continue;
                                 }
                                 //////////////////////////////////////////////////////////////////////////////
-                                //로그인된 유저의 모든 예약정보를 가져온다
-                                List<Reservation> reservations_byUser = UserServiceUtil.INSTANCE
-                                        .userService.getReservationList_byUser(loginedUser.getId());
+
                                 //선택한 영화의 시간이 기존에 예매한 영화의 시간과 겹치면 알려줌
                                 for(int i=0;i<reservations_byUser.size();i++){
                                     int year1 = reservations_byUser.get(i).getSchedule().getYear();
                                     int month1 = reservations_byUser.get(i).getSchedule().getMonth();
+                                    int day1 = reservations_byUser.get(i).getSchedule().getDay();
                                     int hour1 = reservations_byUser.get(i).getSchedule().getHours();
 
                                     int year2 = movie.getSchedule().getYear();
                                     int month2 = movie.getSchedule().getMonth();
+                                    int day2 = movie.getSchedule().getDay();
                                     int hour2 = movie.getSchedule().getHours();
 
                                     int duration = movie.getRuntime();
 
-                                    if(year1==year2&&month1==month2){
+                                    if(year1==year2&&month1==month2&&day1==day2){
                                         tmp=reservations_byUser.get(i).getTitle();
                                         if(hour2<=hour1&&hour1<=(hour2+duration)){
                                             printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
@@ -264,24 +275,94 @@ public class MainController implements Errorable,Controller {
                         printError("해당목록을 조회할수 없습니다(e)");
                         continue;
                     }
-
+                    break;
                 }//case2 : 영화목록 조회
 
                 case 3 :{
+                    if(!isInLogin){
+                        printError("먼저 로그인을 해주세요");
+                        break;
+                    }
                     result = User_Movie.mypage();
                     if(result == 0 ){
                         result = 1;
                         continue outer;
                     }
                     if(result == 1){//회원정보 조회/수정
-
+                        try {
+                            User user = UserServiceUtil.INSTANCE.userService.selectOne(loginedUser.getId());
+                            if(user == null){
+                                throw new Exception();
+                            }
+                            User_Movie.mypage_1_1(user);
+                            if(User_Movie.confirm()){
+                                result = User_Movie.mypage_1_2();
+                                System.out.println("입력 result : "+result);
+                                user = User_Movie.updateUser(result,loginedUser);
+                                if(user == null){
+                                    throw new Exception();
+                                }
+                                result = UserServiceUtil.INSTANCE.userService
+                                        .updateUser(user);
+                                if(result !=1) {
+                                    throw new Exception();
+                                }
+                                System.out.println("회원정보 변경에 성공했습니다");
+                                loginedUser=user;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            printError("회원 정보를 불러오는 것에 실패했습니다(e)");
+                            printError();
+                            result = 1;
+                            continue outer;
+                        }
                     }
                     else if(result == 2){//예약정보 조회/수정
+                        try {
+                            List<Reservation> reservationList_byUser
+                                    = UserServiceUtil.INSTANCE.userService
+                                    .getReservationList_byUser(loginedUser.getId());
+                            if(reservationList_byUser==null){
+                                throw new Exception();
+                            }
+                            if(reservationList_byUser.size()==0){
+                                System.out.println("예매하신 영화는 존재하지 않습니다");
+                                result = 1;
+                                continue outer;
+                            }
+                            result = User_Movie.mypage_2_1(reservationList_byUser);
+                            Timestamp schedule = reservationList_byUser.get(result-1).getSchedule();
+                            int year1 = schedule.getYear();
+                            int month1 = schedule.getMonth();
+                            int day1 = schedule.getDay();
+                            int hour1 = schedule.getHours();
+                            int minute1 = schedule.getMinutes();
+                            Date now = new Date();
+                            int year2 = now.getYear();
+                            int month2 = now.getMonth();
+                            int day2 = now.getDay();
+                            int hour2 = now.getHours();
+                            int minute2 = now.getMinutes();
+                            if(year1==year2&&month1==month2&&day1==day2){
+//                                if(예약시간이 지금시간 -3 -0 사이이면)
+                                if((hour2+3)+((double)minute2/60)
+                                        >=hour1+((double)minute1/60)){
+                                    printError("취소 실패(상영시간 3시간 이내의 영화 선택)");
+                                    result = 1;
+                                    continue outer;
+                                }
+                            }//if
 
+
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     else{
                         printError("올바른 메뉴를 선택해주세요");
                     }
+                    break;
                 }
 
                 case 0 : {
@@ -293,3 +374,4 @@ public class MainController implements Errorable,Controller {
         }//while
     }
 }
+

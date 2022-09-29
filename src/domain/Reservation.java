@@ -13,7 +13,7 @@ public class Reservation {
     private int tno;
     private String id;
     private int price;
-    private Date regDate;
+    private Timestamp regDate;
     private Date modDate;
     public Reservation() {
     }
@@ -66,11 +66,11 @@ public class Reservation {
         this.id = id;
     }
 
-    public Date getRegDate() {
+    public Timestamp getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(Date regDate) {
+    public void setRegDate(Timestamp regDate) {
         this.regDate = regDate;
     }
 
@@ -96,10 +96,12 @@ public class Reservation {
                 "rno=" + rno +
                 ", title='" + title + '\'' +
                 ", schedule=" + schedule +
-                ", seatNum=" + DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)" +
+                ", seatNum=" + DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"  +
                 ", tno=" + tno +
                 ", id='" + id + '\'' +
                 ", price=" + price +
+                ", regDate=" + regDate +
+                ", modDate=" + modDate +
                 '}';
     }
 }

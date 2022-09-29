@@ -55,6 +55,26 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public Integer updateUser(User user) throws Exception {
+        String sql = "update webdb.user\n" +
+                "set pwd = ? , name = ? , phone = ? , email = ? , modDate = ?\n" +
+                "where id = ?;";
+        int rowCnt;
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,user.getPwd());
+        pstmt.setString(2,user.getName());
+        pstmt.setString(3,user.getPhone());
+        pstmt.setString(4,user.getEmail());
+        pstmt.setDate(5,new java.sql.Date(user.getModDate().getTime()));
+        pstmt.setString(6,user.getId());
+        rowCnt = pstmt.executeUpdate();
+        pstmt.close();
+        conn.close();
+        return rowCnt;
+    }
+
+    @Override
     public List<Movie> selectAll_byDate(PageRequest pageRequest) throws Exception {
         String sql = "select * from movie where schedule > now() Limit ? , ?";
         List<Movie> movieList = new ArrayList<>();
@@ -155,6 +175,7 @@ public class UserDAOImpl implements UserDAO {
             reservation.setTno(rs.getInt(5));
             reservation.setId(rs.getString(6));
             reservation.setPrice(rs.getInt(7));
+            reservation.setRegDate(rs.getTimestamp(8));
             reservationList.add(reservation);
         }
         rs.close();
@@ -253,6 +274,7 @@ public class UserDAOImpl implements UserDAO {
             reservation.setTno(rs.getInt(5));
             reservation.setId(rs.getString(6));
             reservation.setPrice(rs.getInt(7));
+            reservation.setRegDate(rs.getTimestamp(8));
             reservationList.add(reservation);
         }
         rs.close();

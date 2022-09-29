@@ -24,6 +24,11 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     }
 
     @Override
+    public Integer updateUser(User user) throws Exception {
+        return userDAO.updateUser(user);
+    }
+
+    @Override
     public List<Movie> getMovieList(PageRequest pageRequest) throws Exception {
         return userDAO.selectAll_byDate(pageRequest);
     }
@@ -66,7 +71,6 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
         reservation.setTno(movie.getTno());
         reservation.setId(user.getId());
         reservation.setPrice(movie.getPrice());
-        System.out.println("reservation:"+reservation);
         if(reservation!=null){
             userDAO.reservation(movie,reservation,user);
             return;
