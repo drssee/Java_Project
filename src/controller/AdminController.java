@@ -1,10 +1,9 @@
 package controller;
 
 
-import dto.Movie;
-import dto.PageRequest;
+import domain.Movie;
+import domain.PageRequest;
 import util.AdminServiceUtil;
-import util.InputUtil;
 import view.Admin_Movie;
 import view.Errorable;
 

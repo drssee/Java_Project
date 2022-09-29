@@ -1,9 +1,9 @@
 package dao;
 
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
-import dto.User;
+import domain.Movie;
+import domain.PageRequest;
+import domain.Reservation;
+import domain.User;
 import util.ConnectionUtil;
 
 import java.sql.*;
@@ -215,11 +215,8 @@ public class UserDAOImpl implements UserDAO {
             conn.commit();
         } catch (Exception e) {
             try {
-                e.printStackTrace();
                 conn.rollback();
-                throw new RuntimeException("예약 도중 오류가 발생 했습니다");
             } catch (SQLException ex) {
-                e.printStackTrace();
                 throw new RuntimeException("예약 도중 오류가 발생 했습니다");
             }
         } finally {
@@ -237,5 +234,30 @@ public class UserDAOImpl implements UserDAO {
                 throw new RuntimeException("reservation clsose error");
             }
         }
+    }//reservation
+
+    @Override
+    public List<Reservation> selectAll_reservation_byUser(String id) throws Exception {
+        String sql = "select * from reservation where schedule > now() and id=?";
+        List<Reservation> reservationList = new ArrayList<>();
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,id);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            Reservation reservation = new Reservation();
+            reservation.setRno(rs.getInt(1));
+            reservation.setTitle(rs.getString(2));
+            reservation.setSchedule(rs.getTimestamp(3));
+            reservation.setSeatNum(rs.getInt(4));
+            reservation.setTno(rs.getInt(5));
+            reservation.setId(rs.getString(6));
+            reservation.setPrice(rs.getInt(7));
+            reservationList.add(reservation);
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return reservationList;
     }
 }

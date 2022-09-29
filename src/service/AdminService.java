@@ -1,9 +1,7 @@
 package service;
 
-import dao.AdminDAO;
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
+import domain.Movie;
+import domain.PageRequest;
 
 import java.util.List;
 

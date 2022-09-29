@@ -3,10 +3,10 @@ package service;
 import controller.MainController;
 import dao.UserDAO;
 import dao.UserDAOImpl;
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
-import dto.User;
+import domain.Movie;
+import domain.PageRequest;
+import domain.Reservation;
+import domain.User;
 
 import java.util.List;
 
@@ -72,5 +72,10 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
             return;
         }
 //        throw new Exception("예약을 진행 할 수 없습니다");
+    }
+
+    @Override
+    public List<Reservation> getReservationList_byUser(String id) throws Exception {
+        return userDAO.selectAll_reservation_byUser(id);
     }
 }

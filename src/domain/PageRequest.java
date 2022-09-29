@@ -1,6 +1,4 @@
-package dto;
-
-import util.AdminServiceUtil;
+package domain;
 
 public class PageRequest {
     private int page; //현재 페이지

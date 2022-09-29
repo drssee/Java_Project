@@ -1,6 +1,6 @@
 package controller;
 
-import dto.User;
+import domain.User;
 import util.UserServiceUtil;
 import view.Errorable;
 import view.Login;

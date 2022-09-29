@@ -1,7 +1,7 @@
 package dao;
 
-import dto.Movie;
-import dto.PageRequest;
+import domain.Movie;
+import domain.PageRequest;
 import util.ConnectionUtil;
 
 import java.sql.Connection;

@@ -1,9 +1,9 @@
 package dao;
 
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
-import dto.User;
+import domain.Movie;
+import domain.PageRequest;
+import domain.Reservation;
+import domain.User;
 
 import java.util.List;
 
@@ -23,4 +23,6 @@ public interface UserDAO {
     Integer getReservationCount(int tno) throws Exception;
 
     void reservation(Movie movie,Reservation reservation,User user);
+
+    List<Reservation> selectAll_reservation_byUser(String id) throws Exception;
 }

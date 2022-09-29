@@ -1,17 +1,13 @@
 package view;
 
 import controller.MainController;
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
+import domain.Movie;
+import domain.PageRequest;
 import util.InputUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class User_Movie implements View{
     public static String showMovie(List<Movie>movieList, PageRequest pageRequest){
@@ -97,5 +93,10 @@ public class User_Movie implements View{
             confirm(movie);
         }
         return false;
+    }
+
+    public static Integer mypage() {
+        System.out.println("1.회원정보 조회/수정 2.나의예약 조회/취소 ");
+        return InputUtil.INSTANCE.inputMenuNum(2);
     }
 }

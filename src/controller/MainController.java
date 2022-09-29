@@ -1,10 +1,9 @@
 package controller;
 
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
-import dto.User;
-import util.AdminServiceUtil;
+import domain.Movie;
+import domain.PageRequest;
+import domain.Reservation;
+import domain.User;
 import util.InputUtil;
 import util.UserServiceUtil;
 import view.*;
@@ -12,7 +11,6 @@ import view.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainController implements Errorable,Controller {
@@ -29,6 +27,7 @@ public class MainController implements Errorable,Controller {
 
         outer:
         while(result!=0){
+
             //관리자모드
             if(result==-9){
                 while(result!=0){
@@ -45,7 +44,7 @@ public class MainController implements Errorable,Controller {
                 break;
             }
 
-            //메뉴선택성공 1.로그인(로그인,회원가입) 2.현재상영중인영화목록 0.프로그램종료
+            //메뉴선택성공 1.로그인(로그인,회원가입) 2.현재상영중인영화목록 3.마이페이지 0.프로그램종료
             switch (result){
                 //로그인(로그인,회원가입)
                 case 1 : {
@@ -138,18 +137,53 @@ public class MainController implements Errorable,Controller {
                                     printError();
                                     continue;
                                 }
+                                //////////////////////////////////////////////////////////////////////////////
+                                //로그인된 유저의 모든 예약정보를 가져온다
+                                List<Reservation> reservations_byUser = UserServiceUtil.INSTANCE
+                                        .userService.getReservationList_byUser(loginedUser.getId());
+                                //선택한 영화의 시간이 기존에 예매한 영화의 시간과 겹치면 알려줌
+                                for(int i=0;i<reservations_byUser.size();i++){
+                                    int year1 = reservations_byUser.get(i).getSchedule().getYear();
+                                    int month1 = reservations_byUser.get(i).getSchedule().getMonth();
+                                    int hour1 = reservations_byUser.get(i).getSchedule().getHours();
 
+                                    int year2 = movie.getSchedule().getYear();
+                                    int month2 = movie.getSchedule().getMonth();
+                                    int hour2 = movie.getSchedule().getHours();
+
+                                    int duration = movie.getRuntime();
+
+                                    if(year1==year2&&month1==month2){
+                                        tmp=reservations_byUser.get(i).getTitle();
+                                        if(hour2<=hour1&&hour1<=(hour2+duration)){
+                                            printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
+                                                    loginedUser.getId()+"님이 예약한 하신 영화 "+tmp+"가 존재합니다");
+                                            continue outer;
+                                        }
+                                    }
+                                }
+                                //////////////////////////////////////////////////////////////////////////////
                                 //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
                                 if(UserServiceUtil.INSTANCE.userService.getReservationCnt(movie.getTno())==0){
                                     System.out.println("모든 좌석이 예매 가능합니다");
                                     selected = User_Movie.showSeatList();
                                 }
                                 else{
-                                    //선택한 영화의 리스트 가져옴
+                                    //선택한 영화의 리스트 가져옴<<<내가 선택한 영화 한종류의 모든 예약 리스트임
                                     List<Reservation> reservationList = UserServiceUtil.INSTANCE
                                             .userService.getReservationList(movie.getTno());
-                                    // seatnum의 count가 100을 초과하면
-                                    // (list의 size()>100) 예매 불가
+
+
+
+                                    //선택한 영화가 이미 유저가 예매한 영화면 예매불가 (도달할수없는 불필요한 코드일수도)
+                                    for(int i=0;i<reservationList.size();i++){
+                                        if(reservationList.get(i).getId().equals(loginedUser.getId())){
+                                            printError("이미 "+loginedUser.getId()+"님이 예약한 영화입니다");
+                                            continue outer;
+                                        }
+                                    }
+
+
                                     if(reservationList.size()>=RESERVATION_SIZE){
                                         printError("더이상 예매가 불가능합니다");
                                         continue outer;
@@ -232,6 +266,23 @@ public class MainController implements Errorable,Controller {
                     }
 
                 }//case2 : 영화목록 조회
+
+                case 3 :{
+                    result = User_Movie.mypage();
+                    if(result == 0 ){
+                        result = 1;
+                        continue outer;
+                    }
+                    if(result == 1){//회원정보 조회/수정
+
+                    }
+                    else if(result == 2){//예약정보 조회/수정
+
+                    }
+                    else{
+                        printError("올바른 메뉴를 선택해주세요");
+                    }
+                }
 
                 case 0 : {
                     System.out.println("종료합니다");

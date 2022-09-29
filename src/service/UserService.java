@@ -1,11 +1,10 @@
 package service;
 
-import dto.Movie;
-import dto.PageRequest;
-import dto.Reservation;
-import dto.User;
+import domain.Movie;
+import domain.PageRequest;
+import domain.Reservation;
+import domain.User;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface UserService {
@@ -25,4 +24,6 @@ public interface UserService {
     public Integer getReservationCnt(int tno) throws Exception;
 
     public void reservation(int selected,Movie movie) throws Exception;
+
+    public List<Reservation> getReservationList_byUser(String id) throws Exception;
 }

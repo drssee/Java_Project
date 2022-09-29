@@ -1,6 +1,6 @@
 package view;
 
-import dto.User;
+import domain.User;
 import util.InputUtil;
 
 import java.util.Date;

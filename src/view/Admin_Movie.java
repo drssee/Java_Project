@@ -1,7 +1,7 @@
 package view;
 
-import dto.Movie;
-import dto.PageRequest;
+import domain.Movie;
+import domain.PageRequest;
 import util.InputUtil;
 
 import java.sql.Timestamp;

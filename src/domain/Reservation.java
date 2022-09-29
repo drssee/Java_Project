@@ -1,4 +1,4 @@
-package dto;
+package domain;
 
 import formatter.DateFormatter;
 
@@ -13,8 +13,8 @@ public class Reservation {
     private int tno;
     private String id;
     private int price;
-
     private Date regDate;
+    private Date modDate;
     public Reservation() {
     }
 
@@ -80,6 +80,14 @@ public class Reservation {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Date getModDate() {
+        return modDate;
+    }
+
+    public void setModDate(Date modDate) {
+        this.modDate = modDate;
     }
 
     @Override
