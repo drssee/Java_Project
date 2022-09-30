@@ -140,7 +140,11 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         rs.next();
-        return rs.getInt(1);
+        int result = rs.getInt(1);
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return result;
     }
 
     @Override
@@ -215,7 +219,7 @@ public class UserDAOImpl implements UserDAO {
             conn.setAutoCommit(false);
 
             pstmt_user = conn.prepareStatement(sql_user);
-            pstmt_user.setInt(1,user.getTotal_payment());
+            pstmt_user.setInt(1,user.getTotal_payment()+reservation.getPrice());
             pstmt_user.setString(2,user.getId());
             pstmt_user.executeUpdate();
 
@@ -281,5 +285,56 @@ public class UserDAOImpl implements UserDAO {
         pstmt.close();
         conn.close();
         return reservationList;
+    }
+
+    @Override
+    public void deleteReservation(int rno,User user,int price) throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt_user = null;
+        PreparedStatement pstmt_res = null;
+
+        try {
+            String sql_user = "update webdb.user\n" +
+                    "set total_payment = ?\n" +
+                    "where id = ?";
+            conn = ConnectionUtil.INSTANCE.getConnection();
+            conn.setAutoCommit(false);
+
+            pstmt_user = conn.prepareStatement(sql_user);
+            pstmt_user.setInt(1,user.getTotal_payment()-price);
+            pstmt_user.setString(2,user.getId());
+            pstmt_user.executeUpdate();
+
+            //
+
+            String sql_res = "delete\n" +
+                    "from reservation\n" +
+                    "where rno = ?;";
+            pstmt_res = conn.prepareStatement(sql_res);
+            pstmt_res.setInt(1,rno);
+            pstmt_res.executeUpdate();
+
+            conn.commit();
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException("예약 취소 도중 오류가 발생 했습니다");
+            }
+        } finally {
+            try {
+                if(pstmt_res!=null){
+                    pstmt_res.close();
+                }
+                if(pstmt_user!=null){
+                    pstmt_user.close();
+                }
+                if(conn!=null){
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("reservation clsose error");
+            }
+        }
     }
 }

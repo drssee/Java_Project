@@ -19,4 +19,5 @@ public interface UserDAO {
     void reservation(Movie movie,Reservation reservation,User user);
     List<Reservation> selectAll_reservation_byUser(String id) throws Exception;
     Integer updateUser(User user) throws Exception;
+    void deleteReservation(int rno,User user,int price) throws Exception;
 }

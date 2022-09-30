@@ -19,4 +19,5 @@ public interface UserService {
     public Integer getReservationCnt(int tno) throws Exception;
     public void reservation(int selected,Movie movie) throws Exception;
     public List<Reservation> getReservationList_byUser(String id) throws Exception;
+    public void deleteRes(int rno,User user, int price) throws Exception;
 }

@@ -135,10 +135,10 @@ public class User_Movie implements View{
             }
             case 2:{
                 System.out.print("2.이름을 입력해주세요");
-                tmp=InputUtil.INSTANCE.inputStr(1,12,false);
+                tmp=InputUtil.INSTANCE.inputStr(2,6,false);
                 while(user.getName().equals(tmp)){
                     System.out.println("이전과 다른 정보를 입력해주세요");
-                    tmp=InputUtil.INSTANCE.inputStr(1,12,false);
+                    tmp=InputUtil.INSTANCE.inputStr(2,6,false);
                 }
                 user.setName(tmp);
                 break;

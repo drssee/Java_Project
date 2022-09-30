@@ -297,7 +297,6 @@ public class MainController implements Errorable,Controller {
                             User_Movie.mypage_1_1(user);
                             if(User_Movie.confirm()){
                                 result = User_Movie.mypage_1_2();
-                                System.out.println("입력 result : "+result);
                                 user = User_Movie.updateUser(result,loginedUser);
                                 if(user == null){
                                     throw new Exception();
@@ -332,7 +331,8 @@ public class MainController implements Errorable,Controller {
                                 continue outer;
                             }
                             result = User_Movie.mypage_2_1(reservationList_byUser);
-                            Timestamp schedule = reservationList_byUser.get(result-1).getSchedule();
+                            Reservation selectedRes = reservationList_byUser.get(result-1);
+                            Timestamp schedule = selectedRes.getSchedule();
                             int year1 = schedule.getYear();
                             int month1 = schedule.getMonth();
                             int day1 = schedule.getDay();
@@ -353,10 +353,11 @@ public class MainController implements Errorable,Controller {
                                     continue outer;
                                 }
                             }//if
-
-
+                            UserServiceUtil.INSTANCE
+                                    .userService.deleteRes(selectedRes.getRno(),loginedUser,selectedRes.getPrice());
+                            System.out.println("선택된 예약이 취소되었습니다");
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            printError("예약정보를 조회할수 없습니다(e)");
                         }
                     }
                     else{

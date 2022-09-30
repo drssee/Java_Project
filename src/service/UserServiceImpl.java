@@ -82,4 +82,9 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     public List<Reservation> getReservationList_byUser(String id) throws Exception {
         return userDAO.selectAll_reservation_byUser(id);
     }
+
+    @Override
+    public void deleteRes(int rno,User user, int price) throws Exception {
+        userDAO.deleteReservation(rno,user,price);
+    }
 }

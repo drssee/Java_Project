@@ -36,7 +36,7 @@ public class Login implements View{
         tmp=InputUtil.INSTANCE.inputStr(5,18);
         user.setPwd(tmp);
         System.out.print("3.이름을 입력해주세요");
-        tmp=InputUtil.INSTANCE.inputStr(1,12,false);
+        tmp=InputUtil.INSTANCE.inputStr(2,6,false);
         user.setName(tmp);
         System.out.print("4.전화번호를 입력해주세요");
         tmp=InputUtil.INSTANCE.inputStr(8,12,true);

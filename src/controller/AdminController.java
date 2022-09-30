@@ -18,7 +18,7 @@ public class AdminController implements Errorable,Controller {
         Movie movie;
         while(result!=0){
             result = Admin_Movie.AdminMenu();
-            //1.영화등록 2.영화목록(조회,수정,삭제,검색) 3.전체예매자목록(조회,수정,삭제,검색) 0.종료
+            //1.영화등록 2.영화목록(조회,수정,삭제,검색) 3.전체예매자목록(조회,수정,삭제,검색) +유저목록 0.종료
 
             if(result==0){
                 return result;
