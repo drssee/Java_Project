@@ -9,39 +9,34 @@ import java.util.List;
 
 public class AdminServiceImpl implements AdminService {
     AdminDAO adminDAO = new AdminDAOImpl();
-    //등록
+
+
     @Override
     public Integer insertMovie(Movie movie) throws Exception{
-        return adminDAO.insert(movie);
+        return adminDAO.insertMovie_byAdmin(movie);
     }
-
     @Override
     public List<Movie> getMovieList(PageRequest pageRequest) throws Exception {
-        return adminDAO.selectMovieList(pageRequest);
+        return adminDAO.selectMovieList_byAdmin(pageRequest);
     }
-
     @Override
     public List<Movie> getSearchedMovieList(PageRequest pageRequest, String keyword) throws Exception {
-        return adminDAO.SearchedMovieList(pageRequest,keyword);
+        return adminDAO.SearchedMovieList_byAdmin(pageRequest,keyword);
     }
-
     @Override
     public Integer getTotalCnt() throws Exception {
-        return adminDAO.getCount();
+        return adminDAO.getCount_byAdmin();
     }
-
     @Override
     public Integer getTotalCnt_Searched(String keyword) throws Exception {
-        return adminDAO.getCount_Searched(keyword);
+        return adminDAO.getCount_Searched_byAdmin(keyword);
     }
-
     @Override
     public Integer updateMovie(Movie movie) throws Exception {
-        return adminDAO.update(movie);
+        return adminDAO.updateMovie_byAdmin(movie);
     }
-
     @Override
     public Integer deleteMovie(Movie movie) throws Exception {
-        return adminDAO.delete(movie);
+        return adminDAO.deleteMovie_byAdmin(movie);
     }
 }

@@ -5,10 +5,7 @@ import view.Errorable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public enum InputUtil implements Errorable {
     INSTANCE;
@@ -134,7 +131,7 @@ public enum InputUtil implements Errorable {
         return tmp;
     }
 
-    public Calendar inputCal(int year,int month,int day,int hour,int min){
+    public Calendar inputCal(int year, int month, int day, int hour, int min){
         if(year<1900||year>2024||month<1||month>12||day<1||day>31||hour<0||hour>23||min<0||min>59){
             printError("올바른 형식의 날짜를 입력해주세요");
             return null;

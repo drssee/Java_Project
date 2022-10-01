@@ -1,6 +1,5 @@
 package view;
 
-
 import controller.MainController;
 import util.InputUtil;
 

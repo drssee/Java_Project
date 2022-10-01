@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AdminDAOImpl implements AdminDAO {
     @Override
-    public Integer insert(Movie movie) throws Exception{
+    public Integer insertMovie_byAdmin(Movie movie) throws Exception{
         String sql = "insert into movie (title, story, director, runtime, opendate, schedule,regDate,price)\n" +
                 "values (?,?,?,?,?,?,?,?)";
         int rowCnt;
@@ -34,7 +34,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
-    public List<Movie> selectMovieList(PageRequest pageRequest) throws Exception {
+    public List<Movie> selectMovieList_byAdmin(PageRequest pageRequest) throws Exception {
         List<Movie> movieList = new ArrayList<>();
         int skip = pageRequest.getSkip();
         int size = pageRequest.getSize();
@@ -64,7 +64,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
-    public List<Movie> SearchedMovieList(PageRequest pageRequest, String keyword) throws Exception {
+    public List<Movie> SearchedMovieList_byAdmin(PageRequest pageRequest, String keyword) throws Exception {
         List<Movie> movieList = new ArrayList<>();
         int skip = pageRequest.getSkip();
         int size = pageRequest.getSize();
@@ -95,7 +95,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
-    public Integer getCount() throws Exception {
+    public Integer getCount_byAdmin() throws Exception {
         String sql = "select count(*) from movie";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -109,7 +109,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
-    public Integer getCount_Searched(String keyword) throws Exception {
+    public Integer getCount_Searched_byAdmin(String keyword) throws Exception {
         String sql = "select count(*) from movie where title Like ?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -124,7 +124,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
-    public Integer update(Movie movie) throws Exception {
+    public Integer updateMovie_byAdmin(Movie movie) throws Exception {
         String sql = "update movie set title = ? , story = ? , director = ? , " +
                 "runtime = ? , opendate = ? , schedule = ? ,price = ? where tno = ?";
         int rowCnt;
@@ -146,7 +146,7 @@ public class AdminDAOImpl implements AdminDAO {
     }
 
     @Override
-    public Integer delete(Movie movie) throws Exception {
+    public Integer deleteMovie_byAdmin(Movie movie) throws Exception {
         String sql = "delete from movie where tno = ?";
         int rowCnt;
         Connection conn = ConnectionUtil.INSTANCE.getConnection();

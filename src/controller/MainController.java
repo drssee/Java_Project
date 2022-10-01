@@ -4,9 +4,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
-import util.ClassUtil;
-import util.InputUtil;
-import util.UserServiceUtil;
+import util.*;
 import view.*;
 
 import java.sql.SQLException;
@@ -95,7 +93,7 @@ public class MainController extends Controller{
 
 
                     try {
-                        Integer totalCnt = UserServiceUtil.INSTANCE.userService.getTotalCnt();
+                        Integer totalCnt = MovieServiceUtil.INSTANCE.movieService.getTotalCnt();
                         PageRequest pageRequest = new PageRequest(totalCnt);
                         List<Movie> movieList = new ArrayList<>();
                         String keyword = "";
@@ -104,7 +102,7 @@ public class MainController extends Controller{
                         while (result != 0) {
                             //검색기능이 활성화되지 않은 경우
                             if(result!=7) {
-                                movieList = UserServiceUtil.INSTANCE.userService.getMovieList(pageRequest);
+                                movieList = MovieServiceUtil.INSTANCE.movieService.getMovieList(pageRequest);
                             }
 
                             tmp = mainView.showMovie(movieList, pageRequest);
@@ -115,9 +113,9 @@ public class MainController extends Controller{
                             if(tmp.equalsIgnoreCase("s")){
                                 //검색기능
                                 keyword= mainView.input_Search_Keyword();
-                                totalCnt = UserServiceUtil.INSTANCE.userService.getSearchedTotalCnt(keyword);
+                                totalCnt = MovieServiceUtil.INSTANCE.movieService.getSearchedTotalCnt(keyword);
                                 pageRequest = new PageRequest(totalCnt);
-                                movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
+                                movieList = MovieServiceUtil.INSTANCE.movieService.getSearchedMovieList(pageRequest,keyword);
                                 if(movieList.size()==0){
                                     printError("찾으시는 영화는 존재하지 않습니다");
                                     printError();
@@ -131,8 +129,8 @@ public class MainController extends Controller{
                                     break;
                                 }
 //                                로그인된 유저의 모든 예약정보를 가져온다
-                                List<Reservation> reservations_byUser = UserServiceUtil.INSTANCE
-                                        .userService.getReservationList_byUser(loginedUser.getId());
+                                List<Reservation> reservations_byUser = MainServiceUtil.INSTANCE.mainService
+                                        .getReservationList_byUser(loginedUser.getId());
                                 if(reservations_byUser.size()>=5){
                                     printError("1인당 최대 5개의 영화가 예매 가능합니다");
                                     continue;
@@ -174,14 +172,14 @@ public class MainController extends Controller{
                                 }
                                 //////////////////////////////////////////////////////////////////////////////
                                 //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
-                                if(UserServiceUtil.INSTANCE.userService.getReservationCnt(movie.getTno())==0){
+                                if(MainServiceUtil.INSTANCE.mainService.getReservationCnt(movie.getTno())==0){
                                     System.out.println("모든 좌석이 예매 가능합니다");
                                     selected = mainView.showSeatList();
                                 }
                                 else{
                                     //선택한 영화의 리스트 가져옴<<<내가 선택한 영화 한종류의 모든 예약 리스트임
-                                    List<Reservation> reservationList = UserServiceUtil.INSTANCE
-                                            .userService.getReservationList(movie.getTno());
+                                    List<Reservation> reservationList = MainServiceUtil.INSTANCE.mainService
+                                            .getReservationList(movie.getTno());
 
 
 
@@ -212,7 +210,7 @@ public class MainController extends Controller{
                                 //reservation 객체를 조립해서 줘야함
                                 if(mainView.confirm(movie)){
                                     //결제기능으로
-                                    UserServiceUtil.INSTANCE.userService.reservation(selected,movie,loginedUser);
+                                    MainServiceUtil.INSTANCE.mainService.reservation(selected,movie,loginedUser);
                                     System.out.println(loginedUser.getId()+"님 "+movie.getTitle()+
                                             "의 예매에 성공하셨습니다");
                                 }
@@ -230,7 +228,7 @@ public class MainController extends Controller{
                                 if(curPage!=1){
                                     pageRequest.setPage(pageRequest.getPage()-1);
                                     if(result==7){
-                                        movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
+                                        movieList = MovieServiceUtil.INSTANCE.movieService.getSearchedMovieList(pageRequest,keyword);
                                     }
                                 }
                                 else{
@@ -246,7 +244,7 @@ public class MainController extends Controller{
                                 else if(curPage!=totalPage&&totalPage!=1){
                                     pageRequest.setPage(pageRequest.getPage()+1);
                                     if(result==7){
-                                        movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
+                                        movieList = MovieServiceUtil.INSTANCE.movieService.getSearchedMovieList(pageRequest,keyword);
                                     }
                                 }
                                 else{
@@ -321,7 +319,7 @@ public class MainController extends Controller{
                     else if(result == 2){//예약정보 조회/수정
                         try {
                             List<Reservation> reservationList_byUser
-                                    = UserServiceUtil.INSTANCE.userService
+                                    = MainServiceUtil.INSTANCE.mainService
                                     .getReservationList_byUser(loginedUser.getId());
                             if(reservationList_byUser==null){
                                 throw new Exception();
@@ -356,8 +354,8 @@ public class MainController extends Controller{
                             }//if
                             System.out.println("정말 취소 하시겠습니까? y/n");
                             if(mainView.confirm()){
-                                UserServiceUtil.INSTANCE
-                                        .userService.deleteRes(selectedRes.getRno(),loginedUser,selectedRes.getPrice());
+                                MainServiceUtil.INSTANCE.mainService
+                                        .deleteRes(selectedRes.getRno(),loginedUser,selectedRes.getPrice());
                                 System.out.println("선택된 예약이 취소되었습니다");
                             }
                             result = 1;
