@@ -4,20 +4,19 @@ package controller;
 import domain.Movie;
 import domain.PageRequest;
 import util.AdminServiceUtil;
-import view.Admin_Movie;
-import view.Errorable;
+import view.Admin;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminController implements Errorable,Controller {
-
+public class AdminController extends Controller{
+    Admin admin = new Admin();
     public Integer admin() {
         Integer result=-1;
         Movie movie;
         while(result!=0){
-            result = Admin_Movie.AdminMenu();
+            result = admin.AdminMenu();
             //1.영화등록 2.영화목록(조회,수정,삭제,검색) 3.전체예매자목록(조회,수정,삭제,검색) +유저목록 0.종료
 
             if(result==0){
@@ -32,15 +31,15 @@ public class AdminController implements Errorable,Controller {
             switch (result){
                 //1.영화등록
                 case 1:{
-                    movie = Admin_Movie.inputMovie();
+                    movie = admin.inputMovie();
                     if(movie==null){
                         printError();
-                        movie = Admin_Movie.inputMovie();
+                        movie = admin.inputMovie();
                     }
                     if(!movie.getOpenDate().before(movie.getSchedule())){
                         //상영날짜가 개봉날짜 보다 이전일때
                         printError("상영날짜는 개봉일보다 이전일수 없습니다");
-                        movie = Admin_Movie.inputMovie();
+                        movie = admin.inputMovie();
                     }
                     try {
                         result = AdminServiceUtil.INSTANCE.adminService.insertMovie(movie);
@@ -85,14 +84,14 @@ public class AdminController implements Errorable,Controller {
                                 movieList = AdminServiceUtil.INSTANCE.adminService.getMovieList(pageRequest);
                             }
                             //movielist를 화면에 출력후 메뉴입력받음
-                            String tmp = Admin_Movie.movieList(movieList,pageRequest);
+                            String tmp = admin.movieList(movieList,pageRequest);
 
                             //현재 페이지 저장을 위한 curPage
                             curPage=pageRequest.getPage();
 
                             //s(검색) m(수정/삭제) p(이전) n(다음) w(메뉴로) q(모드종료)
                             if(tmp.equalsIgnoreCase("s")){
-                                keyword=Admin_Movie.input_Search_Keyword();
+                                keyword= admin.input_Search_Keyword();
                                 totalCnt = AdminServiceUtil.INSTANCE.adminService.getTotalCnt_Searched(keyword);
                                 pageRequest = new PageRequest(totalCnt);
                                 movieList = AdminServiceUtil.INSTANCE.adminService.getSearchedMovieList(pageRequest,keyword);
@@ -105,18 +104,18 @@ public class AdminController implements Errorable,Controller {
 
                             else if(tmp.equalsIgnoreCase("m")){
                                 //수정 삭제
-                                selected = Admin_Movie.sel_modify_delete1();
+                                selected = admin.sel_modify_delete1();
                                 movie=movieList.get(selected-1);
                                 if(movie==null){
                                     printError();
                                     continue;
                                 }
-                                selected = Admin_Movie.sel_modify_delete2();
+                                selected = admin.sel_modify_delete2();
 
                                 //수정
                                 if(selected==1){
                                     //1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약
-                                    movie = Admin_Movie.modifyMovie(movie);
+                                    movie = admin.modifyMovie(movie);
                                     if(movie==null){
                                         printError();
                                     }
@@ -134,7 +133,7 @@ public class AdminController implements Errorable,Controller {
                                 //삭제
                                 else if(selected==2){
                                     //삭제추가
-                                    selected = Admin_Movie.deleteMovie(movie);
+                                    selected = admin.deleteMovie(movie);
                                     if(selected==1){
                                         selected = AdminServiceUtil.INSTANCE.adminService.deleteMovie(movie);
                                         if(selected!=1){

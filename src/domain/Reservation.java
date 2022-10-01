@@ -14,7 +14,7 @@ public class Reservation {
     private String id;
     private int price;
     private Timestamp regDate;
-    private Date modDate;
+    private Timestamp modDate;
     public Reservation() {
     }
 
@@ -86,7 +86,7 @@ public class Reservation {
         return modDate;
     }
 
-    public void setModDate(Date modDate) {
+    public void setModDate(Timestamp modDate) {
         this.modDate = modDate;
     }
 

@@ -9,18 +9,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Admin_Movie implements Errorable , View{
-    public Admin_Movie(){
+public class Admin implements Errorable , View{
+    public Admin(){
 
     }
 
-    public static Integer AdminMenu(){
+    public Integer AdminMenu(){
         System.out.println("관리자모드");
         System.out.println("1.영화등록 2.영화목록(조회/수정/삭제/검색) 3.전체예매자목록(조회/수정/삭제/검색) 0.관리자모드종료");
         return InputUtil.INSTANCE.inputMenuNum(3);
     }
 
-    public static Movie inputMovie() {
+    public Movie inputMovie() {
         Movie movie = new Movie();
         String tmpStr="";
         Integer tmpInt1;
@@ -79,7 +79,7 @@ public class Admin_Movie implements Errorable , View{
         return movie;
     }
 
-    public static String movieList(List<Movie> movieList, PageRequest pageRequest){
+    public String movieList(List<Movie> movieList, PageRequest pageRequest){
         Movie movie;
 //        System.out.println("    영화제목       감독      런타임        개봉일            상영스케줄              등록일         줄거리요약");
         for(int i=0;i<movieList.size();i++){
@@ -96,17 +96,17 @@ public class Admin_Movie implements Errorable , View{
         return tmp;
     }
 
-    public static int sel_modify_delete1() {
+    public int sel_modify_delete1() {
         System.out.println("수정/삭제를 원하는 영화번호를 골라주세요");
         return InputUtil.INSTANCE.inputMenuNum(1,5);
     }
 
-    public static int sel_modify_delete2() {
+    public int sel_modify_delete2() {
         System.out.println("1.수정 2.삭제");
         return InputUtil.INSTANCE.inputMenuNum(1,2);
     }
 
-    public static Movie modifyMovie(Movie movie) {
+    public Movie modifyMovie(Movie movie) {
         String tmpStr="";
         Integer tmpInt1;
         Integer tmpInt2;
@@ -173,7 +173,7 @@ public class Admin_Movie implements Errorable , View{
 
                 if(!openDate.before(schedule)){
                     //상영날짜가 개봉날짜 보다 이전일때
-                    Errorable.s_printError("상영날짜는 개봉일보다 이전일수 없습니다");
+                    printError("상영날짜는 개봉일보다 이전일수 없습니다");
                     modifyMovie(movie);
                 }
 
@@ -189,14 +189,14 @@ public class Admin_Movie implements Errorable , View{
                 movie.setStory(tmpStr);
                 break;
             } default: {
-                Errorable.s_printError("올바른 메뉴를 선택해 주세요");
+                printError("올바른 메뉴를 선택해 주세요");
                 return null;
             }
         }//switch
         return movie;
     }//modifymovie(movie)
 
-    public static int deleteMovie(Movie movie) {
+    public int deleteMovie(Movie movie) {
         System.out.println(movie);
         System.out.println("삭제 하시겠습니까? y/n");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
@@ -206,11 +206,11 @@ public class Admin_Movie implements Errorable , View{
         else if(tmp.equalsIgnoreCase("n")){
             return 0;
         }
-        Errorable.s_printError("올바른 문자를 입력해주세요");
+        printError("올바른 문자를 입력해주세요");
         return deleteMovie(movie);
     }
 
-    public static String input_Search_Keyword() {
+    public String input_Search_Keyword() {
         System.out.print("검색할 키워드를 입력해주세요");
         return InputUtil.INSTANCE.inputStr(1,12);
     }

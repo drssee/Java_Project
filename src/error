@@ -7,3 +7,5 @@ java util date를 java sql date생성자에 gettime 바로하면 잘못된 시�
 calendar를 이용해서 set을 해야함
 
 admindaoimpl의 movie 선언 위치에 따른 변화가 이해가 안됨
+
+db업데이트후 자바user객체도 업데이트 해줘야함(프로그램 실행중이라)

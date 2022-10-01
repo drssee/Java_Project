@@ -5,15 +5,16 @@ import util.UserServiceUtil;
 import view.Errorable;
 import view.Login;
 
-public class RegisterController implements Errorable,Controller {
+public class RegisterController extends UserController implements Errorable{
+    @Override
     public Integer register(){
         //뷰 호출해서 입력받고
         User user = new User();
         int result = -1;
-        user = Login.inputUser();
+        user = login.inputUser();
         if(user==null){
             printError();
-            user=Login.inputUser();
+            user=login.inputUser();
         }
         try {
             result = UserServiceUtil.INSTANCE.userService.registerUser(user);

@@ -1,6 +1,7 @@
 package controller;
 
 import domain.User;
+import util.ClassUtil;
 import util.UserServiceUtil;
 import view.Errorable;
 import view.Login;
@@ -8,13 +9,14 @@ import view.Login;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class LoginController implements Errorable,Controller {
+public class LoginController extends UserController{
+    @Override
     public Integer login(){
         Integer result;
         Map<String,String> id_pwd;
         User user;
 
-        id_pwd = Login.login();
+        id_pwd = login.login();
         if(id_pwd.get("id")==null||id_pwd.get("pwd")==null){
             printError("로그인에 실패했습니다 id와 pwd를 확인해주세요");
             return -1;
@@ -55,8 +57,8 @@ public class LoginController implements Errorable,Controller {
         }
 
         //로그인에 성공하면 해당 유저를 static 변수에 올린다
-        MainController.isInLogin=true;
-        MainController.loginedUser=user;
+        isInLogin=true;
+        loginedUser=user;
 
         //로그인 성공 케이스중 아이디가 admin인 경우
         if(user.getId().equals("admin")){

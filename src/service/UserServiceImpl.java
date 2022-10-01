@@ -7,6 +7,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
+import util.ClassUtil;
 
 import java.util.List;
 
@@ -59,10 +60,9 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
     }
 
     @Override
-    public void reservation(int selected,Movie movie) {
+    public void reservation(int selected,Movie movie,User user) throws Exception {
         //user와 reservation 객체를 넘겨준다
-        User user = MainController.loginedUser;
-        user.setTotal_payment(movie.getPrice());
+        user.setTotal_payment(user.getTotal_payment()+movie.getPrice());
 
         Reservation reservation = new Reservation();
         reservation.setTitle(movie.getTitle());
@@ -71,11 +71,11 @@ public class UserServiceImpl implements UserService { //서비스 인터페이�
         reservation.setTno(movie.getTno());
         reservation.setId(user.getId());
         reservation.setPrice(movie.getPrice());
-        if(reservation!=null){
-            userDAO.reservation(movie,reservation,user);
-            return;
+        if(reservation==null){
+            //controller로 예외를 던짐
+            throw new Exception();
         }
-//        throw new Exception("예약을 진행 할 수 없습니다");
+        userDAO.reservation(movie,reservation,user);
     }
 
     @Override

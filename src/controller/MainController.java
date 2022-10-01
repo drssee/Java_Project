@@ -4,6 +4,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
+import util.ClassUtil;
 import util.InputUtil;
 import util.UserServiceUtil;
 import view.*;
@@ -15,30 +16,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MainController implements Errorable,Controller {
-    public static boolean isInLogin=false;
-    public static User loginedUser=null;
-    public final static Integer RESERVATION_SIZE = 100;
-    Integer result=-1;
-    String tmp = "";
+public class MainController extends Controller{
+    AdminController adminController;
+    UserController userController;
+    MainView mainView = new MainView();
+    Login login;
     public MainController(){
-
-        AdminController adminController = new AdminController();
-        LoginController loginController = new LoginController();
-        RegisterController registerController = new RegisterController();
-
         outer:
         while(result!=0){
 
             //관리자모드
             if(result==-9){
+                adminController = new AdminController();
                 while(result!=0){
                     result = adminController.admin();
                 }
             }
 
             //메인메뉴
-            result = Home.mainMenu();
+            result = (Integer) ClassUtil.INSTANCE.invoke("view.Home","mainMenu");
 
             //메뉴선택실패
             if(result==-1){
@@ -48,19 +44,24 @@ public class MainController implements Errorable,Controller {
 
             //메뉴선택성공 1.로그인(로그인,회원가입) 2.현재상영중인영화목록 3.마이페이지 0.프로그램종료
             switch (result){
+
                 //로그인(로그인,회원가입)
                 case 1 : {
                     if(isInLogin){
                         isInLogin=false;
                         break;
                     }
-                    result = Login.loginMenu();
+
+                    result = (Integer) ClassUtil.INSTANCE.invoke("view.Login","loginMenu");
                     //1.로그인 2.회원가입
 
                     //1.//로그인
                     if(result==1){
+                        userController = new LoginController();
                         while(result!=0){
-                            result = loginController.login();
+                            //login() 리턴 값 result ==-9 관리자모드
+                            //login() 리턴 값 result ==-10 유저모드
+                            result = userController.login();
                             if(result==0){//종료
                                 break outer;
                             }
@@ -68,20 +69,17 @@ public class MainController implements Errorable,Controller {
                                 printError();
                                 continue;
                             }
-                            else if(result==-9){//관리자모드 로그인 성공
-                                break;
-                            }
-                            else if(result==-10){//유저모드 로그인 성공
-                                break;
-                            }
+                            ClassUtil.INSTANCE.invoke("view.Home","welcome",result,loginedUser.getId());
+                            break;
                         }//while
                     }//if(result==1)로그인
 
 
                     //2.회원가입
                     else if(result==2){
+                        userController = new RegisterController();
                         System.out.println("회원가입");
-                        result = registerController.register();
+                        result = userController.register();
                         if(result==1){
                             System.out.println("회원가입에 성공 하셨습니다");
                         }
@@ -109,14 +107,14 @@ public class MainController implements Errorable,Controller {
                                 movieList = UserServiceUtil.INSTANCE.userService.getMovieList(pageRequest);
                             }
 
-                            tmp = User_Movie.showMovie(movieList, pageRequest);
+                            tmp = mainView.showMovie(movieList, pageRequest);
 
                             curPage=pageRequest.getPage();
 
                             //s m(예약) p n w q
                             if(tmp.equalsIgnoreCase("s")){
                                 //검색기능
-                                keyword= User_Movie.input_Search_Keyword();
+                                keyword= mainView.input_Search_Keyword();
                                 totalCnt = UserServiceUtil.INSTANCE.userService.getSearchedTotalCnt(keyword);
                                 pageRequest = new PageRequest(totalCnt);
                                 movieList = UserServiceUtil.INSTANCE.userService.getSearchedMovieList(pageRequest,keyword);
@@ -132,7 +130,7 @@ public class MainController implements Errorable,Controller {
                                     printError("먼저 로그인을 해주세요");
                                     break;
                                 }
-                                //로그인된 유저의 모든 예약정보를 가져온다
+//                                로그인된 유저의 모든 예약정보를 가져온다
                                 List<Reservation> reservations_byUser = UserServiceUtil.INSTANCE
                                         .userService.getReservationList_byUser(loginedUser.getId());
                                 if(reservations_byUser.size()>=5){
@@ -141,7 +139,7 @@ public class MainController implements Errorable,Controller {
                                 }
 
                                 //예매기능
-                                selected = User_Movie.selectMovie(movieList.size());
+                                selected = mainView.selectMovie(movieList.size());
                                 //선택된 영화를 가져온다
                                 Movie movie=movieList.get(selected-1);
                                 if(movie==null){
@@ -169,6 +167,7 @@ public class MainController implements Errorable,Controller {
                                         if(hour2<=hour1&&hour1<=(hour2+duration)){
                                             printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
                                                     loginedUser.getId()+"님이 예약한 하신 영화 "+tmp+"가 존재합니다");
+                                            printError();
                                             continue outer;
                                         }
                                     }
@@ -177,7 +176,7 @@ public class MainController implements Errorable,Controller {
                                 //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
                                 if(UserServiceUtil.INSTANCE.userService.getReservationCnt(movie.getTno())==0){
                                     System.out.println("모든 좌석이 예매 가능합니다");
-                                    selected = User_Movie.showSeatList();
+                                    selected = mainView.showSeatList();
                                 }
                                 else{
                                     //선택한 영화의 리스트 가져옴<<<내가 선택한 영화 한종류의 모든 예약 리스트임
@@ -202,18 +201,18 @@ public class MainController implements Errorable,Controller {
                                     //예약 가능한 좌석 확인하고
                                     System.out.println("예약된 좌석은 X 표시");
                                     List<Integer> seatNumList = reservationList.stream().map(r->r.getSeatNum()).collect(Collectors.toList());
-                                    selected = User_Movie.showSeatList(seatNumList);
+                                    selected = mainView.showSeatList(seatNumList);
                                     while(seatNumList.contains(selected)){
                                         printError("올바른 좌석을 입력해 주세요(중복x)");
-                                        selected = User_Movie.showSeatList(seatNumList);
+                                        selected = mainView.showSeatList(seatNumList);
                                     }
                                 }
                                 //여기까지 온 selected는 유효한 숫자
                                 //selected를 seatnum로 써야함
                                 //reservation 객체를 조립해서 줘야함
-                                if(User_Movie.confirm(movie)){
+                                if(mainView.confirm(movie)){
                                     //결제기능으로
-                                    UserServiceUtil.INSTANCE.userService.reservation(selected,movie);
+                                    UserServiceUtil.INSTANCE.userService.reservation(selected,movie,loginedUser);
                                     System.out.println(loginedUser.getId()+"님 "+movie.getTitle()+
                                             "의 예매에 성공하셨습니다");
                                 }
@@ -283,7 +282,7 @@ public class MainController implements Errorable,Controller {
                         printError("먼저 로그인을 해주세요");
                         break;
                     }
-                    result = User_Movie.mypage();
+                    result = mainView.mypage();
                     if(result == 0 ){
                         result = 1;
                         continue outer;
@@ -294,13 +293,15 @@ public class MainController implements Errorable,Controller {
                             if(user == null){
                                 throw new Exception();
                             }
-                            User_Movie.mypage_1_1(user);
-                            if(User_Movie.confirm()){
-                                result = User_Movie.mypage_1_2();
-                                user = User_Movie.updateUser(result,loginedUser);
+                            mainView.mypage_1_1(user);
+                            if(mainView.confirm()){
+                                result = mainView.mypage_1_2();
+                                //입력받음
+                                user = mainView.updateUser(result,loginedUser);
                                 if(user == null){
                                     throw new Exception();
                                 }
+                                //변경
                                 result = UserServiceUtil.INSTANCE.userService
                                         .updateUser(user);
                                 if(result !=1) {
@@ -330,7 +331,7 @@ public class MainController implements Errorable,Controller {
                                 result = 1;
                                 continue outer;
                             }
-                            result = User_Movie.mypage_2_1(reservationList_byUser);
+                            result = mainView.mypage_2_1(reservationList_byUser);
                             Reservation selectedRes = reservationList_byUser.get(result-1);
                             Timestamp schedule = selectedRes.getSchedule();
                             int year1 = schedule.getYear();
@@ -353,9 +354,14 @@ public class MainController implements Errorable,Controller {
                                     continue outer;
                                 }
                             }//if
-                            UserServiceUtil.INSTANCE
-                                    .userService.deleteRes(selectedRes.getRno(),loginedUser,selectedRes.getPrice());
-                            System.out.println("선택된 예약이 취소되었습니다");
+                            System.out.println("정말 취소 하시겠습니까? y/n");
+                            if(mainView.confirm()){
+                                UserServiceUtil.INSTANCE
+                                        .userService.deleteRes(selectedRes.getRno(),loginedUser,selectedRes.getPrice());
+                                System.out.println("선택된 예약이 취소되었습니다");
+                            }
+                            result = 1;
+                            continue outer;
                         } catch (Exception e) {
                             printError("예약정보를 조회할수 없습니다(e)");
                         }

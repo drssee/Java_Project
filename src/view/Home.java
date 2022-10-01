@@ -9,10 +9,21 @@ public class Home implements View{
     public Home(){
 
     }
-
-    public static Integer mainMenu(){
-        int result=-1;
+    public void mainLogo(){
+        System.out.println("\n" +
+                " _____  ______ _____  _   _      ___  ___               _       \n" +
+                "|  ___||___  /|  ___|| \\ | |     |  \\/  |              (_)      \n" +
+                "| |__     / / | |__  |  \\| |     | .  . |  ___  __   __ _   ___ \n" +
+                "|  __|   / /  |  __| | . ` |     | |\\/| | / _ \\ \\ \\ / /| | / _ \\\n" +
+                "| |___ ./ /___| |___ | |\\  |     | |  | || (_) | \\ V / | ||  __/\n" +
+                "\\____/ \\_____/\\____/ \\_| \\_/     \\_|  |_/ \\___/   \\_/  |_| \\___|\n" +
+                "                                                                \n" +
+                "                                                                ");
         System.out.println("영화 예매 시스템");
+    }
+
+    public Integer mainMenu(){
+        int result=-1;
         if(MainController.isInLogin){
             System.out.println("1.로그아웃 2.영화목록조회 3.마이페이지 0.종료");
             result = InputUtil.INSTANCE.inputMenuNum(3);
@@ -22,5 +33,18 @@ public class Home implements View{
             result = InputUtil.INSTANCE.inputMenuNum(2);
         }
         return result;
+    }
+
+    public void welcome(int num,String id){
+        if(num==-9){
+            System.out.println("EZEN_MOVIE 관리자 "+id+"님 환영합니다");
+            return;
+        }
+        System.out.println("\n" +
+                id+"님 환영합니다!\n"+
+                "｀、、｀ヽ｀ヽ｀、、ヽヽ、｀、ヽ｀ヽ｀ヽヽ｀\n" +
+                "ヽ｀、｀ヽ｀、ヽ｀｀、ヽ｀ヽ｀、ヽヽ｀ヽ、ヽ\n" +
+                "｀ヽ、ヽヽ｀ヽ｀、｀｀ヽ｀ヽ、ヽ、ヽ｀ヽ｀ヽ\n" +
+                "、ヽ｀ヽ｀、ヽヽ｀｀、ヽ｀、ヽヽ \uD800\uDC8A ヽ｀｀\n");
     }
 }

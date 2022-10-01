@@ -2,6 +2,7 @@ package domain;
 
 import formatter.DateFormatter;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class User {
@@ -13,7 +14,7 @@ public class User {
     private String email;
     private Date regDate;
     private int total_payment;
-    private Date modDate;
+    private Timestamp modDate;
 
     public User() {
     }
@@ -74,11 +75,11 @@ public class User {
         this.total_payment = total_payment;
     }
 
-    public Date getModDate() {
+    public Timestamp getModDate() {
         return modDate;
     }
 
-    public void setModDate(Date modDate) {
+    public void setModDate(Timestamp modDate) {
         this.modDate = modDate;
     }
 

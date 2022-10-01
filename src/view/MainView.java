@@ -14,11 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class User_Movie implements View{
-    public static String showMovie(List<Movie>movieList, PageRequest pageRequest){
+public class MainView implements View{
+    public String showMovie(List<Movie>movieList, PageRequest pageRequest){
         System.out.println("예매 가능한 영화 목록");
         Movie movie;
-//        System.out.println("    영화제목       감독      런타임        개봉일            상영스케줄              등록일         줄거리요약");
+
         for(int i=0;i<movieList.size();i++){
             movie=movieList.get(i);
             System.out.println((i+1)+". "+movie);
@@ -32,17 +32,17 @@ public class User_Movie implements View{
         System.out.println();
         return tmp;
     }
-    public static String input_Search_Keyword() {
+    public String input_Search_Keyword() {
         System.out.print("검색할 키워드를 입력해주세요");
         return InputUtil.INSTANCE.inputStr(1,12);
     }
 
-    public static int selectMovie(int size) {
+    public int selectMovie(int size) {
         System.out.println("예매할 영화의 번호를 입력해주세요");
         return InputUtil.INSTANCE.inputMenuNum(1,size);
     }
 
-    public static int showSeatList(List<Integer> seatNumList){
+    public int showSeatList(List<Integer> seatNumList){
         List<String> seat = new ArrayList<>();
         IntStream.rangeClosed(1,100).forEach(i->seat.add(String.valueOf(i)));
 
@@ -65,7 +65,7 @@ public class User_Movie implements View{
         System.out.println("예약할 좌석을 입력해주세요");
         return InputUtil.INSTANCE.inputMenuNum(1,100);
     }
-    public static int showSeatList(){
+    public int showSeatList(){
         for(int i=1;i<= MainController.RESERVATION_SIZE;i++){
             if(i<10){
                 System.out.printf(" %2d ",i);
@@ -81,7 +81,7 @@ public class User_Movie implements View{
         return InputUtil.INSTANCE.inputMenuNum(1,100);
     }
 
-    public static boolean confirm(Movie movie) {
+    public boolean confirm(Movie movie) {
         String tmp = "";
         System.out.println(movie);
         System.out.println("선택하신 "+movie.getTitle()+"을 예매하시겠습니까? "
@@ -100,7 +100,7 @@ public class User_Movie implements View{
         return false;
     }
 
-    public static boolean confirm(){
+    public boolean confirm(){
         String tmp = "";
         tmp=InputUtil.INSTANCE.inputStr(1,1);
         if(tmp.equalsIgnoreCase("y")){
@@ -116,11 +116,11 @@ public class User_Movie implements View{
         return false;
     }
 
-    public static Integer mypage() {
+    public Integer mypage() {
         System.out.println("1.회원정보 조회/수정 2.나의예약 조회/취소 ");
         return InputUtil.INSTANCE.inputMenuNum(2);
     }
-    public static User updateUser(int num,User user){
+    public User updateUser(int num,User user){
         String tmp = "";
         switch (num){
             case 1:{
@@ -164,24 +164,24 @@ public class User_Movie implements View{
                 break;
             }
         }
-        Date date = new Date();
-        user.setModDate(date);
+        Timestamp ts = new Timestamp(new Date().getTime());
+        user.setModDate(ts);
         return user;
     }
 
-    public static void mypage_1_1(User user) {
+    public void mypage_1_1(User user) {
         System.out.println(user);
         System.out.println("수정을 원하시면 y 아니면 n");
     }
 
-    public static Integer mypage_1_2() {
+    public Integer mypage_1_2() {
         System.out.println("수정 가능 한 회원 정보");
         System.out.println("1.비밀번호 2.회원이름 3.전화번호 4.이메일");
         System.out.println("수정을 원하시는 정보를 입력해주세요");
         return InputUtil.INSTANCE.inputMenuNum(1,4);
     }
 
-    public static Integer mypage_2_1(List<Reservation> reservationList){
+    public Integer mypage_2_1(List<Reservation> reservationList){
         System.out.println("예매하신 영화 리스트");
         for(int i=0;i<reservationList.size();i++){
             Reservation r = reservationList.get(i);

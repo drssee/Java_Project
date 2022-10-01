@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Login implements View{
-    public static Integer loginMenu(){
+    public Integer loginMenu(){
         System.out.println("로그인 메뉴");
         System.out.println("1.로그인 2.회원가입");
         return InputUtil.INSTANCE.inputMenuNum(2);
     }
-    public static Map<String,String> login(){
+    public Map<String,String> login(){
         Map<String,String> id_pwd = new HashMap<>();
         String tmp = "";
         System.out.print("1.id를 입력해주세요");
@@ -26,7 +26,7 @@ public class Login implements View{
         return id_pwd;
     }
 
-    public static User inputUser(){
+    public User inputUser(){
         User user = new User();
         String tmp = "";
         System.out.print("1.id를 입력해주세요");

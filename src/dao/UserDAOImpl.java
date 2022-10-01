@@ -1,13 +1,20 @@
 package dao;
 
+import controller.MainController;
 import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
+import jdk.jfr.Description;
+import jdk.jfr.MetadataDefinition;
 import util.ConnectionUtil;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
@@ -66,7 +73,7 @@ public class UserDAOImpl implements UserDAO {
         pstmt.setString(2,user.getName());
         pstmt.setString(3,user.getPhone());
         pstmt.setString(4,user.getEmail());
-        pstmt.setDate(5,new java.sql.Date(user.getModDate().getTime()));
+        pstmt.setTimestamp(5,user.getModDate());
         pstmt.setString(6,user.getId());
         rowCnt = pstmt.executeUpdate();
         pstmt.close();
@@ -217,11 +224,12 @@ public class UserDAOImpl implements UserDAO {
                     "where id = ?";
             conn = ConnectionUtil.INSTANCE.getConnection();
             conn.setAutoCommit(false);
-
             pstmt_user = conn.prepareStatement(sql_user);
-            pstmt_user.setInt(1,user.getTotal_payment()+reservation.getPrice());
+            pstmt_user.setInt(1,user.getTotal_payment());
             pstmt_user.setString(2,user.getId());
             pstmt_user.executeUpdate();
+
+            MainController.loginedUser=user;
 
             //
 
@@ -240,6 +248,7 @@ public class UserDAOImpl implements UserDAO {
             conn.commit();
         } catch (Exception e) {
             try {
+                System.out.println("롤백이 발생했습니다");
                 conn.rollback();
             } catch (SQLException ex) {
                 throw new RuntimeException("예약 도중 오류가 발생 했습니다");
@@ -299,11 +308,12 @@ public class UserDAOImpl implements UserDAO {
                     "where id = ?";
             conn = ConnectionUtil.INSTANCE.getConnection();
             conn.setAutoCommit(false);
-
             pstmt_user = conn.prepareStatement(sql_user);
             pstmt_user.setInt(1,user.getTotal_payment()-price);
             pstmt_user.setString(2,user.getId());
             pstmt_user.executeUpdate();
+            user.setTotal_payment(user.getTotal_payment()-price);
+            MainController.loginedUser=user;
 
             //
 
@@ -317,6 +327,7 @@ public class UserDAOImpl implements UserDAO {
             conn.commit();
         } catch (Exception e) {
             try {
+                System.out.println("예약 취소 도중 오류가 발생 했습니다");
                 conn.rollback();
             } catch (SQLException ex) {
                 throw new RuntimeException("예약 취소 도중 오류가 발생 했습니다");
