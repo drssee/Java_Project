@@ -21,6 +21,17 @@ public class Home implements Viewable {
         System.out.println("영화 예매 시스템");
     }
 
+    public void exit(){
+        System.out.println("\n" +
+                "┏♪━･･━･･━･･━･･━+☆+┓\n" +
+                "이용해주셔서 감사합니다\n" +
+                "     EZEN Movie를\n" +
+                "        종료합니다!\n" +
+                "　　 ∧,,∧　    ∧_∧\n" +
+                " (*･ω･*) (*･ω･*)\n" +
+                "┗+☆+━〇☆〇･〇☆〇━♬┛\n");
+    }
+
     public Integer mainMenu(){
         int result=-1;
         if(MainController.isInLogin){
@@ -36,10 +47,9 @@ public class Home implements Viewable {
 
     public void welcome(int num,String id){
         if(num==-9){
-            System.out.println("EZEN_MOVIE 관리자 "+id+"님 환영합니다");
-            return;
+            System.out.println("EZEN_MOVIE 관리자");
         }
-        System.out.println("\n" +
+        System.out.println(
                 id+"님 환영합니다!\n"+
                 "｀、、｀ヽ｀ヽ｀、、ヽヽ、｀、ヽ｀ヽ｀ヽヽ｀\n" +
                 "ヽ｀、｀ヽ｀、ヽ｀｀、ヽ｀ヽ｀、ヽヽ｀ヽ、ヽ\n" +

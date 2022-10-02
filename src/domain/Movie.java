@@ -1,6 +1,6 @@
 package domain;
 
-import formatter.NumberFormatter;
+import formatter.DatetimeFormatter;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -91,12 +91,10 @@ public class Movie {
         this.price = price;
     }
 
-//    @Override
-//    public String toString() {
-//        return "영화제목: "+getTitle()+"/ "+"감독: "+getDirector()+"/ "+"런타임: "+getRuntime()+"시간"+"/ "+ "개봉일: "+DateFormatter.INSTANCE.formatDate(getOpenDate())+"/ "+ "상영스케줄: "+DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+"/ "+ "등록일: "+DateFormatter.INSTANCE.formatDate(getRegDate())+"/ "+"가격: "+getPrice()+"/ "+"줄거리요약: "+getStory();
-//    }
     @Override
     public String toString() {
-        return "상영스케줄 - "+ NumberFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+" | "+"런타임 - "+NumberFormatter.INSTANCE.formatTime(getRuntime())+" | "+"요금 - "+getPrice()+" | "+getTitle()+"\n";
+        return "상영스케줄 - "+ DatetimeFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+
+                " | "+"런타임 - "+ DatetimeFormatter.INSTANCE.formatTime(getRuntime())+" | "+
+                "요금 - "+getPrice()+" | "+getTitle()+"\n";
     }
 }

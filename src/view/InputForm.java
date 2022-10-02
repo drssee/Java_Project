@@ -7,23 +7,23 @@ public enum InputForm {
     InputForm(){}
     public int inputYear(){
         System.out.print("년도>>");
-        return InputUtil.INSTANCE.inputMenuNum(1900,2024);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(1900,2024);
     }
     public int inputMonth(){
         System.out.print("월>>");
-        return InputUtil.INSTANCE.inputMenuNum(1,12);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(1,12);
     }
     public int inputDay(){
         System.out.print("일>>");
-        return InputUtil.INSTANCE.inputMenuNum(1,31);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(1,31);
     }
     public int inputHour(){
         System.out.print("시간>>");
-        return InputUtil.INSTANCE.inputMenuNum(0,23);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(0,23);
     }
     public int inputMinute(){
         System.out.print("분>>");
-        return InputUtil.INSTANCE.inputMenuNum(0,59);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(0,59);
     }
     public String inputId(){
         System.out.print("1.id를 입력해주세요(영문+숫자)");
@@ -63,6 +63,6 @@ public enum InputForm {
     }
     public int inputMovieRuntime(){
         System.out.print("4.영화의 런타임을 입력해주세요(분 단위입력)");
-        return InputUtil.INSTANCE.inputMenuNum(60,360);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(60,360);
     }
 }

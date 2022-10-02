@@ -1,6 +1,6 @@
 package domain;
 
-import formatter.NumberFormatter;
+import formatter.DatetimeFormatter;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -92,16 +92,14 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                "rno=" + rno +
-                ", title='" + title + '\'' +
-                ", schedule=" + schedule +
-                ", seatNum=" + NumberFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"  +
-                ", tno=" + tno +
-                ", id='" + id + '\'' +
-                ", price=" + price +
-                ", regDate=" + regDate +
-                ", modDate=" + modDate +
-                '}';
+        return  "예약번호-" + rno +
+                ", 영화이름-" + title + '\'' +
+                ", 상영일자-" + DatetimeFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)" +
+                ", 좌석번호-" + seatNum+
+                ", 영화번호-" + tno +
+                ", 고객id-" + id + '\'' +
+                ", 가격-" + price +
+                ", 등록시간-" + DatetimeFormatter.INSTANCE.formatDate(regDate) +
+                ", 변경시간-" + (modDate==null?"변경이력없음":DatetimeFormatter.INSTANCE.formatDate(modDate))+"\n";
     }
 }

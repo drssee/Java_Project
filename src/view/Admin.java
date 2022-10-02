@@ -2,6 +2,7 @@ package view;
 
 import domain.Movie;
 import domain.PageRequest;
+import domain.Reservation;
 import util.InputUtil;
 
 import java.sql.Timestamp;
@@ -67,7 +68,7 @@ public class Admin implements Viewable, Errorable{
 
         return movie;
     }
-    public String showMovieList(List<Movie>movieList, PageRequest pageRequest){
+    public String showMovieList(List<Movie> movieList, PageRequest pageRequest){
         System.out.println("════════════════════════════════════════════════════등록된 영화 관리═══════════════════════════════════════════════════════\n");
         Movie movie;
         for(int i=0;i<movieList.size();i++){
@@ -84,12 +85,12 @@ public class Admin implements Viewable, Errorable{
         return tmp;
     }
     public int sel_modify_delete1() {
-        System.out.println("수정/삭제를 원하는 영화번호를 골라주세요");
+        System.out.println("수정/삭제를 원하는 영화번호를 골라주세요\t");
         return InputUtil.INSTANCE.inputMenuNum(1,5);
     }
 
     public int sel_modify_delete2() {
-        System.out.println("1.수정 2.삭제");
+        System.out.println("1.수정 2.삭제\t");
         return InputUtil.INSTANCE.inputMenuNum(1,2);
     }
 
@@ -104,9 +105,8 @@ public class Admin implements Viewable, Errorable{
 
         System.out.println(movie);
         System.out.println("수정하고 싶은 옵션을 선택해주세요");
-        System.out.print("1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약");
-        tmpInt1 = InputUtil.INSTANCE.inputMenuNum(1,5);
-
+        System.out.print("1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약\t");
+        tmpInt1 = InputUtil.INSTANCE.inputMenuNum_noQ(1,5);
 
         switch (tmpInt1){
             case 1:{
@@ -188,6 +188,33 @@ public class Admin implements Viewable, Errorable{
     public String input_Search_Keyword() {
         return InputForm.INSTANCE.inputKeyword();
     }
+    public String showResList(List<Reservation> reservationList, PageRequest pageRequest){
+        System.out.println("══════════════════════════════════════════════════════════════════════════등록된 예매 관리═════════════════════════════════════════════════════════════════════════════\n");
+        Reservation reservation;
+        for(int i=0;i<reservationList.size();i++){
+            reservation=reservationList.get(i);
+            System.out.println(" "+(i+1)+". "+reservation);
+        }
+        System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [고객id검색 s] " +
+                "[예약수정/삭제 m] " +
+                "[관리모드메뉴로 w] " +
+                "[관리모드종료 q]");
+        String tmp = InputUtil.INSTANCE.inputStr(1,1);
+        System.out.println();
+        return tmp;
+    }
+
+    public Integer resConMenu() {
+        System.out.println("현재 메뉴에선 좌석번호만 수정 가능합니다, 영화정보의 변경을 원하시면 무비탭으로 이동해주세요");
+        System.out.print("1.수정 2.삭제\t");
+        return InputUtil.INSTANCE.inputMenuNum(1,2);
+    }
+    public Integer resConMenu1(String msg){
+        System.out.print(msg+"을 원하시는 예약 리스트를 선택해주세요(예약번호 입력 x)\t");
+        return InputUtil.INSTANCE.inputMenuNum(1,5);
+    }
+
 }
 
 

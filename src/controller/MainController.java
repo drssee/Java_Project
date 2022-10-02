@@ -80,7 +80,7 @@ public class MainController extends Controller{
                         result = userController.register();
                         if(result==1){
                             System.out.println("회원가입에 성공 하셨습니다");
-                            System.out.println("서비스를 이요하시려면 로그인을 해주세요\n");
+                            System.out.println("서비스를 이용하시려면 로그인을 해주세요\n");
                         }
                     }
                     break;
@@ -101,17 +101,17 @@ public class MainController extends Controller{
                                 movieList = MovieServiceUtil.INSTANCE.movieService.getMovieList(pageRequest);
                             }
 
-                            //영화목록 게시판을 불려온다
+                            //영화목록 게시판을 불러온다
                             tmp = mainView.showMovieList(movieList, pageRequest);
                             //현재 게시판 페이지 기억하는 변수
                             curPage=pageRequest.getPage();
 
-                            //s(검색 m(예약) p(이전) n(다음) q(종료)
+                            //s(검색) m(예약) p(이전) n(다음) q(종료)
                             if(tmp.equalsIgnoreCase("s")){
                                 //검색기능
                                 //키워드를 입력받아서 키워드에 해당하는 전체 영화 개수를 불러오고 ,
                                 //키워드에 해당하는 페이지 정보도 가져온다
-                                keyword= mainView.input_Search_Keyword();
+                                keyword = mainView.input_Search_Keyword();
                                 totalCnt = MovieServiceUtil.INSTANCE.movieService.getSearchedTotalCnt(keyword);
                                 pageRequest = new PageRequest(totalCnt);
                                 //검색한 리스트
@@ -147,6 +147,7 @@ public class MainController extends Controller{
                                 //예매할 영화의 번호를 선택
                                 selected = mainView.selectMovie(movieList.size());
                                 if(selected==-1){
+                                    printError("메뉴로 돌아갑니다");
                                     continue;
                                 }
                                 //선택된 영화를 가져온다
@@ -201,7 +202,6 @@ public class MainController extends Controller{
                                 }
                                 if(selected==-1){
                                     printError("예약을 종료합니다");
-                                    printError();
                                     continue ;
                                 }
                                 //여기까지 온 selected는 유효한 숫자
@@ -227,9 +227,10 @@ public class MainController extends Controller{
                                 if(curPage!=1){
                                     pageRequest.setPage(pageRequest.getPage()-1);
                                     if(result==7){
-                                        movieList = MovieServiceUtil.INSTANCE.movieService.getSearchedMovieList(pageRequest,keyword);
+                                        movieList = MovieServiceUtil.INSTANCE.movieService
+                                                .getSearchedMovieList(pageRequest,keyword);
                                     }
-                                }
+                                }//if외부
                                 else{
                                     printError("더이상 앞으로 갈 수 없습니다");
                                 }
@@ -238,12 +239,14 @@ public class MainController extends Controller{
                                 //다음
                                 int totalPage = pageRequest.getTotalPage();
                                 if(totalPage==0){
+                                    //게시판에 아무것도 없는 상태일때
                                     printError("목록이 없습니다");
                                 }
                                 else if(curPage!=totalPage&&totalPage!=1){
                                     pageRequest.setPage(pageRequest.getPage()+1);
                                     if(result==7){
-                                        movieList = MovieServiceUtil.INSTANCE.movieService.getSearchedMovieList(pageRequest,keyword);
+                                        movieList = MovieServiceUtil.INSTANCE.movieService
+                                                .getSearchedMovieList(pageRequest,keyword);
                                     }
                                 }
                                 else{
@@ -267,7 +270,6 @@ public class MainController extends Controller{
                         continue;
                     }
                     catch(Exception e){
-                        e.printStackTrace();
                         printError("해당목록을 조회할수 없습니다(e)");
                         continue;
                     }
@@ -330,6 +332,9 @@ public class MainController extends Controller{
                                 continue outer;
                             }
                             result = mainView.mypage_2_1(reservationList_byUser);
+                            if(result==-1){
+                                throw new Exception();
+                            }
                             Reservation selectedRes = reservationList_byUser.get(result-1);
                             Timestamp schedule = selectedRes.getSchedule();
                             Long scheduledTime = schedule.getTime();
@@ -363,8 +368,9 @@ public class MainController extends Controller{
                 }
 
                 case 0 : {
-                    System.out.println("종료합니다");
+                    ClassUtil.INSTANCE.invoke("view.Home","exit");
                     InputUtil.INSTANCE.close();
+                    System.exit(0);
                     break;
                 }
             }//switch

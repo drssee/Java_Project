@@ -4,10 +4,10 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public enum NumberFormatter {
+public enum DatetimeFormatter {
     INSTANCE;
 
-    NumberFormatter() {
+    DatetimeFormatter() {
     }
 
     public String formatDate(Date date){

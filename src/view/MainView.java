@@ -4,7 +4,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
-import formatter.NumberFormatter;
+import formatter.DatetimeFormatter;
 import util.InputUtil;
 
 import java.sql.Timestamp;
@@ -35,7 +35,7 @@ public class MainView implements Viewable, Errorable{
     }
 
     public int selectMovie(int size) {
-        System.out.println("예매할 영화의 번호를 입력해주세요");
+        System.out.println("예매할 영화의 번호를 입력해주세요\t");
         return InputUtil.INSTANCE.inputMenuNum(1,size);
     }
 
@@ -89,7 +89,7 @@ public class MainView implements Viewable, Errorable{
             }
             System.out.println();
         }
-        System.out.println("예약할 좌석을 입력해주세요");
+        System.out.print("예약할 좌석을 입력해주세요\t");
         return InputUtil.INSTANCE.inputMenuNum(1,100);
     }
     public boolean confirm(Movie movie) {
@@ -111,21 +111,21 @@ public class MainView implements Viewable, Errorable{
         return false;
     }
 
-    public boolean confirm(){
-        String tmp = "";
-        tmp=InputUtil.INSTANCE.inputStr(1,1);
-        if(tmp.equalsIgnoreCase("y")){
-            return true;
-        }
-        else if(tmp.equalsIgnoreCase("n")){
-            return false;
-        }
-        else{
-            printError("올바른 문자를 입력해주세요");
-            confirm();
-        }
-        return false;
-    }
+//    public boolean confirm(){
+//        String tmp = "";
+//        tmp=InputUtil.INSTANCE.inputStr(1,1);
+//        if(tmp.equalsIgnoreCase("y")){
+//            return true;
+//        }
+//        else if(tmp.equalsIgnoreCase("n")){
+//            return false;
+//        }
+//        else{
+//            printError("올바른 문자를 입력해주세요");
+//            confirm();
+//        }
+//        return false;
+//    }
 
     public Integer mypage() {
         System.out.println("1.회원정보 조회/수정 2.나의예약 조회/취소 0.메뉴로 ");
@@ -199,7 +199,7 @@ public class MainView implements Viewable, Errorable{
         System.out.println("수정 가능 한 회원 정보");
         System.out.println("1.비밀번호 2.회원이름 3.전화번호 4.이메일");
         System.out.println("수정을 원하시는 정보를 입력해주세요");
-        return InputUtil.INSTANCE.inputMenuNum(1,4);
+        return InputUtil.INSTANCE.inputMenuNum_noQ(1,4);
     }
 
     public Integer mypage_2_1(List<Reservation> reservationList){
@@ -208,12 +208,12 @@ public class MainView implements Viewable, Errorable{
             Reservation r = reservationList.get(i);
             System.out.println((i+1)+". 영화제목:"+r.getTitle()
             +" 상영일자:"+r.getSchedule()+" 좌석번호:"+r.getSeatNum()
-            +" 예매한시간:"+ NumberFormatter.INSTANCE
+            +" 예매한시간:"+ DatetimeFormatter.INSTANCE
                             .formatDate(r.getRegDate()));
         }
         System.out.println("취소하고 싶으신 예약이 있으시면");
         System.out.println("번호를 입력해주세요");
-        System.out.println("(주의)상영 3시간 이전의 영화는 취소 불가합니다");
+        System.out.print("(주의)상영 3시간 이전의 영화는 취소 불가합니다\t");
         return InputUtil.INSTANCE.inputMenuNum(1,reservationList.size());
     }
 }

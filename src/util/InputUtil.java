@@ -20,7 +20,6 @@ public enum InputUtil implements Errorable {
             bufferedReader.close();
         } catch (IOException e) {
             printError("close실패");
-            System.exit(0);
         }
     }
     public Integer inputMenuNum(int maxNum){//한자리정수 0~9입력받는 메서드
@@ -52,11 +51,34 @@ public enum InputUtil implements Errorable {
         String tmp="";
         Integer result = 0;
         try {
-            System.out.println("종료는 q");
+            System.out.println("(종료는 q)");
             tmp = bufferedReader.readLine();
             if("q".equals(tmp)||"Q".equals(tmp)){
                 return -1;
             }
+            while(tmp==null||"".equals(tmp)||minNum>Integer.valueOf(tmp)||maxNum<Integer.valueOf(tmp)){
+                printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
+                tmp = String.valueOf(inputMenuNum(minNum,maxNum));
+            }
+            result = Integer.valueOf(tmp);
+        }
+        catch (NumberFormatException e) {
+            printError("올바른 숫자를 입력해주세요");
+            return inputMenuNum(minNum,maxNum);
+        } catch (IOException e) {
+            printError("입력에 실패하였습니다");
+            return -1;
+        } catch (Exception e){
+            printError();
+            return -1;
+        }
+        return result;
+    }
+    public Integer inputMenuNum_noQ(int minNum , int maxNum){//min~max 정수 입력받는 메서드
+        String tmp="";
+        Integer result = 0;
+        try {
+            tmp = bufferedReader.readLine();
             while(tmp==null||"".equals(tmp)||minNum>Integer.valueOf(tmp)||maxNum<Integer.valueOf(tmp)){
                 printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
                 tmp = String.valueOf(inputMenuNum(minNum,maxNum));

@@ -9,3 +9,7 @@ calendar를 이용해서 set을 해야함
 admindaoimpl의 movie 선언 위치에 따른 변화가 이해가 안됨
 
 db업데이트후 자바user객체도 업데이트 해줘야함(프로그램 실행중이라)
+
+정규식 공부
+
+reflection api로 메소드를 동적호출하면 같은 코드인데 될때 vs 안될때 차이점
