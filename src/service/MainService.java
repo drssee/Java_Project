@@ -12,4 +12,5 @@ public interface MainService {
     public void reservation(int selected, Movie movie, User user) throws Exception;
     public List<Reservation> getReservationList_byUser(String id) throws Exception;
     public void deleteRes(int rno,User user, int price) throws Exception;
+    public boolean checkTime(Movie movie , List<Reservation> reservations_byUser);
 }

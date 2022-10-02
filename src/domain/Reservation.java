@@ -1,6 +1,6 @@
 package domain;
 
-import formatter.DateFormatter;
+import formatter.NumberFormatter;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -96,7 +96,7 @@ public class Reservation {
                 "rno=" + rno +
                 ", title='" + title + '\'' +
                 ", schedule=" + schedule +
-                ", seatNum=" + DateFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"  +
+                ", seatNum=" + NumberFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"  +
                 ", tno=" + tno +
                 ", id='" + id + '\'' +
                 ", price=" + price +

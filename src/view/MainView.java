@@ -1,11 +1,10 @@
 package view;
 
-import controller.MainController;
 import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
-import formatter.DateFormatter;
+import formatter.NumberFormatter;
 import util.InputUtil;
 
 import java.sql.Timestamp;
@@ -14,27 +13,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class MainView implements View{
-    public String showMovie(List<Movie>movieList, PageRequest pageRequest){
-        System.out.println("예매 가능한 영화 목록");
+public class MainView implements Viewable, Errorable{
+    public String showMovieList(List<Movie>movieList, PageRequest pageRequest){
+        System.out.println("════════════════════════════════════════════════════예매 가능한 영화 목록════════════════════════════════════════════════════\n");
         Movie movie;
-
         for(int i=0;i<movieList.size();i++){
             movie=movieList.get(i);
-            System.out.println((i+1)+". "+movie);
+            System.out.println(" "+(i+1)+". "+movie);
         }
-        System.out.println("현재 페이지 : "+pageRequest.getPage());
-        System.out.print("[등록된 영화검색 s] " +
+        System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [등록된 영화검색 s] " +
+                "[자세히 보기 d] " +
                 "[영화예매 m] " +
-                "[이전 p] [다음 n] " +
                 "[메뉴로 q]");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         System.out.println();
         return tmp;
     }
     public String input_Search_Keyword() {
-        System.out.print("검색할 키워드를 입력해주세요");
-        return InputUtil.INSTANCE.inputStr(1,12);
+        return InputForm.INSTANCE.inputKeyword();
     }
 
     public int selectMovie(int size) {
@@ -42,45 +39,59 @@ public class MainView implements View{
         return InputUtil.INSTANCE.inputMenuNum(1,size);
     }
 
+    public int showSeatList(){
+        return showSeatList(new ArrayList<Integer>());
+    }
     public int showSeatList(List<Integer> seatNumList){
         List<String> seat = new ArrayList<>();
         IntStream.rangeClosed(1,100).forEach(i->seat.add(String.valueOf(i)));
-
 
         for(int i=0;i<seatNumList.size();i++){
             seat.set((seatNumList.get(i)-1)," X");
         }
 
-        for(int i=1;i<=seat.size();i++){
-            if(i<=10){
-                System.out.printf(" %2s ",seat.get(i-1));
+        for(int i=1;i<=seat.size()/10;i++){
+            for(int a=1;a<=10;a++){
+                if(a==5){
+                    System.out.print("┌────┐\t\t");
+                }
+                else{
+                    System.out.print("┌────┐");
+                }
             }
-            else{
-                System.out.print(" "+seat.get(i-1)+" ");
+            System.out.println();
+            for(int b=1;b<=10;b++){
+//                String tmp = ""+(i-1)+b;
+                String tmp  = seat.get(((i-1)*10)+(b-1))+"";
+                if(b==10){
+                    if(i==10){
+                        System.out.printf("|%3s |",tmp);
+                    }
+                    else{
+                        System.out.printf("| %2s |",tmp);
+                    }
+                }
+                else if(b==5){
+                    System.out.printf("| %2s |\t\t",tmp);
+                }
+                else{
+                    System.out.printf("| %2s |",tmp);
+                }
             }
-            if(i%10==0) {
-                System.out.println();
+            System.out.println();
+            for(int c=1;c<=10;c++){
+                if(c==5){
+                    System.out.print("└────┘\t\t");
+                }
+                else{
+                    System.out.print("└────┘");
+                }
             }
+            System.out.println();
         }
         System.out.println("예약할 좌석을 입력해주세요");
         return InputUtil.INSTANCE.inputMenuNum(1,100);
     }
-    public int showSeatList(){
-        for(int i=1;i<= MainController.RESERVATION_SIZE;i++){
-            if(i<10){
-                System.out.printf(" %2d ",i);
-            }
-            else{
-                System.out.print(" "+i+" ");
-            }
-            if(i%10==0) {
-                System.out.println();
-            }
-        }
-        System.out.println("예약할 좌석을 입력해주세요");
-        return InputUtil.INSTANCE.inputMenuNum(1,100);
-    }
-
     public boolean confirm(Movie movie) {
         String tmp = "";
         System.out.println(movie);
@@ -94,7 +105,7 @@ public class MainView implements View{
             return false;
         }
         else{
-            System.out.println("올바른 문자를 입력해주세요");
+            printError("올바른 문자를 입력해주세요");
             confirm(movie);
         }
         return false;
@@ -110,55 +121,65 @@ public class MainView implements View{
             return false;
         }
         else{
-            System.out.println("올바른 문자를 입력해주세요");
+            printError("올바른 문자를 입력해주세요");
             confirm();
         }
         return false;
     }
 
     public Integer mypage() {
-        System.out.println("1.회원정보 조회/수정 2.나의예약 조회/취소 ");
+        System.out.println("1.회원정보 조회/수정 2.나의예약 조회/취소 0.메뉴로 ");
         return InputUtil.INSTANCE.inputMenuNum(2);
     }
-    public User updateUser(int num,User user){
+    public User updateUser(int num,User user) throws Exception {
         String tmp = "";
         switch (num){
+            //변경할 정보가 pwd이면 변경전 pwd를 확인후 변경
             case 1:{
-                System.out.print("1.pwd를 입력해주세요");
+                System.out.print("1.변경전 pwd를 입력해주세요");
+                tmp=InputUtil.INSTANCE.inputStr(5,18);
+                while(!user.getPwd().equals(tmp)){
+                    printError("잘못된 pwd를 입력하셨습니다\n다시 입력해주세요\n종료를 원하시면 exitq를 입력");
+                    tmp=InputUtil.INSTANCE.inputStr(5,18);
+                    if("exitq".equals(tmp)||"exitq".equals(tmp)){
+                        throw new Exception();
+                    }
+                }
+                System.out.print("1.변경할 pwd를 입력해주세요");
                 tmp=InputUtil.INSTANCE.inputStr(5,18);
                 while(user.getPwd().equals(tmp)){
-                    System.out.println("이전과 다른 정보를 입력해주세요");
+                    System.out.println("이전과 다른 정보를 입력해주세요\n종료를 원하시면 exitq를 입력");
                     tmp=InputUtil.INSTANCE.inputStr(5,18);
+                    if("exitq".equals(tmp)||"exitq".equals(tmp)){
+                        throw new Exception();
+                    }
                 }
                 user.setPwd(tmp);
                 break;
             }
             case 2:{
-                System.out.print("2.이름을 입력해주세요");
-                tmp=InputUtil.INSTANCE.inputStr(2,6,false);
+                tmp = InputForm.INSTANCE.inputName();
                 while(user.getName().equals(tmp)){
                     System.out.println("이전과 다른 정보를 입력해주세요");
-                    tmp=InputUtil.INSTANCE.inputStr(2,6,false);
+                    tmp=InputForm.INSTANCE.inputName();
                 }
                 user.setName(tmp);
                 break;
             }
             case 3:{
-                System.out.print("3.전화번호를 입력해주세요");
-                tmp=InputUtil.INSTANCE.inputStr(8,12,true);
+                tmp = InputForm.INSTANCE.inputPhone();
                 while(user.getPhone().equals(tmp)){
                     System.out.println("이전과 다른 정보를 입력해주세요");
-                    tmp=InputUtil.INSTANCE.inputStr(8,12,true);
+                    tmp = InputForm.INSTANCE.inputPhone();
                 }
                 user.setPhone(tmp);
                 break;
             }
             case 4:{
-                System.out.print("4.이메일을 입력해주세요");
-                tmp=InputUtil.INSTANCE.inputStr(6,18,"@");
+                tmp = InputForm.INSTANCE.inputEmail();
                 while(user.getEmail().equals(tmp)){
                     System.out.println("이전과 다른 정보를 입력해주세요");
-                    tmp=InputUtil.INSTANCE.inputStr(6,18,"@");
+                    tmp = InputForm.INSTANCE.inputEmail();
                 }
                 user.setEmail(tmp);
                 break;
@@ -187,7 +208,7 @@ public class MainView implements View{
             Reservation r = reservationList.get(i);
             System.out.println((i+1)+". 영화제목:"+r.getTitle()
             +" 상영일자:"+r.getSchedule()+" 좌석번호:"+r.getSeatNum()
-            +" 예매한시간:"+ DateFormatter.INSTANCE
+            +" 예매한시간:"+ NumberFormatter.INSTANCE
                             .formatDate(r.getRegDate()));
         }
         System.out.println("취소하고 싶으신 예약이 있으시면");

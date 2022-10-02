@@ -3,7 +3,7 @@ package view;
 import controller.MainController;
 import util.InputUtil;
 
-public class Home implements View{
+public class Home implements Viewable {
 
     public Home(){
 

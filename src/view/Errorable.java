@@ -10,6 +10,6 @@ public interface Errorable {
                 "　　 ∧_∧ \n" +
                 "　　(_  _   )\n" +
                 "　　　ヽ ﾉ) \n" +
-                "　 　 　 ｣｣");
+                "　 　 　 ｣｣\n");
     }
 }

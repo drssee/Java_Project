@@ -84,7 +84,7 @@ public class AdminController extends Controller{
                                 movieList = AdminServiceUtil.INSTANCE.adminService.getMovieList(pageRequest);
                             }
                             //movielist를 화면에 출력후 메뉴입력받음
-                            String tmp = admin.movieList(movieList,pageRequest);
+                            String tmp = admin.showMovieList(movieList,pageRequest);
 
                             //현재 페이지 저장을 위한 curPage
                             curPage=pageRequest.getPage();

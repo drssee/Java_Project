@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Admin implements Errorable , View{
+public class Admin implements Viewable, Errorable{
     public Admin(){
 
     }
@@ -31,46 +31,35 @@ public class Admin implements Errorable , View{
         Calendar cal = Calendar.getInstance();
 
         System.out.println("영화등록 모드");
-        System.out.print("1.영화제목을 입력해주세요");
-        tmpStr =  InputUtil.INSTANCE.inputStr(1,12);
+        tmpStr = InputForm.INSTANCE.inputMovieName();
         movie.setTitle(tmpStr);
-        System.out.print("2.간단한 줄거리를 입력해주세요(100자이하)");
-        tmpStr = InputUtil.INSTANCE.inputStr(1,100);
+        tmpStr = InputForm.INSTANCE.inputMovieStory();
         movie.setStory(tmpStr);
-        System.out.print("3.영화감독 이름을 입력해주세요");
-        tmpStr = InputUtil.INSTANCE.inputStr(1,12);
+        tmpStr = InputForm.INSTANCE.inputMovieDirector();
         movie.setDirector(tmpStr);
-        System.out.print("4.영화의 런타임을 입력해주세요");
-        tmpInt1 = InputUtil.INSTANCE.inputMenuNum(9);
+        tmpInt1 = InputForm.INSTANCE.inputMovieRuntime();
         movie.setRuntime(tmpInt1);
 
         System.out.println("5.영화의 오픈 날짜를 입력해주세요(년도 월 일)");
-        System.out.print("년도>>");
-        tmpInt1=InputUtil.INSTANCE.inputMenuNum(1900,2024);
+        tmpInt1=InputForm.INSTANCE.inputYear();
 
-        System.out.print("월>>");
-        tmpInt2=InputUtil.INSTANCE.inputMenuNum(1,12);
+        tmpInt2=InputForm.INSTANCE.inputMonth();
 
-        System.out.print("일>>");
-        tmpInt3=InputUtil.INSTANCE.inputMenuNum(1,31);
+        tmpInt3=InputForm.INSTANCE.inputDay();
 
         movie.setOpenDate(InputUtil.INSTANCE.inputCal(tmpInt1,tmpInt2,tmpInt3).getTime());
 
         System.out.println("6.영화의 상영일자를 입력해 주세요(년도 월 일 시 분)");
         System.out.print("년도>>");
-        tmpInt1=InputUtil.INSTANCE.inputMenuNum(1900,2024);
+        tmpInt1=InputForm.INSTANCE.inputYear();
 
-        System.out.print("월>>");
-        tmpInt2=InputUtil.INSTANCE.inputMenuNum(1,12);
+        tmpInt2=InputForm.INSTANCE.inputMonth();
 
-        System.out.print("일>>");
-        tmpInt3=InputUtil.INSTANCE.inputMenuNum(1,31);
+        tmpInt3=InputForm.INSTANCE.inputDay();
 
-        System.out.print("시간>>");
-        tmpInt4=InputUtil.INSTANCE.inputMenuNum(0,23);
+        tmpInt4=InputForm.INSTANCE.inputHour();
 
-        System.out.print("분>>");
-        tmpInt5=InputUtil.INSTANCE.inputMenuNum(0,59);
+        tmpInt5=InputForm.INSTANCE.inputMinute();
 
         movie.setSchedule(new Timestamp(InputUtil.INSTANCE.inputCal(tmpInt1,tmpInt2,tmpInt3,tmpInt4,tmpInt5).getTimeInMillis()));
 
@@ -78,24 +67,22 @@ public class Admin implements Errorable , View{
 
         return movie;
     }
-
-    public String movieList(List<Movie> movieList, PageRequest pageRequest){
+    public String showMovieList(List<Movie>movieList, PageRequest pageRequest){
+        System.out.println("════════════════════════════════════════════════════등록된 영화 관리═══════════════════════════════════════════════════════\n");
         Movie movie;
-//        System.out.println("    영화제목       감독      런타임        개봉일            상영스케줄              등록일         줄거리요약");
         for(int i=0;i<movieList.size();i++){
             movie=movieList.get(i);
-            System.out.println((i+1)+". "+movie);
+            System.out.println(" "+(i+1)+". "+movie);
         }
-        System.out.println("현재 페이지 : "+pageRequest.getPage());
-        System.out.print("[등록된 영화검색 s] " +
-                "[수정/삭제 m] " +
-                "[이전 p] [다음 n] " +
-                "[관리자메뉴로 w] [관리자모드종료 q]");
+        System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [영화검색 s] " +
+                "[자세히 보기 d] " +
+                "[관리모드메뉴로 w] " +
+                "[관리모드종료 q]");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         System.out.println();
         return tmp;
     }
-
     public int sel_modify_delete1() {
         System.out.println("수정/삭제를 원하는 영화번호를 골라주세요");
         return InputUtil.INSTANCE.inputMenuNum(1,5);
@@ -123,51 +110,40 @@ public class Admin implements Errorable , View{
 
         switch (tmpInt1){
             case 1:{
-                System.out.print("1.영화제목을 입력해주세요");
-                tmpStr =  InputUtil.INSTANCE.inputStr(1,12);
+                tmpStr = InputForm.INSTANCE.inputMovieName();
                 movie.setTitle(tmpStr);
                 break;
             } case 2:{
-                System.out.print("2.영화감독 이름을 입력해주세요");
-                tmpStr = InputUtil.INSTANCE.inputStr(1,12);
+                tmpStr = InputForm.INSTANCE.inputMovieDirector();
                 movie.setDirector(tmpStr);
                 break;
             } case 3:{
-                System.out.print("3.영화의 런타임을 입력해주세요");
-                tmpInt1 = InputUtil.INSTANCE.inputMenuNum(9);
+                tmpInt1 = InputForm.INSTANCE.inputMovieRuntime();
                 movie.setRuntime(tmpInt1);
                 break;
             } case 4:{
                 System.out.println("개봉일&상영스케줄");
                 System.out.println("4-1.영화의 오픈 날짜를 입력해주세요(년도 월 일)");
-                System.out.print("년도>>");
-                tmpInt1=InputUtil.INSTANCE.inputMenuNum(1900,2024);
+                tmpInt1=InputForm.INSTANCE.inputYear();
 
-                System.out.print("월>>");
-                tmpInt2=InputUtil.INSTANCE.inputMenuNum(1,12);
+                tmpInt2=InputForm.INSTANCE.inputMonth();
 
-                System.out.print("일>>");
-                tmpInt3=InputUtil.INSTANCE.inputMenuNum(1,31);
+                tmpInt3=InputForm.INSTANCE.inputDay();
 
                 Date openDate = InputUtil.INSTANCE.inputCal(tmpInt1,tmpInt2,tmpInt3).getTime();
 
                 //
 
                 System.out.println("4-2.영화의 상영일자를 입력해 주세요(년도 월 일 시 분)");
-                System.out.print("년도>>");
-                tmpInt1=InputUtil.INSTANCE.inputMenuNum(1900,2024);
+                tmpInt1=InputForm.INSTANCE.inputYear();
 
-                System.out.print("월>>");
-                tmpInt2=InputUtil.INSTANCE.inputMenuNum(1,12);
+                tmpInt2=InputForm.INSTANCE.inputMonth();
 
-                System.out.print("일>>");
-                tmpInt3=InputUtil.INSTANCE.inputMenuNum(1,31);
+                tmpInt3=InputForm.INSTANCE.inputDay();
 
-                System.out.print("시간>>");
-                tmpInt4=InputUtil.INSTANCE.inputMenuNum(0,23);
+                tmpInt4=InputForm.INSTANCE.inputHour();
 
-                System.out.print("분>>");
-                tmpInt5=InputUtil.INSTANCE.inputMenuNum(0,59);
+                tmpInt5=InputForm.INSTANCE.inputMinute();
 
                 Timestamp schedule = new Timestamp(InputUtil.INSTANCE.inputCal(tmpInt1,tmpInt2,tmpInt3,tmpInt4,tmpInt5).getTimeInMillis());
 
@@ -184,8 +160,7 @@ public class Admin implements Errorable , View{
                 break;
 
             } case 5: {
-                System.out.print("5.간단한 줄거리를 입력해주세요(100자이하)");
-                tmpStr = InputUtil.INSTANCE.inputStr(1, 100);
+                tmpStr=InputForm.INSTANCE.inputMovieStory();
                 movie.setStory(tmpStr);
                 break;
             } default: {
@@ -211,8 +186,7 @@ public class Admin implements Errorable , View{
     }
 
     public String input_Search_Keyword() {
-        System.out.print("검색할 키워드를 입력해주세요");
-        return InputUtil.INSTANCE.inputStr(1,12);
+        return InputForm.INSTANCE.inputKeyword();
     }
 }
 

@@ -65,7 +65,7 @@ public class MainController extends Controller{
                             }
                             else if(result==-1){//에러
                                 printError();
-                                continue;
+                                break;
                             }
                             ClassUtil.INSTANCE.invoke("view.Home","welcome",result,loginedUser.getId());
                             break;
@@ -80,18 +80,13 @@ public class MainController extends Controller{
                         result = userController.register();
                         if(result==1){
                             System.out.println("회원가입에 성공 하셨습니다");
-                        }
-                        else{
-                            printError("회원가입에 실패하셨습니다");
-                            printError();
+                            System.out.println("서비스를 이요하시려면 로그인을 해주세요\n");
                         }
                     }
                     break;
                 }//case 1 로그인(로그인,회원가입) 끝
 
                 case 2: {//상영중인 영화목록
-
-
                     try {
                         Integer totalCnt = MovieServiceUtil.INSTANCE.movieService.getTotalCnt();
                         PageRequest pageRequest = new PageRequest(totalCnt);
@@ -100,27 +95,36 @@ public class MainController extends Controller{
                         int curPage;
                         int selected;
                         while (result != 0) {
-                            //검색기능이 활성화되지 않은 경우
+                            //검색중이 아닐때
                             if(result!=7) {
+                                //검색중이 아닐때 리스트
                                 movieList = MovieServiceUtil.INSTANCE.movieService.getMovieList(pageRequest);
                             }
 
-                            tmp = mainView.showMovie(movieList, pageRequest);
-
+                            //영화목록 게시판을 불려온다
+                            tmp = mainView.showMovieList(movieList, pageRequest);
+                            //현재 게시판 페이지 기억하는 변수
                             curPage=pageRequest.getPage();
 
-                            //s m(예약) p n w q
+                            //s(검색 m(예약) p(이전) n(다음) q(종료)
                             if(tmp.equalsIgnoreCase("s")){
                                 //검색기능
+                                //키워드를 입력받아서 키워드에 해당하는 전체 영화 개수를 불러오고 ,
+                                //키워드에 해당하는 페이지 정보도 가져온다
                                 keyword= mainView.input_Search_Keyword();
                                 totalCnt = MovieServiceUtil.INSTANCE.movieService.getSearchedTotalCnt(keyword);
                                 pageRequest = new PageRequest(totalCnt);
+                                //검색한 리스트
                                 movieList = MovieServiceUtil.INSTANCE.movieService.getSearchedMovieList(pageRequest,keyword);
+                                //키워드로 찾아온 영화리스트의 사이즈가 0이면 x
                                 if(movieList.size()==0){
                                     printError("찾으시는 영화는 존재하지 않습니다");
                                     printError();
                                 }
-                                result = 7;
+                                else{
+                                    //검색조건을 알리기 위한 변수
+                                    result = 7;
+                                }
                             }
                             else if(tmp.equalsIgnoreCase("m")){
                                 //isinlogin이 true일때만 들어갈수있음
@@ -131,59 +135,48 @@ public class MainController extends Controller{
 //                                로그인된 유저의 모든 예약정보를 가져온다
                                 List<Reservation> reservations_byUser = MainServiceUtil.INSTANCE.mainService
                                         .getReservationList_byUser(loginedUser.getId());
+
+                                //예매는 1인당 최대 5개까지
                                 if(reservations_byUser.size()>=5){
                                     printError("1인당 최대 5개의 영화가 예매 가능합니다");
                                     continue;
                                 }
 
                                 //예매기능
+
+                                //예매할 영화의 번호를 선택
                                 selected = mainView.selectMovie(movieList.size());
+                                if(selected==-1){
+                                    continue;
+                                }
                                 //선택된 영화를 가져온다
                                 Movie movie=movieList.get(selected-1);
+                                //없으면 continue
                                 if(movie==null){
                                     printError();
                                     continue;
                                 }
-                                //////////////////////////////////////////////////////////////////////////////
 
                                 //선택한 영화의 시간이 기존에 예매한 영화의 시간과 겹치면 알려줌
-                                for(int i=0;i<reservations_byUser.size();i++){
-                                    int year1 = reservations_byUser.get(i).getSchedule().getYear();
-                                    int month1 = reservations_byUser.get(i).getSchedule().getMonth();
-                                    int day1 = reservations_byUser.get(i).getSchedule().getDay();
-                                    int hour1 = reservations_byUser.get(i).getSchedule().getHours();
-
-                                    int year2 = movie.getSchedule().getYear();
-                                    int month2 = movie.getSchedule().getMonth();
-                                    int day2 = movie.getSchedule().getDay();
-                                    int hour2 = movie.getSchedule().getHours();
-
-                                    int duration = movie.getRuntime();
-
-                                    if(year1==year2&&month1==month2&&day1==day2){
-                                        tmp=reservations_byUser.get(i).getTitle();
-                                        if(hour2<=hour1&&hour1<=(hour2+duration)){
-                                            printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
-                                                    loginedUser.getId()+"님이 예약한 하신 영화 "+tmp+"가 존재합니다");
-                                            printError();
-                                            continue outer;
-                                        }
-                                    }
+                                if(!MainServiceUtil.INSTANCE.mainService.checkTime(movie,reservations_byUser)){
+                                    printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
+                                            loginedUser.getId()+"님이 예약하신 영화가 이미 존재합니다");
+                                    printError();
+                                    continue;
                                 }
-                                //////////////////////////////////////////////////////////////////////////////
+
                                 //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
+                                //해당 영화의 reservation이 하나도 없을때
                                 if(MainServiceUtil.INSTANCE.mainService.getReservationCnt(movie.getTno())==0){
                                     System.out.println("모든 좌석이 예매 가능합니다");
                                     selected = mainView.showSeatList();
                                 }
                                 else{
-                                    //선택한 영화의 리스트 가져옴<<<내가 선택한 영화 한종류의 모든 예약 리스트임
+                                    //내가 선택한 영화의 모든 예약 리스트를 가져옴
                                     List<Reservation> reservationList = MainServiceUtil.INSTANCE.mainService
                                             .getReservationList(movie.getTno());
 
-
-
-                                    //선택한 영화가 이미 유저가 예매한 영화면 예매불가 (도달할수없는 불필요한 코드일수도)
+                                    //선택한 영화가 이미 유저가 예매한 영화면 예매불가
                                     for(int i=0;i<reservationList.size();i++){
                                         if(reservationList.get(i).getId().equals(loginedUser.getId())){
                                             printError("이미 "+loginedUser.getId()+"님이 예약한 영화입니다");
@@ -191,19 +184,25 @@ public class MainController extends Controller{
                                         }
                                     }
 
-
+                                    //최대 예약가능한 좌석수가 다 차면 불가능
                                     if(reservationList.size()>=RESERVATION_SIZE){
                                         printError("더이상 예매가 불가능합니다");
                                         continue outer;
                                     }
-                                    //예약 가능한 좌석 확인하고
+                                    //예약된 좌석리스트 가져와서 가능한 좌석 확인
                                     System.out.println("예약된 좌석은 X 표시");
                                     List<Integer> seatNumList = reservationList.stream().map(r->r.getSeatNum()).collect(Collectors.toList());
                                     selected = mainView.showSeatList(seatNumList);
+                                    //선택한 좌석번호가 이미 등록되있는 좌석이면 다시 입력 받음
                                     while(seatNumList.contains(selected)){
-                                        printError("올바른 좌석을 입력해 주세요(중복x)");
+                                        printError("올바른 좌석을 입력해 주세요(e)(중복 좌석 선택)\n예약 종료를 원하시면 q를 눌러 주세요");
                                         selected = mainView.showSeatList(seatNumList);
                                     }
+                                }
+                                if(selected==-1){
+                                    printError("예약을 종료합니다");
+                                    printError();
+                                    continue ;
                                 }
                                 //여기까지 온 selected는 유효한 숫자
                                 //selected를 seatnum로 써야함
@@ -281,11 +280,13 @@ public class MainController extends Controller{
                         break;
                     }
                     result = mainView.mypage();
+                    //메뉴로
                     if(result == 0 ){
                         result = 1;
                         continue outer;
                     }
-                    if(result == 1){//회원정보 조회/수정
+                    //회원정보 조회/수정
+                    if(result == 1){
                         try {
                             User user = UserServiceUtil.INSTANCE.userService.selectOne(loginedUser.getId());
                             if(user == null){
@@ -309,7 +310,6 @@ public class MainController extends Controller{
                                 loginedUser=user;
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
                             printError("회원 정보를 불러오는 것에 실패했습니다(e)");
                             printError();
                             result = 1;
@@ -332,25 +332,13 @@ public class MainController extends Controller{
                             result = mainView.mypage_2_1(reservationList_byUser);
                             Reservation selectedRes = reservationList_byUser.get(result-1);
                             Timestamp schedule = selectedRes.getSchedule();
-                            int year1 = schedule.getYear();
-                            int month1 = schedule.getMonth();
-                            int day1 = schedule.getDay();
-                            int hour1 = schedule.getHours();
-                            int minute1 = schedule.getMinutes();
-                            Date now = new Date();
-                            int year2 = now.getYear();
-                            int month2 = now.getMonth();
-                            int day2 = now.getDay();
-                            int hour2 = now.getHours();
-                            int minute2 = now.getMinutes();
-                            if(year1==year2&&month1==month2&&day1==day2){
+                            Long scheduledTime = schedule.getTime();
+                            Long now = new Date().getTime();
 //                                if(예약시간이 지금시간 -3 -0 사이이면)
-                                if((hour2+3)+((double)minute2/60)
-                                        >=hour1+((double)minute1/60)){
-                                    printError("취소 실패(상영시간 3시간 이내의 영화 선택)");
-                                    result = 1;
-                                    continue outer;
-                                }
+                            if(now<scheduledTime&&(scheduledTime-(3*60*60*1000))<=now){
+                                printError("취소 실패(상영시간 3시간 이내의 영화 선택)");
+                                result = 1;
+                                continue outer;
                             }//if
                             System.out.println("정말 취소 하시겠습니까? y/n");
                             if(mainView.confirm()){
@@ -361,6 +349,10 @@ public class MainController extends Controller{
                             result = 1;
                             continue outer;
                         } catch (Exception e) {
+                            if(result==-1){
+                                System.out.println("메뉴로 돌아갑니다\n");
+                                continue ;
+                            }
                             printError("예약정보를 조회할수 없습니다(e)");
                         }
                     }

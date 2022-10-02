@@ -45,4 +45,19 @@ public class MainServiceImpl implements MainService{
     public void deleteRes(int rno,User user, int price) throws Exception {
         mainDAO.deleteReservation(rno,user,price);
     }
+    @Override
+    public boolean checkTime(Movie movie,List<Reservation> reservations_byUser) {
+        //분단위 영화의 런타임을 초단위로 바꿈
+        Long duration = Long.valueOf(movie.getRuntime()*60);
+        Long scheduledTime = movie.getSchedule().getTime();
+        for(int i=0;i<reservations_byUser.size();i++){
+            Long reservatedTime = reservations_byUser.get(i).getSchedule().getTime();
+            //예약된 리스트의 상영시간들중에 ,
+            //지금 예약하려고 고른 영화의 런타임이 겹칠때
+            if(scheduledTime<=reservatedTime&&reservatedTime<=(scheduledTime+duration)){
+                return false;
+            }
+        }
+        return true;
+    }
 }
