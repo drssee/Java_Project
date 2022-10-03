@@ -312,7 +312,8 @@ public class MainController extends Controller{
                                 //입력받음
                                 user = mainView.updateUser(result,loginedUser);
                                 if(user == null){
-                                    throw new Exception();
+                                    printError("회원정보 업데이트에 실패했습니다");
+                                    continue;
                                 }
                                 //변경
                                 result = UserServiceUtil.INSTANCE.userService

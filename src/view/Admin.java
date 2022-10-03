@@ -53,7 +53,6 @@ public class Admin implements Viewable, Errorable{
         movie.setOpenDate(InputUtil.INSTANCE.inputCal(tmpInt1,tmpInt2,tmpInt3).getTime());
 
         System.out.println("6.영화의 상영일자를 입력해 주세요(년도 월 일 시 분)");
-        System.out.print("년도>>");
         tmpInt1=InputForm.INSTANCE.inputYear();
 
         tmpInt2=InputForm.INSTANCE.inputMonth();

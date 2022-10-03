@@ -113,22 +113,6 @@ public class MainView implements Viewable, Errorable{
         return false;
     }
 
-//    public boolean confirm(){
-//        String tmp = "";
-//        tmp=InputUtil.INSTANCE.inputStr(1,1);
-//        if(tmp.equalsIgnoreCase("y")){
-//            return true;
-//        }
-//        else if(tmp.equalsIgnoreCase("n")){
-//            return false;
-//        }
-//        else{
-//            printError("올바른 문자를 입력해주세요");
-//            confirm();
-//        }
-//        return false;
-//    }
-
     public Integer mypage() {
         System.out.println("1.회원정보 조회/수정 2.나의예약 조회/취소 0.메뉴로 ");
         return InputUtil.INSTANCE.inputMenuNum(2);
@@ -138,49 +122,52 @@ public class MainView implements Viewable, Errorable{
         switch (num){
             //변경할 정보가 pwd이면 변경전 pwd를 확인후 변경
             case 1:{
-                System.out.print("1.변경전 pwd를 입력해주세요");
-                tmp=InputUtil.INSTANCE.inputStr(5,18);
+                System.out.print("1.변경전 pwd를 입력해주세요(영문+숫자)");
+                tmp=InputUtil.INSTANCE.inputStr(1,5,18);
                 while(!user.getPwd().equals(tmp)){
-                    printError("잘못된 pwd를 입력하셨습니다\n다시 입력해주세요\n종료를 원하시면 exitq를 입력");
-                    tmp=InputUtil.INSTANCE.inputStr(5,18);
-                    if("exitq".equals(tmp)||"exitq".equals(tmp)){
-                        throw new Exception();
+                    printError("\n잘못된 pwd를 입력하셨습니다\n다시 입력해주세요\n\n종료를 원하시면 exitq를 입력");
+                    tmp=InputUtil.INSTANCE.inputStr(1,5,18);
+                    if(exitq(tmp)){
+                        return null;
                     }
                 }
-                System.out.print("1.변경할 pwd를 입력해주세요");
+                System.out.print("1.변경할 pwd를 입력해주세요(영문+숫자)");
                 tmp=InputUtil.INSTANCE.inputStr(5,18);
                 while(user.getPwd().equals(tmp)){
-                    System.out.println("이전과 다른 정보를 입력해주세요\n종료를 원하시면 exitq를 입력");
+                    System.out.println("\n이전과 다른 정보를 입력해주세요\n\n종료를 원하시면 exitq를 입력");
                     tmp=InputUtil.INSTANCE.inputStr(5,18);
-                    if("exitq".equals(tmp)||"exitq".equals(tmp)){
-                        throw new Exception();
+                    if(exitq(tmp)){
+                        return null;
                     }
                 }
                 user.setPwd(tmp);
                 break;
             }
             case 2:{
+                System.out.println("이름을 입력해주세요 (등록된 이름:"+user.getName()+")");
                 tmp = InputForm.INSTANCE.inputName();
                 while(user.getName().equals(tmp)){
-                    System.out.println("이전과 다른 정보를 입력해주세요");
+                    System.out.println("이전과 다른 정보를 입력해주세요 ("+user.getName()+")");
                     tmp=InputForm.INSTANCE.inputName();
                 }
                 user.setName(tmp);
                 break;
             }
             case 3:{
+                System.out.println("전화번호를 입력해주세요 (등록된 전화번호:"+user.getPhone()+")");
                 tmp = InputForm.INSTANCE.inputPhone();
                 while(user.getPhone().equals(tmp)){
-                    System.out.println("이전과 다른 정보를 입력해주세요");
+                    System.out.println("이전과 다른 정보를 입력해주세요 ("+user.getPhone()+")");
                     tmp = InputForm.INSTANCE.inputPhone();
                 }
                 user.setPhone(tmp);
                 break;
             }
             case 4:{
+                System.out.println("이메일을 입력해주세요 (등록된 이메일:"+user.getEmail()+")");
                 tmp = InputForm.INSTANCE.inputEmail();
                 while(user.getEmail().equals(tmp)){
-                    System.out.println("이전과 다른 정보를 입력해주세요");
+                    System.out.println("이전과 다른 정보를 입력해주세요 ("+user.getEmail()+")");
                     tmp = InputForm.INSTANCE.inputEmail();
                 }
                 user.setEmail(tmp);
@@ -198,9 +185,9 @@ public class MainView implements Viewable, Errorable{
     }
 
     public Integer mypage_1_2() {
-        System.out.println("수정 가능 한 회원 정보");
+        System.out.println("'수정 가능 한 회원 정보'");
         System.out.println("1.비밀번호 2.회원이름 3.전화번호 4.이메일");
-        System.out.println("수정을 원하시는 정보를 입력해주세요");
+        System.out.println("수정을 원하시는 정보를 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputMenuNum_noQ(1,4);
     }
 
@@ -217,5 +204,9 @@ public class MainView implements Viewable, Errorable{
         System.out.println("번호를 입력해주세요");
         System.out.print("(주의)상영 3시간 이전의 영화는 취소 불가합니다\t");
         return InputUtil.INSTANCE.inputMenuNum(1,reservationList.size());
+    }
+
+    public boolean exitq(String tmp){
+        return "exitq".equals(tmp)||"exitq".equals(tmp);
     }
 }
