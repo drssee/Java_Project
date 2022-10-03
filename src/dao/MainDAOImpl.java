@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainDAOImpl implements MainDAO{
-
-
+    public MainDAOImpl() {}
 
     @Override
     public List<Reservation> selectAll_reservation(int tno) throws Exception {
@@ -59,12 +58,13 @@ public class MainDAOImpl implements MainDAO{
     }
 
     @Override
-    public void reservation(Movie movie, Reservation reservation, User user) {
+    public void reservation(Movie movie, Reservation reservation, User user) throws Exception {
         //selected = seatnum
         //movie = 예약할 영화
         Connection conn = null;
         PreparedStatement pstmt_user = null;
         PreparedStatement pstmt_res = null;
+        String msg = "예약 도중 오류가 발생했습니다";
 
         try {
             String sql_user = "update webdb.user\n" +
@@ -96,10 +96,11 @@ public class MainDAOImpl implements MainDAO{
             conn.commit();
         } catch (Exception e) {
             try {
-                System.out.println("롤백이 발생했습니다");
+                System.out.println(msg);
                 conn.rollback();
+                throw new Exception(msg);
             } catch (SQLException ex) {
-                throw new RuntimeException("예약 도중 오류가 발생 했습니다");
+                throw new RuntimeException(msg);
             }
         } finally {
             try {
@@ -149,7 +150,7 @@ public class MainDAOImpl implements MainDAO{
         Connection conn = null;
         PreparedStatement pstmt_user = null;
         PreparedStatement pstmt_res = null;
-
+        String msg = "예약 취소 도중 오류가 발생 했습니다";
         try {
             String sql_user = "update webdb.user\n" +
                     "set total_payment = ?\n" +
@@ -161,6 +162,7 @@ public class MainDAOImpl implements MainDAO{
             pstmt_user.setString(2,user.getId());
             pstmt_user.executeUpdate();
             user.setTotal_payment(user.getTotal_payment()-price);
+            //로그인된 유저가 활성화된 상태니 최신화를 해줌
             MainController.loginedUser=user;
 
             //
@@ -175,10 +177,11 @@ public class MainDAOImpl implements MainDAO{
             conn.commit();
         } catch (Exception e) {
             try {
-                System.out.println("예약 취소 도중 오류가 발생 했습니다");
+                System.out.println(msg);
                 conn.rollback();
+                throw new Exception(msg);
             } catch (SQLException ex) {
-                throw new RuntimeException("예약 취소 도중 오류가 발생 했습니다");
+                throw new RuntimeException(msg);
             }
         } finally {
             try {

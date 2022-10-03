@@ -11,14 +11,16 @@ import java.util.Date;
 import java.util.List;
 
 public class Admin implements Viewable, Errorable{
-    public Admin(){
-
-    }
+    public Admin(){}
 
     public Integer AdminMenu(){
         System.out.println("관리자모드");
         System.out.println("1.영화등록 2.영화목록(조회/수정/삭제/검색) 3.전체예매자목록(조회/수정/삭제/검색) 0.관리자모드종료");
         return InputUtil.INSTANCE.inputMenuNum(3);
+    }
+
+    public void curMovieList(){
+        System.out.println("현재 등록된 영화 목록");
     }
 
     public Movie inputMovie() {
@@ -78,19 +80,20 @@ public class Admin implements Viewable, Errorable{
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
         System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [영화검색 s] " +
                 "[자세히 보기 d] " +
+                "[수정/삭제 m] " +
                 "[관리모드메뉴로 w] " +
                 "[관리모드종료 q]");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         System.out.println();
         return tmp;
     }
-    public int sel_modify_delete1() {
-        System.out.println("수정/삭제를 원하는 영화번호를 골라주세요\t");
+    public int sel_modify(String msg) {
+        System.out.print(msg+"를 원하는 영화번호를 골라주세요\t");
         return InputUtil.INSTANCE.inputMenuNum(1,5);
     }
 
-    public int sel_modify_delete2() {
-        System.out.println("1.수정 2.삭제\t");
+    public int sel_modify_delete() {
+        System.out.print("1.수정 2.삭제\t");
         return InputUtil.INSTANCE.inputMenuNum(1,2);
     }
 
@@ -102,12 +105,13 @@ public class Admin implements Viewable, Errorable{
         Integer tmpInt4;
         Integer tmpInt5;
         Calendar cal = Calendar.getInstance();
-
-        System.out.println(movie);
+        InputForm.INSTANCE.detailMovie(movie,40);
         System.out.println("수정하고 싶은 옵션을 선택해주세요");
         System.out.print("1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약\t");
-        tmpInt1 = InputUtil.INSTANCE.inputMenuNum_noQ(1,5);
-
+        tmpInt1 = InputUtil.INSTANCE.inputMenuNum(1,5);
+        if(tmpInt1==-1){
+            return null;
+        }
         switch (tmpInt1){
             case 1:{
                 tmpStr = InputForm.INSTANCE.inputMovieName();
@@ -172,7 +176,7 @@ public class Admin implements Viewable, Errorable{
     }//modifymovie(movie)
 
     public int deleteMovie(Movie movie) {
-        System.out.println(movie);
+        InputForm.INSTANCE.detailMovie(movie,40);
         System.out.println("삭제 하시겠습니까? y/n");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         if(tmp.equalsIgnoreCase("y")){

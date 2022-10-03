@@ -29,10 +29,12 @@ public enum ClassUtil {
     }
     public Method getMethod(Class clazz , String methodName){
         String msg = "";
+        Method method;
         try {
             for(Method m : clazz.getDeclaredMethods()){
                 if(m.getName().equals(methodName)){
-                    return m;
+                    method = clazz.getMethod(m.getName(),m.getParameterTypes());
+                    return method;
                 }
             }
         }  catch (Exception e){
@@ -66,14 +68,14 @@ public enum ClassUtil {
         }
         return obj;
     }
-
-    public <T> Object invoke(String className, Object obj , String methodName, T ... t) {
-        Class<?> clazz = getClass(className);
-        Method method = getMethod(clazz,methodName);
+    public Object invoke(String className, String methodName,Object ... args) {
         Object object = null;
         String msg = "";
         try {
-            object = method.invoke(obj,t);
+            Class<?> clazz = getClass(className);
+            Method method = getMethod(clazz,methodName);
+            Object obj = getObj(className);
+            object = method.invoke(obj,args);
         } catch (InvocationTargetException e) {
             msg="오류가 발생했습니다(ite)";
         } catch (IllegalAccessException e) {
@@ -83,30 +85,7 @@ public enum ClassUtil {
             msg="오류가 발생했습니다(e)";
         } finally {
             if(!"".equals(msg)){
-                exitWithError(clazz.getName(),msg);
-            }
-        }
-        return object;
-    }
-
-    public <T> Object invoke(String className, String methodName, T ... t) {
-        Class<?> clazz = getClass(className);
-        Method method = getMethod(clazz,methodName);
-        Object obj = getObj(className);
-        Object object = null;
-        String msg = "";
-        try {
-            object = method.invoke(obj,t);
-        } catch (InvocationTargetException e) {
-            msg="오류가 발생했습니다(ite)";
-        } catch (IllegalAccessException e) {
-            msg="오류가 발생했습니다(iae)";
-        } catch (Exception e){
-            e.printStackTrace();
-            msg="오류가 발생했습니다(e)";
-        } finally {
-            if(!"".equals(msg)){
-                exitWithError(clazz.getName(),msg);
+                exitWithError(className,msg);
             }
         }
         return object;

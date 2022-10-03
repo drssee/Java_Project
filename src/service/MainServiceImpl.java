@@ -9,6 +9,8 @@ import domain.User;
 import java.util.List;
 
 public class MainServiceImpl implements MainService{
+    public MainServiceImpl() {}
+
     MainDAO mainDAO = new MainDAOImpl();
 
     @Override

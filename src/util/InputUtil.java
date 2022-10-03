@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public enum InputUtil implements Errorable {
     INSTANCE;
     BufferedReader bufferedReader;
-    private InputUtil(){
+    InputUtil(){
         this.bufferedReader=new BufferedReader(new InputStreamReader(System.in));
     }
 
@@ -81,13 +81,13 @@ public enum InputUtil implements Errorable {
             tmp = bufferedReader.readLine();
             while(tmp==null||"".equals(tmp)||minNum>Integer.valueOf(tmp)||maxNum<Integer.valueOf(tmp)){
                 printError(minNum+"에서 "+maxNum+"사이의 값을 입력해주세요");
-                tmp = String.valueOf(inputMenuNum(minNum,maxNum));
+                tmp = String.valueOf(inputMenuNum_noQ(minNum,maxNum));
             }
             result = Integer.valueOf(tmp);
         }
         catch (NumberFormatException e) {
             printError("올바른 숫자를 입력해주세요");
-            return inputMenuNum(minNum,maxNum);
+            return inputMenuNum_noQ(minNum,maxNum);
         } catch (IOException e) {
             printError("입력에 실패하였습니다");
             return -1;
@@ -240,5 +240,8 @@ public enum InputUtil implements Errorable {
     private boolean isValidEmail(String str){
         String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
         return Pattern.matches(pattern,str);
+    }
+    public String any() throws IOException {
+        return bufferedReader.readLine();
     }
 }

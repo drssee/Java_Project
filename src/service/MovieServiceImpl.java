@@ -8,6 +8,8 @@ import domain.PageRequest;
 import java.util.List;
 
 public class MovieServiceImpl implements MovieService{
+    public MovieServiceImpl() {}
+
     MovieDAO movieDAO = new MovieDAOImpl();
 
     @Override

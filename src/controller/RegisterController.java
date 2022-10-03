@@ -8,6 +8,7 @@ import view.Login;
 import java.sql.SQLException;
 
 public class RegisterController extends UserController implements Errorable{
+    public RegisterController(){}
     @Override
     public Integer register(){
         User user = new User();

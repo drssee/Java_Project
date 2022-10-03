@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class UserDAOImpl implements UserDAO {
+    public UserDAOImpl() {}
+
     @Override
     public User selectOne(String id) throws Exception{
         String sql = "select * from user where id=?";

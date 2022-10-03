@@ -6,9 +6,7 @@ import java.sql.DriverManager;
 public enum ConnectionUtil{
     INSTANCE;
 
-    ConnectionUtil(){
-
-    }
+    ConnectionUtil(){}
 
     public Connection getConnection() throws Exception {
 

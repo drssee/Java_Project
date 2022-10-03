@@ -10,10 +10,13 @@ import util.MainServiceUtil;
 import util.UserServiceUtil;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class AdminServiceImpl implements AdminService {
+    public AdminServiceImpl() {}
+
     AdminDAO adminDAO = new AdminDAOImpl();
 
 
@@ -38,12 +41,18 @@ public class AdminServiceImpl implements AdminService {
         return adminDAO.getMovieCnt_Searched_byAd(keyword);
     }
     @Override
-    public Integer updateMovie(Movie movie) throws Exception {
-        return adminDAO.updateMovie_byAdmin(movie);
+    public void updateMovie(Movie movie) throws Exception {
+        adminDAO.updateMovie_byAdmin(movie);
     }
     @Override
-    public Integer deleteMovie(Movie movie) throws Exception {
-        return adminDAO.deleteMovie_byAdmin(movie);
+    public void deleteMovie(Movie movie,List<String> IdList) throws Exception {
+        //가져온 아이디 리스트로 유저 리스트를 가져옴
+        List<User> userList = new ArrayList<>();
+        for(int i=0;i<IdList.size();i++){
+            User user = UserServiceUtil.INSTANCE.userService.selectOne(IdList.get(i));
+            userList.add(user);
+        }
+        adminDAO.deleteMovie_byAdmin(movie,userList);
     }
 
     @Override
@@ -104,5 +113,11 @@ public class AdminServiceImpl implements AdminService {
         User user = UserServiceUtil.INSTANCE.userService.selectOne(reservation.getId());
         int price = reservation.getPrice();
         MainServiceUtil.INSTANCE.mainService.deleteRes(rno,user,price);
+    }
+
+    @Override
+    public List<String> getIdList_fromActivatedRes(Movie movie) throws Exception {
+        int tno = movie.getTno();
+        return adminDAO.selIdList_fromActivatedRes(tno);
     }
 }

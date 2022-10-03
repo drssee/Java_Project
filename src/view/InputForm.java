@@ -1,5 +1,7 @@
 package view;
 
+import domain.Movie;
+import formatter.EmFormatter;
 import util.InputUtil;
 
 public enum InputForm {
@@ -64,5 +66,33 @@ public enum InputForm {
     public int inputMovieRuntime(){
         System.out.print("4.영화의 런타임을 입력해주세요(분 단위입력)");
         return InputUtil.INSTANCE.inputMenuNum_noQ(60,360);
+    }
+    public void detailMovie(Movie movie , int max){
+        System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
+        System.out.println("1.영화제목 - "+movie.getTitle()+" | "+"2. 감독 - "+movie.getDirector()+" | "+"3. 런타임 - "+
+                EmFormatter.INSTANCE.formatTime(movie.getRuntime())+" | "+"4. 개봉일&상영스케줄 - "+
+                EmFormatter.INSTANCE.formatDate(movie.getOpenDate())+" & "
+                + EmFormatter.INSTANCE.formatDate(movie.getSchedule())+"\n\n"+
+                "5. 스토리요약 - "+EmFormatter.INSTANCE.formatText(movie.getStory(),max)+"\n");
+        System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
+    }
+
+    public void toMenu(){
+        System.out.println("메뉴로 돌아갑니다");
+    }
+    public void success(String msg){
+        System.out.println(msg+"에 성공했습니다");
+    }
+    public void success1(String msg){
+        System.out.println(msg+" 성공!\n");
+    }
+    public void yes_No(String msg){
+        System.out.println("정말로 "+msg+" 하시겠습니까?y/n");
+    }
+//    public void yes_No1(String msg){
+//        System.out.println(msg+"를 원하시면 y/n 을 입력해주세요");
+//    }
+    public void anyButton(){
+        System.out.print("계속 하시려면 아무 버튼이나 눌러주세요");
     }
 }

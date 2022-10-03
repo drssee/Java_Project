@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDAOImpl implements MovieDAO{
+    public MovieDAOImpl() {}
+
     @Override
     public List<Movie> selectAll_byDate(PageRequest pageRequest) throws Exception {
         String sql = "select * from movie where schedule > now() Limit ? , ?";

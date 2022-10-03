@@ -5,8 +5,10 @@ import dao.UserDAOImpl;
 import domain.User;
 
 public class UserServiceImpl implements UserService { //서비스 인터페이스 상속
-    UserDAO userDAO = new UserDAOImpl();
 
+    public UserServiceImpl() {}
+
+    UserDAO userDAO = new UserDAOImpl();
     @Override
     public User selectOne(String id) throws Exception {
         return userDAO.selectOne(id);

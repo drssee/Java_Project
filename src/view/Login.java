@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Login implements Viewable {
+    public Login() {}
     public Integer loginMenu(){
         System.out.println("로그인 메뉴");
         System.out.println("1.로그인 2.회원가입");

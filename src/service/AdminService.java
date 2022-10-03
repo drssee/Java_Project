@@ -12,8 +12,8 @@ public interface AdminService {
     List<Movie> getSearchedMovieList(PageRequest pageRequest,String keyword) throws Exception;
     Integer getMovieCnt() throws Exception;
     Integer getSearchedMovieCnt(String keyword) throws Exception;
-    Integer updateMovie(Movie movie) throws Exception;
-    Integer deleteMovie(Movie movie) throws Exception;
+    void updateMovie(Movie movie) throws Exception;
+    void deleteMovie(Movie movie,List<String> IdList) throws Exception;
     List<Reservation> getResList(PageRequest pageRequest) throws Exception;
     Integer getResCnt() throws Exception;
     List<Reservation> getSearchedResList(PageRequest pageRequest,String keyword) throws Exception;
@@ -23,4 +23,5 @@ public interface AdminService {
     List<Reservation> getResList_byTno(int tno) throws Exception;
     boolean checkSchedule(Reservation reservation) throws Exception;
     void deleteRes(Reservation reservation) throws Exception;
+    List<String> getIdList_fromActivatedRes(Movie movie) throws Exception;
 }

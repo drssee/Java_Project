@@ -7,28 +7,25 @@ import domain.Reservation;
 import util.AdminServiceUtil;
 import util.ClassUtil;
 import util.InputUtil;
-import util.MainServiceUtil;
 import view.Admin;
+import view.InputForm;
 import view.MainView;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdminController extends Controller{
-    Admin admin = new Admin();
+    public AdminController(){}
     public Integer admin() {
+        Admin admin = new Admin();
         Integer result=-1;
         Movie movie;
         while(result!=0){
             result = admin.AdminMenu();
-            //1.영화등록 2.영화목록(조회,수정,삭제,검색) 3.전체예매자목록(조회,수정,삭제,검색) +유저목록 0.종료
-
+            //1.영화등록 2.영화목록(조회,수정,삭제,검색) 3.전체예매자목록(조회,수정,삭제,검색) 0.종료
             if(result==0){
-//                return result;
                 ClassUtil.INSTANCE.invoke("view.Home","exit");
                 InputUtil.INSTANCE.close();
                 System.exit(0);
@@ -71,15 +68,15 @@ public class AdminController extends Controller{
                         System.out.println(movie);
                         continue;
                     }
-                    System.out.println("영화등록에 성공 했습니다");
-                    System.out.println(movie);
+                    InputForm.INSTANCE.success("영화등록");
+                    InputForm.INSTANCE.detailMovie(movie,40);
 
                     break;
                 }//case 1:영화등록
 
                 //2.영화목록
                 case 2:{
-                    System.out.println("등록된 모든 영화 목록");
+                    admin.curMovieList();
                     try {
                         //초기값
                         Integer totalCnt = AdminServiceUtil.INSTANCE.adminService.getMovieCnt();
@@ -100,7 +97,7 @@ public class AdminController extends Controller{
                             //현재 페이지 저장을 위한 curPage
                             curPage=pageRequest.getPage();
 
-                            //s(검색) m(수정/삭제) p(이전) n(다음) w(메뉴로) q(모드종료)
+                            //s(검색) d(자세히보기) m(수정/삭제) p(이전) n(다음) w(메뉴로) q(모드종료)
                             if(tmp.equalsIgnoreCase("s")){
                                 keyword= admin.input_Search_Keyword();
                                 totalCnt = AdminServiceUtil.INSTANCE.adminService.getSearchedMovieCnt(keyword);
@@ -112,12 +109,22 @@ public class AdminController extends Controller{
                                 }
                                 result = 7;
                             }//if(tmp.equalsIgnoreCase("s")) //검색 모드
-
+                            else if(tmp.equalsIgnoreCase("d")){
+                                selected = admin.sel_modify("자세히보기");
+                                if(selected<0){
+                                    printError();
+                                    continue;
+                                }
+                                movie = movieList.get(selected-1);
+                                InputForm.INSTANCE.detailMovie(movie,40);
+                                InputForm.INSTANCE.anyButton();
+                                InputUtil.INSTANCE.any();
+                            }//if(tmp.equalsIgnoreCase("d")) //자세히보기
                             else if(tmp.equalsIgnoreCase("m")){
                                 //수정 삭제
-                                selected = admin.sel_modify_delete1();
+                                selected = admin.sel_modify("수정/삭제");
                                 if(selected==-1){
-                                    printError("메뉴로 돌아갑니다");
+                                    InputForm.INSTANCE.toMenu();
                                     continue;
                                 }
                                 movie=movieList.get(selected-1);
@@ -125,9 +132,9 @@ public class AdminController extends Controller{
                                     printError();
                                     continue;
                                 }
-                                selected = admin.sel_modify_delete2();
+                                selected = admin.sel_modify_delete();
                                 if(selected==-1){
-                                    printError("메뉴로 돌아갑니다");
+                                    InputForm.INSTANCE.toMenu();
                                     continue;
                                 }
                                 //수정
@@ -135,16 +142,11 @@ public class AdminController extends Controller{
                                     //1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약
                                     movie = admin.modifyMovie(movie);
                                     if(movie==null){
-                                        printError();
+                                        InputForm.INSTANCE.toMenu();
+                                        continue;
                                     }
-
-                                    result = AdminServiceUtil.INSTANCE.adminService.updateMovie(movie);
-                                    if(result!=1){
-                                        printError("영화정보 업데이트에 실패했습니다");
-                                        printError();
-                                        return -1;
-                                    }
-                                    System.out.println("영화정보 업데이트에 성공했습니다");
+                                    AdminServiceUtil.INSTANCE.adminService.updateMovie(movie);
+                                    InputForm.INSTANCE.success("영화정보 업데이트");
                                     break;
                                 }//if 1.수정
 
@@ -153,19 +155,15 @@ public class AdminController extends Controller{
                                     //삭제추가
                                     selected = admin.deleteMovie(movie);
                                     if(selected==1){
-                                        selected = AdminServiceUtil.INSTANCE.adminService.deleteMovie(movie);
-                                        if(selected!=1){
-                                            printError("삭제에 실패했습니다");
-                                            printError();
-                                            continue;
-                                        }
-                                        else if (selected==1){
-                                            System.out.println("삭제에 성공했습니다");
-                                            break;
-                                        }
+                                        //아직 상영전인 예약중에 삭제할 영화를 예매한 고객의 아이디 리스트를 가져옴
+                                        List<String> IdList = AdminServiceUtil.INSTANCE.adminService
+                                                .getIdList_fromActivatedRes(movie);
+                                        AdminServiceUtil.INSTANCE.adminService.deleteMovie(movie,IdList);
+                                        InputForm.INSTANCE.success("삭제");
+                                        break;
                                     }//if 외부
-                                    System.out.println("리스트로 돌아갑니다");
-                                }
+                                    InputForm.INSTANCE.toMenu();
+                                }//else if 2. 삭제
                             }//if(tmp.equalsIgnoreCase("m")) //수정 삭제 모드
                             else if(tmp.equalsIgnoreCase("p")){
                                 //이전
@@ -230,7 +228,7 @@ public class AdminController extends Controller{
                 //3.전체예매자목록
                 case 3:{
                     try {
-                        System.out.println("현재 등록된 영화 목록(조회/수정/삭제)");
+                        admin.curMovieList();
                         Integer totalResCnt = AdminServiceUtil.INSTANCE.adminService.getResCnt();
                         PageRequest pageRequest = new PageRequest(totalResCnt);
                         List<Reservation> reservationList = AdminServiceUtil
@@ -280,7 +278,7 @@ public class AdminController extends Controller{
                                         //수정할 예약을 선택
                                         selected = admin.resConMenu1("수정");
                                         if(selected==-1){
-                                            printError("메뉴로 돌아갑니다");
+                                            InputForm.INSTANCE.toMenu();
                                             continue;
                                         }
                                         Reservation selectedRes = reservationList.get(selected-1);
@@ -300,8 +298,6 @@ public class AdminController extends Controller{
                                                 .map(r->r.getSeatNum()).collect(Collectors.toList());
 
                                         //변경하고싶은 좌석번호를 가져와 검증
-//                                        Object obj = ClassUtil.INSTANCE.getObj("view.MainView");
-//                                        result = (Integer) ClassUtil.INSTANCE.invoke("view.MainView",obj,"showSeatList",seatList);
                                         result = new MainView().showSeatList(seatList);
                                         if(result==-1){
                                             continue;
@@ -313,26 +309,26 @@ public class AdminController extends Controller{
                                         }
                                         //검증에 통과한 경우에만 업데이트
                                         AdminServiceUtil.INSTANCE.adminService.updateRes(selectedRes,result);
-                                        System.out.println("좌석번호 수정에 성공 했습니다");
+                                        InputForm.INSTANCE.success("좌석번호 수정");
                                         break;
                                     }
                                     case 2 :{
                                         selected = admin.resConMenu1("삭제");
                                         if(selected==-1){
-                                            printError("메뉴로 돌아갑니다");
+                                            InputForm.INSTANCE.toMenu();
                                             continue;
                                         }
                                         Reservation selectedRes = reservationList.get(selected-1);
                                         if(selectedRes==null){
                                             throw new Exception();
                                         }
-                                        System.out.println("정말로 삭제 하시겠습니까?");
+                                        InputForm.INSTANCE.yes_No("삭제");
                                         if(admin.confirm()){
                                             AdminServiceUtil.INSTANCE.adminService.deleteRes(selectedRes);
-                                            System.out.println("삭제에 성공했습니다");
+                                            InputForm.INSTANCE.success("삭제");
                                         }
                                         else{
-                                            printError("메뉴로 돌아갑니다");
+                                            InputForm.INSTANCE.toMenu();
                                             continue;
                                         }
                                         break;

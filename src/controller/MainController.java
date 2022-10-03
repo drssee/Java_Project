@@ -18,7 +18,6 @@ public class MainController extends Controller{
     AdminController adminController;
     UserController userController;
     MainView mainView = new MainView();
-    Login login;
     public MainController(){
         outer:
         while(result!=0){
@@ -79,7 +78,7 @@ public class MainController extends Controller{
                         System.out.println("회원가입");
                         result = userController.register();
                         if(result==1){
-                            System.out.println("회원가입에 성공 하셨습니다");
+                            InputForm.INSTANCE.success("회원가입");
                             System.out.println("서비스를 이용하시려면 로그인을 해주세요\n");
                         }
                     }
@@ -106,7 +105,7 @@ public class MainController extends Controller{
                             //현재 게시판 페이지 기억하는 변수
                             curPage=pageRequest.getPage();
 
-                            //s(검색) m(예약) p(이전) n(다음) q(종료)
+                            //s(검색) d(자세히보기) m(예약) p(이전) n(다음) q(종료)
                             if(tmp.equalsIgnoreCase("s")){
                                 //검색기능
                                 //키워드를 입력받아서 키워드에 해당하는 전체 영화 개수를 불러오고 ,
@@ -125,7 +124,19 @@ public class MainController extends Controller{
                                     //검색조건을 알리기 위한 변수
                                     result = 7;
                                 }
-                            }
+                            }//if s
+                            else if(tmp.equalsIgnoreCase("d")){
+                                selected = (int) ClassUtil.INSTANCE.invoke("view.Admin","sel_modify","자세히보기");
+//                                selected = admin.sel_modify("자세히보기");
+                                if(selected<0){
+                                    printError();
+                                    continue;
+                                }
+                                Movie movie = movieList.get(selected-1);
+                                InputForm.INSTANCE.detailMovie(movie,40);
+                                InputForm.INSTANCE.anyButton();
+                                InputUtil.INSTANCE.any();
+                            }//else if d
                             else if(tmp.equalsIgnoreCase("m")){
                                 //isinlogin이 true일때만 들어갈수있음
                                 if(!isInLogin){
@@ -147,7 +158,7 @@ public class MainController extends Controller{
                                 //예매할 영화의 번호를 선택
                                 selected = mainView.selectMovie(movieList.size());
                                 if(selected==-1){
-                                    printError("메뉴로 돌아갑니다");
+                                    InputForm.INSTANCE.toMenu();
                                     continue;
                                 }
                                 //선택된 영화를 가져온다
@@ -210,8 +221,8 @@ public class MainController extends Controller{
                                 if(mainView.confirm(movie)){
                                     //결제기능으로
                                     MainServiceUtil.INSTANCE.mainService.reservation(selected,movie,loginedUser);
-                                    System.out.println(loginedUser.getId()+"님 "+movie.getTitle()+
-                                            "의 예매에 성공하셨습니다");
+                                    InputForm.INSTANCE.success(loginedUser.getId()+"님 "+movie.getTitle()+
+                                            "의 예매");
                                 }
                                 else{
                                     printError(loginedUser.getId()+"님 "+movie.getTitle()+
@@ -308,7 +319,7 @@ public class MainController extends Controller{
                                 if(result !=1) {
                                     throw new Exception();
                                 }
-                                System.out.println("회원정보 변경에 성공했습니다");
+                                InputForm.INSTANCE.success("회원정보 변경");
                                 loginedUser=user;
                             }
                         } catch (Exception e) {
@@ -327,7 +338,7 @@ public class MainController extends Controller{
                                 throw new Exception();
                             }
                             if(reservationList_byUser.size()==0){
-                                System.out.println("예매하신 영화는 존재하지 않습니다");
+                                printError("예매하신 영화는 존재하지 않습니다");
                                 result = 1;
                                 continue outer;
                             }
@@ -345,17 +356,17 @@ public class MainController extends Controller{
                                 result = 1;
                                 continue outer;
                             }//if
-                            System.out.println("정말 취소 하시겠습니까? y/n");
+                            InputForm.INSTANCE.yes_No("취소");
                             if(mainView.confirm()){
                                 MainServiceUtil.INSTANCE.mainService
                                         .deleteRes(selectedRes.getRno(),loginedUser,selectedRes.getPrice());
-                                System.out.println("선택된 예약이 취소되었습니다");
+                                InputForm.INSTANCE.success("선택된 예약의 취소");
                             }
                             result = 1;
                             continue outer;
                         } catch (Exception e) {
                             if(result==-1){
-                                System.out.println("메뉴로 돌아갑니다\n");
+                                InputForm.INSTANCE.toMenu();
                                 continue ;
                             }
                             printError("예약정보를 조회할수 없습니다(e)");

@@ -1,6 +1,6 @@
 package domain;
 
-import formatter.DatetimeFormatter;
+import formatter.EmFormatter;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -16,8 +16,7 @@ public class Movie {
     private Date regDate;
     private int price;
 
-    public Movie() {
-    }
+    public Movie() {}
 
     public Integer getTno() {
         return tno;
@@ -93,8 +92,8 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "상영스케줄 - "+ DatetimeFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+
-                " | "+"런타임 - "+ DatetimeFormatter.INSTANCE.formatTime(getRuntime())+" | "+
+        return "상영스케줄 - "+ EmFormatter.INSTANCE.formatDate(getSchedule())+"(시간:분)"+
+                " | "+"런타임 - "+ EmFormatter.INSTANCE.formatTime(getRuntime())+" | "+
                 "요금 - "+getPrice()+" | "+getTitle()+"\n";
     }
 }

@@ -4,7 +4,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
-import formatter.DatetimeFormatter;
+import formatter.EmFormatter;
 import util.InputUtil;
 
 import java.sql.Timestamp;
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class MainView implements Viewable, Errorable{
+    public MainView() {}
+
     public String showMovieList(List<Movie>movieList, PageRequest pageRequest){
         System.out.println("════════════════════════════════════════════════════예매 가능한 영화 목록════════════════════════════════════════════════════\n");
         Movie movie;
@@ -47,7 +49,7 @@ public class MainView implements Viewable, Errorable{
         IntStream.rangeClosed(1,100).forEach(i->seat.add(String.valueOf(i)));
 
         for(int i=0;i<seatNumList.size();i++){
-            seat.set((seatNumList.get(i)-1)," X");
+            seat.set((seatNumList.get(i)-1)," x");
         }
 
         for(int i=1;i<=seat.size()/10;i++){
@@ -208,7 +210,7 @@ public class MainView implements Viewable, Errorable{
             Reservation r = reservationList.get(i);
             System.out.println((i+1)+". 영화제목:"+r.getTitle()
             +" 상영일자:"+r.getSchedule()+" 좌석번호:"+r.getSeatNum()
-            +" 예매한시간:"+ DatetimeFormatter.INSTANCE
+            +" 예매한시간:"+ EmFormatter.INSTANCE
                             .formatDate(r.getRegDate()));
         }
         System.out.println("취소하고 싶으신 예약이 있으시면");

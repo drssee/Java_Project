@@ -1,6 +1,6 @@
 package domain;
 
-import formatter.DatetimeFormatter;
+import formatter.EmFormatter;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -85,6 +85,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "아이디:"+getId()+" 이름:"+getName()+" 전화번호:"+getPhone()+" 이메일:"+getEmail()+" 등록일:"+ DatetimeFormatter.INSTANCE.formatDate(getRegDate())+" 총 결제금액:"+getTotal_payment();
+        return "아이디:"+getId()+" 이름:"+getName()+" 전화번호:"+getPhone()+" 이메일:"+getEmail()+" 등록일:"+ EmFormatter.INSTANCE.formatDate(getRegDate())+" 총 결제금액:"+getTotal_payment();
     }
 }

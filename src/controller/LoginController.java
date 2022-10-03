@@ -4,12 +4,14 @@ import domain.User;
 import util.ClassUtil;
 import util.UserServiceUtil;
 import view.Errorable;
+import view.InputForm;
 import view.Login;
 
 import java.sql.SQLException;
 import java.util.Map;
 
 public class LoginController extends UserController{
+    public LoginController(){}
     @Override
     public Integer login(){
         Integer result;
@@ -62,12 +64,12 @@ public class LoginController extends UserController{
 
         //로그인 성공 케이스중 아이디가 admin인 경우
         if(user.getId().equals("admin")){
-            System.out.println("관리자모드 로그인 성공!\n");
+            InputForm.INSTANCE.success1("관리자모드 로그인");
             return -9;
         }
 
         //일반 로그인 성공
-        System.out.println("로그인 성공!\n");
+        InputForm.INSTANCE.success1("로그인");
         result=-10;
 
         return result;

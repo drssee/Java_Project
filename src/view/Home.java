@@ -5,9 +5,7 @@ import util.InputUtil;
 
 public class Home implements Viewable {
 
-    public Home(){
-
-    }
+    public Home(){}
     public void mainLogo(){
         System.out.println("\n" +
                 " _____  ______ _____  _   _      ___  ___               _       \n" +
