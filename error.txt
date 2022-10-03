@@ -1,0 +1,24 @@
+상속한 클래스 생성자에서 상속받은 클래스 객체를 만들면 stackoverflow
+
+db와 커넥션을 열고 사용후 닫지 않으면 자원이 반환되지 않음
+
+java util date를 java sql date로 바로 형변환 하면 오류가뜸
+java util date를 java sql date생성자에 gettime 바로하면 잘못된 시간이 입력됨
+calendar를 이용해서 set을 해야함
+
+admindaoimpl의 movie 선언 위치에 따른 변화가 이해가 안됨
+
+db업데이트후 자바user객체도 업데이트 해줘야함(프로그램 실행중이라)
+
+정규식 공부
+
+reflection api로 메소드를 동적호출하면 같은 코드인데 될때 vs 안될때 차이점
+컴파일러가 가변인자 매개변수 처리시 문제가 생길수 있음
+
+예외처리를 한곳에서 하려다 보니 jdbc사용 코드에서 try catch finally를 사용하지 못해서 close에 문제가 생길수 있음
+
+static메서드,변수 최소한으로 사용하기
+
+같은 기능이지만 조금씩 달라서 수정하기 힘든 중복코드가 너무 많음
+
+서로 pk와 fk로 연결된 테이블을 다룰때 문제
