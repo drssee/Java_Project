@@ -46,6 +46,7 @@ public class MainController extends Controller{
                 case 1 : {
                     if(isInLogin){
                         isInLogin=false;
+                        ClassUtil.INSTANCE.invoke("view.Home","logout");
                         break;
                     }
 

@@ -24,7 +24,7 @@ public class MainView implements Viewable, Errorable{
             System.out.println(" "+(i+1)+". "+movie);
         }
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
-        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [등록된 영화검색 s] " +
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n\n [등록된 영화검색 s] " +
                 "[자세히 보기 d] " +
                 "[영화예매 m] " +
                 "[메뉴로 q]");

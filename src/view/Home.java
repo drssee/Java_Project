@@ -16,7 +16,6 @@ public class Home implements Viewable {
                 "\\____/ \\_____/\\____/ \\_| \\_/     \\_|  |_/ \\___/   \\_/  |_| \\___|\n" +
                 "                                                                \n" +
                 "                                                                ");
-        System.out.println("영화 예매 시스템");
     }
 
     public void exit(){
@@ -33,11 +32,19 @@ public class Home implements Viewable {
     public Integer mainMenu(){
         int result=-1;
         if(MainController.isInLogin){
-            System.out.println("1.로그아웃 2.영화목록조회 3.마이페이지 0.종료");
+            System.out.println("\n" +
+                    "|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|\n" +
+                    " 1.로그아웃 2.영화목록조회 3.마이페이지 0.종료\n" +
+                    "|＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿|\n" +
+                    "         \\ (•◡•) /" );
             result = InputUtil.INSTANCE.inputMenuNum(3);
         }
         else {
-            System.out.println("1.로그인 2.영화목록조회(비회원) 0.종료");
+            System.out.println("\n" +
+                    "|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|\n" +
+                    " 1.로그인  2.영화목록조회 3.마이페이지 0.종료\n" +
+                    "|＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿|\n" +
+                    "         \\ (•◡•) /" );
             result = InputUtil.INSTANCE.inputMenuNum(2);
         }
         return result;
@@ -45,6 +52,7 @@ public class Home implements Viewable {
 
     public void welcome(int num,String id){
         if(num==-9){
+            System.out.println("\n");
             System.out.println("EZEN_MOVIE 관리자");
         }
         System.out.println(
@@ -53,5 +61,13 @@ public class Home implements Viewable {
                 "ヽ｀、｀ヽ｀、ヽ｀｀、ヽ｀ヽ｀、ヽヽ｀ヽ、ヽ\n" +
                 "｀ヽ、ヽヽ｀ヽ｀、｀｀ヽ｀ヽ、ヽ、ヽ｀ヽ｀ヽ\n" +
                 "、ヽ｀ヽ｀、ヽヽ｀｀、ヽ｀、ヽヽ \uD800\uDC8A ヽ｀｀\n");
+    }
+    public void logout(){
+        System.out.println("로그아웃에 성공했습니다");
+        System.out.println("\n" +
+                "　　 ∧_∧ \n" +
+                "　　(_  _   )\n" +
+                "　　　ヽ ﾉ) \n" +
+                "　 　 　 ｣｣\n");
     }
 }

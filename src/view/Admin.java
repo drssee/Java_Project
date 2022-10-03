@@ -78,7 +78,7 @@ public class Admin implements Viewable, Errorable{
             System.out.println(" "+(i+1)+". "+movie);
         }
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
-        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [영화검색 s] " +
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n\n [영화검색 s] " +
                 "[자세히 보기 d] " +
                 "[수정/삭제 m] " +
                 "[관리모드메뉴로 w] " +
@@ -200,7 +200,7 @@ public class Admin implements Viewable, Errorable{
             System.out.println(" "+(i+1)+". "+reservation);
         }
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
-        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n [고객id검색 s] " +
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n\n [고객id검색 s] " +
                 "[예약수정/삭제 m] " +
                 "[관리모드메뉴로 w] " +
                 "[관리모드종료 q]");
