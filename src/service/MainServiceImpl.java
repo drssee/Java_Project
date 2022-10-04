@@ -5,8 +5,13 @@ import dao.MainDAOImpl;
 import domain.Movie;
 import domain.Reservation;
 import domain.User;
+import util.MainServiceUtil;
+import util.UserServiceUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MainServiceImpl implements MainService{
     public MainServiceImpl() {}
@@ -61,5 +66,59 @@ public class MainServiceImpl implements MainService{
             }
         }
         return true;
+    }
+    @Override
+    public List<String> getIdList_fromRes(Movie movie) throws Exception {
+        List<Reservation> reservationList = getReservationList(movie.getTno());
+        List<String> idList = new ArrayList<>();
+        for(Reservation r : reservationList){
+            idList.add(r.getId());
+        }
+        return idList;
+    }
+    @Override
+    public List<User> getUserList_fromRes(List<String> idList) throws Exception {
+        //idlist로 userlist 가져와야함
+        List<User> userList = new ArrayList<>();
+        for(int i=0;i<idList.size();i++){
+            User user = UserServiceUtil.INSTANCE.userService.selectOne(idList.get(i));
+            userList.add(user);
+        }
+        return userList;
+    }
+
+    @Override
+    public String analysis(List<User> userList,int tno) throws Exception {
+        //gender age 통계 가져오기
+        if(userList.size()<1){
+            return null;
+        }
+        String result = "";
+        //<gender1or2><count>
+        Map<Integer,Integer> genderMap = mainDAO.groupByGender(userList,tno);
+        //<age><count>
+        Map<Integer,Integer> ageMap = mainDAO.groupByAge(userList,tno);
+
+        //string으로 반환
+        Set<Integer> keySet = genderMap.keySet();
+        for(Integer key : keySet){
+            Integer value = genderMap.get(key);
+            result += (key==1?"남성":"여성")+" "+value+"명 ";
+        }
+        result += " / ";
+        keySet = ageMap.keySet();
+        for(Integer key : keySet){
+            Integer value = ageMap.get(key);
+            result += key+"0대"+" "+value+"명";
+        }
+        return result+"\n";
+    }
+
+    @Override
+    public String getAnalysis(Movie movie) throws Exception {
+        List<String> idList = MainServiceUtil.INSTANCE.mainService.getIdList_fromRes(movie);
+        List<User> userList = MainServiceUtil.INSTANCE.mainService.getUserList_fromRes(idList);
+        int tno = movie.getTno();
+        return MainServiceUtil.INSTANCE.mainService.analysis(userList,tno);
     }
 }

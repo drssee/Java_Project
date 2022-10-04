@@ -33,11 +33,16 @@ public class Login implements Viewable {
     public User inputUser(String id){
         User user = new User();
         String tmp = "";
+        int tmpInt;
         user.setId(id);
         tmp = InputForm.INSTANCE.inputPwd();
         user.setPwd(tmp);
         tmp = InputForm.INSTANCE.inputName();
         user.setName(tmp);
+        tmpInt = InputForm.INSTANCE.inputGender();
+        user.setGender(tmpInt);
+        tmpInt = InputForm.INSTANCE.inputAge();
+        user.setAge(tmpInt);
         tmp = InputForm.INSTANCE.inputPhone();
         user.setPhone(tmp);
         tmp = InputForm.INSTANCE.inputEmail();

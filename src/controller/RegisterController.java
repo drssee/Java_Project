@@ -3,6 +3,7 @@ package controller;
 import domain.User;
 import util.UserServiceUtil;
 import view.Errorable;
+import view.InputForm;
 import view.Login;
 
 import java.sql.SQLException;
@@ -33,6 +34,7 @@ public class RegisterController extends UserController implements Errorable{
             result = UserServiceUtil.INSTANCE.userService.registerUser(user);
             if(result == 1){
                 result = 1;
+                InputForm.INSTANCE.success("회원가입");
                 return result;
             }
         } catch(SQLException e){

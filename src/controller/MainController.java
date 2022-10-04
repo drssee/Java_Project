@@ -134,7 +134,9 @@ public class MainController extends Controller{
                                     continue;
                                 }
                                 Movie movie = movieList.get(selected-1);
-                                InputForm.INSTANCE.detailMovie(movie,40);
+                                String analysis = MainServiceUtil.INSTANCE.mainService
+                                        .getAnalysis(movie);
+                                InputForm.INSTANCE.detailMovie(movie,40,analysis);
                                 InputForm.INSTANCE.anyButton();
                                 InputUtil.INSTANCE.any();
                             }//else if d

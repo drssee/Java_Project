@@ -4,6 +4,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import util.InputUtil;
+import util.MainServiceUtil;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -77,7 +78,7 @@ public class Admin implements Viewable, Errorable{
             System.out.println(" "+(i+1)+". "+movie);
         }
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
-        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n\n [영화검색 s] " +
+        System.out.print(" [이전 p] [현재 페이지: "+pageRequest.getPage()+"] [총 페이지: "+pageRequest.getTotalPage()+"] [다음 n] \n\n [영화제목 검색 s] " +
                 "[자세히 보기 d] " +
                 "[수정/삭제 m] " +
                 "[관리모드메뉴로 w] " +
@@ -96,7 +97,7 @@ public class Admin implements Viewable, Errorable{
         return InputUtil.INSTANCE.inputMenuNum(1,2);
     }
 
-    public Movie modifyMovie(Movie movie) {
+    public Movie modifyMovie(Movie movie,String analysis) {
         String tmpStr="";
         Integer tmpInt1;
         Integer tmpInt2;
@@ -104,7 +105,7 @@ public class Admin implements Viewable, Errorable{
         Integer tmpInt4;
         Integer tmpInt5;
         Calendar cal = Calendar.getInstance();
-        InputForm.INSTANCE.detailMovie(movie,40);
+        InputForm.INSTANCE.detailMovie(movie,40,analysis);
         System.out.println("수정하고 싶은 옵션을 선택해주세요");
         System.out.print("1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약\t");
         tmpInt1 = InputUtil.INSTANCE.inputMenuNum(1,5);
@@ -153,7 +154,7 @@ public class Admin implements Viewable, Errorable{
                 if(!openDate.before(schedule)){
                     //상영날짜가 개봉날짜 보다 이전일때
                     printError("상영날짜는 개봉일보다 이전일수 없습니다");
-                    modifyMovie(movie);
+                    modifyMovie(movie,analysis);
                 }
 
                 movie.setOpenDate(openDate);
@@ -174,8 +175,8 @@ public class Admin implements Viewable, Errorable{
         return movie;
     }//modifymovie(movie)
 
-    public int deleteMovie(Movie movie) {
-        InputForm.INSTANCE.detailMovie(movie,40);
+    public int deleteMovie(Movie movie,String analysis) {
+        InputForm.INSTANCE.detailMovie(movie,40,analysis);
         System.out.println("삭제 하시겠습니까? y/n");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         if(tmp.equalsIgnoreCase("y")){
@@ -185,7 +186,7 @@ public class Admin implements Viewable, Errorable{
             return 0;
         }
         printError("올바른 문자를 입력해주세요");
-        return deleteMovie(movie);
+        return deleteMovie(movie,analysis);
     }
 
     public String input_Search_Keyword() {

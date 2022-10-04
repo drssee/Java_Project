@@ -27,6 +27,8 @@ public class UserDAOImpl implements UserDAO {
         user.setEmail(rs.getString(5));
         user.setRegDate(rs.getDate(6));
         user.setTotal_payment(rs.getInt(7));
+        user.setGender(rs.getInt(9));
+        user.setAge(rs.getInt(10));
         rs.close();
         pstmt.close();
         conn.close();
@@ -37,8 +39,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Integer insertUser(User user) throws Exception {
-        String sql = "insert into webdb.user (id, pwd, name, phone, email)\n" +
-                "values (?,?,?,?,?);";
+        String sql = "insert into webdb.user (id, pwd, name, phone, email,gender,age)\n" +
+                "values (?,?,?,?,?,?,?);";
         int rowCnt;
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -47,6 +49,8 @@ public class UserDAOImpl implements UserDAO {
         pstmt.setString(3,user.getName());
         pstmt.setString(4,user.getPhone());
         pstmt.setString(5,user.getEmail());
+        pstmt.setInt(6,user.getGender());
+        pstmt.setInt(7,user.getAge());
         rowCnt = pstmt.executeUpdate();
         pstmt.close();
         conn.close();

@@ -39,6 +39,14 @@ public enum InputForm {
         System.out.print("3.이름을 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(2,6,false);
     }
+    public int inputGender(){
+        System.out.println("4.성별을 입력해주세요 ✎");
+        return InputUtil.INSTANCE.inputMenuNum(1,2);
+    }
+    public int inputAge(){
+        System.out.println("5.나이를 입력해주세요 ✎");
+        return InputUtil.INSTANCE.inputMenuNum(12,100);
+    }
     public String inputPhone(){
         System.out.print("4.전화번호를 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(8,12,true);
@@ -67,13 +75,14 @@ public enum InputForm {
         System.out.print("4.영화의 런타임을 입력해주세요(분 단위입력) ✎");
         return InputUtil.INSTANCE.inputMenuNum_noQ(60,360);
     }
-    public void detailMovie(Movie movie , int max){
+    public void detailMovie(Movie movie , int max , String analysisData){
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
         System.out.println("1.영화제목 - "+movie.getTitle()+" | "+"2. 감독 - "+movie.getDirector()+" | "+"3. 런타임 - "+
                 EmFormatter.INSTANCE.formatTime(movie.getRuntime())+" | "+"4. 개봉일&상영스케줄 - "+
                 EmFormatter.INSTANCE.formatDate(movie.getOpenDate())+" & "
                 + EmFormatter.INSTANCE.formatDate(movie.getSchedule())+"\n\n"+
-                "5. 스토리요약 - "+EmFormatter.INSTANCE.formatText(movie.getStory(),max)+"\n");
+                "  이 영화를 선택한 유저들의 성별 / 연령 - "+analysisData+"\n"+
+                "  스토리요약 - "+EmFormatter.INSTANCE.formatText(movie.getStory(),max)+"\n");
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
     }
 

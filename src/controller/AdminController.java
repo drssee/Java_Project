@@ -4,9 +4,11 @@ package controller;
 import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
+import domain.User;
 import util.AdminServiceUtil;
 import util.ClassUtil;
 import util.InputUtil;
+import util.MainServiceUtil;
 import view.Admin;
 import view.InputForm;
 import view.MainView;
@@ -69,7 +71,7 @@ public class AdminController extends Controller{
                         continue;
                     }
                     InputForm.INSTANCE.success("영화등록");
-                    InputForm.INSTANCE.detailMovie(movie,40);
+                    InputForm.INSTANCE.detailMovie(movie,40,null);
 
                     break;
                 }//case 1:영화등록
@@ -111,12 +113,22 @@ public class AdminController extends Controller{
                             }//if(tmp.equalsIgnoreCase("s")) //검색 모드
                             else if(tmp.equalsIgnoreCase("d")){
                                 selected = admin.sel_modify("자세히보기");
+                                //선택된 영화번호 검증
                                 if(selected<0){
                                     printError();
                                     continue;
                                 }
                                 movie = movieList.get(selected-1);
-                                InputForm.INSTANCE.detailMovie(movie,40);
+                                //리스트에서 가져온 영화 검증
+                                if(movie==null){
+                                    printError();
+                                    continue;
+                                }
+                                //자세히보기
+                                //가져온 영화정보로 통계 가져오기
+                                String analysis = MainServiceUtil.INSTANCE.mainService
+                                                .getAnalysis(movie);
+                                InputForm.INSTANCE.detailMovie(movie,40,analysis);
                                 InputForm.INSTANCE.anyButton();
                                 InputUtil.INSTANCE.any();
                             }//if(tmp.equalsIgnoreCase("d")) //자세히보기
@@ -140,7 +152,9 @@ public class AdminController extends Controller{
                                 //수정
                                 if(selected==1){
                                     //1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약
-                                    movie = admin.modifyMovie(movie);
+                                    String analysis = MainServiceUtil.INSTANCE.mainService
+                                            .getAnalysis(movie);
+                                    movie = admin.modifyMovie(movie,analysis);
                                     if(movie==null){
                                         InputForm.INSTANCE.toMenu();
                                         continue;
@@ -153,12 +167,14 @@ public class AdminController extends Controller{
                                 //삭제
                                 else if(selected==2){
                                     //삭제추가
-                                    selected = admin.deleteMovie(movie);
+                                    String analysis = MainServiceUtil.INSTANCE.mainService
+                                            .getAnalysis(movie);
+                                    selected = admin.deleteMovie(movie,analysis);
                                     if(selected==1){
-                                        //아직 상영전인 예약중에 삭제할 영화를 예매한 고객의 아이디 리스트를 가져옴
-                                        List<String> IdList = AdminServiceUtil.INSTANCE.adminService
+                                        //아직 상영전인 예약중에 삭제할 영화의 예매한 고객의 아이디 리스트를 가져옴
+                                        List<String> idList = AdminServiceUtil.INSTANCE.adminService
                                                 .getIdList_fromActivatedRes(movie);
-                                        AdminServiceUtil.INSTANCE.adminService.deleteMovie(movie,IdList);
+                                        AdminServiceUtil.INSTANCE.adminService.deleteMovie(movie,idList);
                                         InputForm.INSTANCE.success("삭제");
                                         break;
                                     }//if 외부

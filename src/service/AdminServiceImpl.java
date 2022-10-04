@@ -45,13 +45,9 @@ public class AdminServiceImpl implements AdminService {
         adminDAO.updateMovie_byAdmin(movie);
     }
     @Override
-    public void deleteMovie(Movie movie,List<String> IdList) throws Exception {
+    public void deleteMovie(Movie movie,List<String> idList) throws Exception {
         //가져온 아이디 리스트로 유저 리스트를 가져옴
-        List<User> userList = new ArrayList<>();
-        for(int i=0;i<IdList.size();i++){
-            User user = UserServiceUtil.INSTANCE.userService.selectOne(IdList.get(i));
-            userList.add(user);
-        }
+        List<User> userList = MainServiceUtil.INSTANCE.mainService.getUserList_fromRes(idList);
         adminDAO.deleteMovie_byAdmin(movie,userList);
     }
 

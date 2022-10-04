@@ -15,7 +15,8 @@ public class User {
     private Date regDate;
     private int total_payment;
     private Timestamp modDate;
-
+    private int gender;//1or2
+    private int age;
     public User() {
     }
 
@@ -83,11 +84,28 @@ public class User {
         this.modDate = modDate;
     }
 
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
-        return  "|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|\n"+
-                "   아이디:"+getId()+" 이름:"+getName()+" 전화번호:"+getPhone()+" 이메일:"+getEmail()+
+        return  "|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|\n"+
+                "   아이디:"+getId()+" 이름:"+getName()+" 성별:"+(getGender()==1?"남성":"여성 ")+" 나이:"+getAge()+
+                "  전화번호:"+getPhone()+" 이메일:"+getEmail()+
                 " 등록일:"+ EmFormatter.INSTANCE.formatDate(getRegDate())+" 총 결제금액:"+getTotal_payment()+"\n"+
-                "|＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿|\n";
+                "|＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿|\n";
     }
 }

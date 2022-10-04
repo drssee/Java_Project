@@ -11,7 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainDAOImpl implements MainDAO{
     public MainDAOImpl() {}
@@ -198,5 +200,51 @@ public class MainDAOImpl implements MainDAO{
                 throw new RuntimeException("reservation clsose error");
             }
         }
+    }
+
+    @Override
+    public Map<Integer, Integer> groupByGender(List<User> userList,int tno) throws Exception {
+        String sql = "select gender , count(*)\n" +
+                "from reservation\n" +
+                "    inner join user\n" +
+                "    on reservation.id = user.id\n" +
+                "where tno = ?\n" +
+                "group by 1\n"+
+                "order by 1;";
+        Map<Integer,Integer> genderMap = new HashMap<>();
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1,tno);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            genderMap.put(rs.getInt(1),rs.getInt(2));
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return genderMap;
+    }
+
+    @Override
+    public Map<Integer, Integer> groupByAge(List<User> userList,int tno) throws Exception {
+        String sql = "select TRUNCATE(age/10,0) , count(*)\n" +
+                "from reservation\n" +
+                "    inner join user\n" +
+                "    on reservation.id = user.id\n" +
+                "where tno = ?\n" +
+                "group by 1\n"+
+                "order by 1";
+        Map<Integer,Integer> ageMap = new HashMap<>();
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1,tno);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            ageMap.put(rs.getInt(1),rs.getInt(2));
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return ageMap;
     }
 }
