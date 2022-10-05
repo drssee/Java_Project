@@ -16,7 +16,8 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public Integer insertMovie_byAdmin(Movie movie) throws Exception {
-        String sql = "insert into movie (title, story, director, runtime, opendate, schedule,regDate,price,actor)\n" +
+        String sql = "insert into movie (title, story, director, runtime, opendate, " +
+                "schedule,regDate,price,actor)\n" +
                 "values (?,?,?,?,?,?,?,?,?)";
         int rowCnt;
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
@@ -208,6 +209,7 @@ public class AdminDAOImpl implements AdminDAO {
         PreparedStatement pstmt_user = null;
         PreparedStatement pstmt_tmp1 = null;
         PreparedStatement pstmt_tmp2 = null;
+
         String msg = "삭제 도중 오류가 발생했습니다";
 
         try {
@@ -222,33 +224,29 @@ public class AdminDAOImpl implements AdminDAO {
             pstmt_movie = conn.prepareStatement(sql_movie);
             pstmt_movie.setInt(1, movie.getTno());
             pstmt_movie.executeUpdate();
-
             //영화 삭제 끝
-
 
             String sql_res = "delete from reservation where tno = ?";
             pstmt_res = conn.prepareStatement(sql_res);
             pstmt_res.setInt(1, movie.getTno());
             pstmt_res.executeUpdate();
-
             //예약 삭제 끝
 
-
-            //유저 변경
-            //삭제한 예약이 아직 상영전 영화면 예매한 유저들에게 환불을 해주어야함
-            String sql_user = "update user\n" +
-                    "set total_payment = ?\n" +
-                    "where id = ?";
-            pstmt_user = conn.prepareStatement(sql_user);
-            //해당하는 userList 사이즈가 0이면 아무것도 일어나지 않음
-            for(int i = 0 ;i<userList.size();i++){
-                User user = userList.get(i);
-                pstmt_user.setInt(1, (user.getTotal_payment()-movie.getPrice()));
-                pstmt_user.setString(2, user.getId());
-                pstmt_user.executeUpdate();
+            //삭제할 예약이 아직 상영전 영화면 예매한 유저들에게 환불을 해주어야함
+            if(movie.getSchedule().after(new java.util.Date())){
+                String sql_user = "update user\n" +
+                        "set total_payment = ?\n" +
+                        "where id = ?";
+                pstmt_user = conn.prepareStatement(sql_user);
+                //해당하는 userList 사이즈가 0이면 아무것도 일어나지 않음
+                for(int i = 0 ;i<userList.size();i++){
+                    User user = userList.get(i);
+                    pstmt_user.setInt(1, (user.getTotal_payment()-movie.getPrice()));
+                    pstmt_user.setString(2, user.getId());
+                    pstmt_user.executeUpdate();
+                }
+                //유저 변경 끝
             }
-            //유저 변경 끝
-
 
             sql1 = "set foreign_key_checks=1";
             pstmt_tmp2 = conn.prepareStatement(sql1);

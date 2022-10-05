@@ -90,7 +90,8 @@ public class MovieDAOImpl implements MovieDAO{
 
     @Override
     public Integer getSearchedTotalCount(String keyword) throws Exception {
-        String sql = "select count(*) from movie where schedule > now() and title Like ?";
+        String sql = "select count(*) from movie " +
+                "where schedule > now() and title Like ?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1,"%"+keyword+"%");

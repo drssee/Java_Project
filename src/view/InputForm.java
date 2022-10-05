@@ -1,10 +1,10 @@
 package view;
 
 import domain.Movie;
-import formatter.EmFormatter;
+import util.formatter.EmFormatter;
 import util.InputUtil;
 
-public enum InputForm {
+public enum InputForm implements Viewable{
     INSTANCE;
     InputForm(){}
     public int inputYear(){
@@ -64,8 +64,8 @@ public enum InputForm {
         return InputUtil.INSTANCE.inputStr(1,12);
     }
     public String inputMovieStory(){
-        System.out.print("간단한 줄거리를 입력해주세요(100자이하) ✎");
-        return InputUtil.INSTANCE.inputStr(1,100);
+        System.out.print("간단한 줄거리를 입력해주세요 ✎");
+        return InputUtil.INSTANCE.inputStr(1,1000);
     }
     public String inputMovieDirector(){
         System.out.print("영화감독 이름을 입력해주세요 ✎");
@@ -79,7 +79,7 @@ public enum InputForm {
         System.out.println("영화의 주연배우들을 입력해주세요(배우1,)(배우1,배우2)");
         return InputUtil.INSTANCE.inputStr(2,30,",");
     }
-    public void detailMovie(Movie movie , int max , String analysisData){
+    public void detailMovie(Movie movie , String analysisData){
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
         System.out.println("1.영화제목 - "+movie.getTitle()+" | "+"2. 감독 - "+movie.getDirector()+" | "+"3. 런타임 - "+
                 EmFormatter.INSTANCE.formatTime(movie.getRuntime())+" | "+"4. 개봉일&상영스케줄 - "+

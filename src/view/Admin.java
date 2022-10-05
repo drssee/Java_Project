@@ -4,7 +4,6 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import util.InputUtil;
-import util.MainServiceUtil;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -107,7 +106,7 @@ public class Admin implements Viewable, Errorable{
         Integer tmpInt4;
         Integer tmpInt5;
         Calendar cal = Calendar.getInstance();
-        InputForm.INSTANCE.detailMovie(movie,40,analysis);
+        InputForm.INSTANCE.detailMovie(movie, analysis);
         System.out.println("수정하고 싶은 옵션을 선택해주세요");
         System.out.print("1.영화제목 2.감독 3.배우목록 4.런타임 5.개봉일&상영스케줄 6.스토리요약\t");
         tmpInt1 = InputUtil.INSTANCE.inputMenuNum(1,6);
@@ -181,7 +180,7 @@ public class Admin implements Viewable, Errorable{
     }//modifymovie(movie)
 
     public int deleteMovie(Movie movie,String analysis) {
-        InputForm.INSTANCE.detailMovie(movie,40,analysis);
+        InputForm.INSTANCE.detailMovie(movie, analysis);
         System.out.println("삭제 하시겠습니까? y/n");
         String tmp = InputUtil.INSTANCE.inputStr(1,1);
         if(tmp.equalsIgnoreCase("y")){

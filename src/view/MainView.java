@@ -4,7 +4,7 @@ import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
 import domain.User;
-import formatter.EmFormatter;
+import util.formatter.EmFormatter;
 import util.InputUtil;
 
 import java.sql.Timestamp;

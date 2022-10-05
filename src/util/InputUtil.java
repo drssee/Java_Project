@@ -182,9 +182,8 @@ public enum InputUtil implements Util,Errorable {
         //keyword , == actor 입력
         if(",".equals(keyword)){
             //,가 마지막에 오면 ,삭제후 저장
-            if(keyword.indexOf(",")==(keyword.length()-1)){
-                tmp=tmp.substring(0,(keyword.length()-1));
-                return tmp;
+            if(tmp.indexOf(keyword)==(tmp.length()-1)){
+                return tmp.substring(0,tmp.length()-1);
             }
         }
         if(!tmp.contains(keyword)){

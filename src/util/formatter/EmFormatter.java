@@ -1,10 +1,12 @@
-package formatter;
+package util.formatter;
+
+import util.Util;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public enum EmFormatter {
+public enum EmFormatter implements Util {
     INSTANCE;
 
     EmFormatter() {}

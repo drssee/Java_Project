@@ -4,7 +4,6 @@ package controller;
 import domain.Movie;
 import domain.PageRequest;
 import domain.Reservation;
-import domain.User;
 import util.AdminServiceUtil;
 import util.ClassUtil;
 import util.InputUtil;
@@ -71,7 +70,7 @@ public class AdminController extends Controller{
                         continue;
                     }
                     InputForm.INSTANCE.success("영화등록");
-                    InputForm.INSTANCE.detailMovie(movie,40,null);
+                    InputForm.INSTANCE.detailMovie(movie, null);
 
                     break;
                 }//case 1:영화등록
@@ -128,7 +127,7 @@ public class AdminController extends Controller{
                                 //가져온 영화정보로 통계 가져오기
                                 String analysis = MainServiceUtil.INSTANCE.mainService
                                                 .getAnalysis(movie);
-                                InputForm.INSTANCE.detailMovie(movie,40,analysis);
+                                InputForm.INSTANCE.detailMovie(movie, analysis);
                                 InputForm.INSTANCE.anyButton();
                                 InputUtil.INSTANCE.any();
                             }//if(tmp.equalsIgnoreCase("d")) //자세히보기
@@ -406,7 +405,6 @@ public class AdminController extends Controller{
                             printError();
                             continue;
                         }
-                        e.printStackTrace();
                         printError("해당목록을 조회할수 없습니다(e)");
                         continue;
                     }

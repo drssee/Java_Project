@@ -398,8 +398,8 @@ values ('nene','nene','송지율','010-111-2222','movie8@movie.com',now(),11000,
 insert into reservation (title, schedule, seatnum, tno, id, price)
 values ('범죄도시2','2022-11-15 09:50',10,48,'user1',9000);
 
-insert into reservation (title, schedule, seatnum, tno, id, price)
-values ('범죄도시2','2022-05-20 19:50',21,43,'user1',13000);
+insert into reservation (title, schedule, seatnum, tno, id, price,regDate)
+values ('범죄도시2','2022-05-20 19:50',21,43,'user1',13000,'2022-05-18');
 
 insert into reservation (title, schedule, seatnum, tno, id, price)
 values ('범죄도시2','2022-11-15 09:50',31,48,'whalpha',9000);

@@ -12,7 +12,7 @@ public enum ConnectionUtil implements Util{
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_db"
-                ,"root","root");
+                ,"root","rlaskagus1!");
 
         return connection;
     }

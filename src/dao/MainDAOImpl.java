@@ -165,6 +165,7 @@ public class MainDAOImpl implements MainDAO{
             pstmt_user.executeUpdate();
             user.setTotal_payment(user.getTotal_payment()-price);
             //로그인된 유저가 활성화된 상태니 최신화를 해줌
+
             MainController.loginedUser=user;
 
             //

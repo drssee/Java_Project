@@ -1,6 +1,6 @@
 package domain;
 
-import formatter.EmFormatter;
+import util.formatter.EmFormatter;
 
 import java.sql.Timestamp;
 import java.util.Date;

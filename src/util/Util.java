@@ -1,4 +1,4 @@
 package util;
 
-public interface Util {
+public interface Util{
 }
