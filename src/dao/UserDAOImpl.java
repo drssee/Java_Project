@@ -39,7 +39,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Integer insertUser(User user) throws Exception {
-        String sql = "insert into webdb.user (id, pwd, name, phone, email,gender,age)\n" +
+        String sql = "insert into user " +
+                "(id, pwd, name, phone, email,gender,age)\n" +
                 "values (?,?,?,?,?,?,?);";
         int rowCnt;
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
@@ -59,7 +60,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Integer updateUser(User user) throws Exception {
-        String sql = "update webdb.user\n" +
+        String sql = "update user\n" +
                 "set pwd = ? , name = ? , phone = ? , email = ? , modDate = ?\n" +
                 "where id = ?;";
         int rowCnt;

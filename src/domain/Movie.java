@@ -15,6 +15,7 @@ public class Movie {
     private Timestamp schedule;
     private Date regDate;
     private int price;
+    private String actor;
 
     public Movie() {}
 
@@ -88,6 +89,14 @@ public class Movie {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getActor() {
+        return actor;
+    }
+
+    public void setActor(String actor) {
+        this.actor = actor;
     }
 
     @Override

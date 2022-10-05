@@ -69,7 +69,7 @@ public class MainDAOImpl implements MainDAO{
         String msg = "예약 도중 오류가 발생했습니다";
 
         try {
-            String sql_user = "update webdb.user\n" +
+            String sql_user = "update user\n" +
                     "set total_payment = ?\n" +
                     "where id = ?";
             conn = ConnectionUtil.INSTANCE.getConnection();
@@ -154,7 +154,7 @@ public class MainDAOImpl implements MainDAO{
         PreparedStatement pstmt_res = null;
         String msg = "예약 취소 도중 오류가 발생 했습니다";
         try {
-            String sql_user = "update webdb.user\n" +
+            String sql_user = "update user\n" +
                     "set total_payment = ?\n" +
                     "where id = ?";
             conn = ConnectionUtil.INSTANCE.getConnection();

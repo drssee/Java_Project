@@ -28,52 +28,56 @@ public enum InputForm {
         return InputUtil.INSTANCE.inputMenuNum_noQ(0,59);
     }
     public String inputId(){
-        System.out.print("1.id를 입력해주세요(영문+숫자) ✎");
+        System.out.print("id를 입력해주세요(영문+숫자) ✎");
         return InputUtil.INSTANCE.inputStr(1,3,12);
     }
     public String inputPwd(){
-        System.out.print("2.pwd를 입력해주세요(영문+숫자) ✎");
+        System.out.print("pwd를 입력해주세요(영문+숫자) ✎");
         return InputUtil.INSTANCE.inputStr(1,5,18);
     }
     public String inputName(){
-        System.out.print("3.이름을 입력해주세요 ✎");
+        System.out.print("이름을 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(2,6,false);
     }
     public int inputGender(){
-        System.out.println("4.성별을 입력해주세요 ✎");
-        return InputUtil.INSTANCE.inputMenuNum(1,2);
+        System.out.print("성별을 입력해주세요 ✎");
+        return InputUtil.INSTANCE.inputMenuNum_noQ(1,2);
     }
     public int inputAge(){
-        System.out.println("5.나이를 입력해주세요 ✎");
-        return InputUtil.INSTANCE.inputMenuNum(12,100);
+        System.out.print("나이를 입력해주세요 ✎");
+        return InputUtil.INSTANCE.inputMenuNum_noQ(12,100);
     }
     public String inputPhone(){
-        System.out.print("4.전화번호를 입력해주세요 ✎");
+        System.out.print("전화번호를 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(8,12,true);
     }
     public String inputEmail(){
-        System.out.print("5.이메일을 입력해주세요 ✎");
+        System.out.print("이메일을 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(6,18,"@");
     }
     public String inputKeyword(){
         System.out.print("검색할 키워드를 입력해주세요 ✎\n");
-        return InputUtil.INSTANCE.inputStr(1,12);
+        return InputUtil.INSTANCE.inputStr(1,30);
     }
     public String inputMovieName(){
-        System.out.print("1.영화제목을 입력해주세요 ✎");
+        System.out.print("영화제목을 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(1,12);
     }
     public String inputMovieStory(){
-        System.out.print("2.간단한 줄거리를 입력해주세요(100자이하) ✎");
+        System.out.print("간단한 줄거리를 입력해주세요(100자이하) ✎");
         return InputUtil.INSTANCE.inputStr(1,100);
     }
     public String inputMovieDirector(){
-        System.out.print("3.영화감독 이름을 입력해주세요 ✎");
+        System.out.print("영화감독 이름을 입력해주세요 ✎");
         return InputUtil.INSTANCE.inputStr(1,12,false);
     }
     public int inputMovieRuntime(){
-        System.out.print("4.영화의 런타임을 입력해주세요(분 단위입력) ✎");
+        System.out.print("영화의 런타임을 입력해주세요(분 단위입력) ✎");
         return InputUtil.INSTANCE.inputMenuNum_noQ(60,360);
+    }
+    public String inputActor(){
+        System.out.println("영화의 주연배우들을 입력해주세요(배우1,)(배우1,배우2)");
+        return InputUtil.INSTANCE.inputStr(2,30,",");
     }
     public void detailMovie(Movie movie , int max , String analysisData){
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
@@ -81,8 +85,8 @@ public enum InputForm {
                 EmFormatter.INSTANCE.formatTime(movie.getRuntime())+" | "+"4. 개봉일&상영스케줄 - "+
                 EmFormatter.INSTANCE.formatDate(movie.getOpenDate())+" & "
                 + EmFormatter.INSTANCE.formatDate(movie.getSchedule())+"\n\n"+
-                "  이 영화를 선택한 유저들의 성별 / 연령 - "+analysisData+"\n"+
-                "  스토리요약 - "+EmFormatter.INSTANCE.formatText(movie.getStory(),max)+"\n");
+                "5.주연배우목록 - "+movie.getActor()+"\n\n6.이 영화를 선택한 유저들의 성별 / 연령 - "+(analysisData==null?"아직 데이터가 없습니다\n":analysisData)+"\n"+
+                "7.스토리요약\n"+movie.getStory()+"\n\n");
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n");
     }
 

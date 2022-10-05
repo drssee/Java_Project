@@ -15,7 +15,7 @@ public class MovieDAOImpl implements MovieDAO{
 
     @Override
     public List<Movie> selectAll_byDate(PageRequest pageRequest) throws Exception {
-        String sql = "select * from movie where schedule > now() Limit ? , ?";
+        String sql = "select * from movie where schedule > now() order by schedule Limit ? , ?";
         List<Movie> movieList = new ArrayList<>();
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -33,6 +33,7 @@ public class MovieDAOImpl implements MovieDAO{
             movie.setSchedule(rs.getTimestamp(7));
             movie.setRegDate(rs.getDate(8));
             movie.setPrice(rs.getInt(9));
+            movie.setActor(rs.getString(10));
             movieList.add(movie);
         }
         rs.close();
@@ -46,7 +47,7 @@ public class MovieDAOImpl implements MovieDAO{
         List<Movie> movieList = new ArrayList<>();
         int skip = pageRequest.getSkip();
         int size = pageRequest.getSize();
-        String sql = "select * from movie where schedule > now() and title Like ? order by tno desc Limit ?,?";
+        String sql = "select * from movie where schedule > now() and title Like ? order by schedule desc Limit ?,?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1,"%"+keyword+"%");
@@ -64,6 +65,7 @@ public class MovieDAOImpl implements MovieDAO{
             movie.setSchedule(rs.getTimestamp(7));
             movie.setRegDate(rs.getDate(8));
             movie.setPrice(rs.getInt(9));
+            movie.setActor(rs.getString(10));
             movieList.add(movie);
         }
         rs.close();

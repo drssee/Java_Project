@@ -16,8 +16,8 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public Integer insertMovie_byAdmin(Movie movie) throws Exception {
-        String sql = "insert into movie (title, story, director, runtime, opendate, schedule,regDate,price)\n" +
-                "values (?,?,?,?,?,?,?,?)";
+        String sql = "insert into movie (title, story, director, runtime, opendate, schedule,regDate,price,actor)\n" +
+                "values (?,?,?,?,?,?,?,?,?)";
         int rowCnt;
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -29,6 +29,7 @@ public class AdminDAOImpl implements AdminDAO {
         pstmt.setTimestamp(6, movie.getSchedule());
         pstmt.setDate(7, new java.sql.Date(movie.getRegDate().getTime()));
         pstmt.setInt(8, movie.getPrice());
+        pstmt.setString(9,movie.getActor());
         rowCnt = pstmt.executeUpdate();
         pstmt.close();
         conn.close();
@@ -58,6 +59,7 @@ public class AdminDAOImpl implements AdminDAO {
             movie.setSchedule(rs.getTimestamp(7));
             movie.setRegDate(rs.getDate(8));
             movie.setPrice(rs.getInt(9));
+            movie.setActor(rs.getString(10));
             movieList.add(movie);
         }
         rs.close();
@@ -89,6 +91,7 @@ public class AdminDAOImpl implements AdminDAO {
             movie.setSchedule(rs.getTimestamp(7));
             movie.setRegDate(rs.getDate(8));
             movie.setPrice(rs.getInt(9));
+            movie.setActor(rs.getString(10));
             movieList.add(movie);
         }
         rs.close();
@@ -135,7 +138,7 @@ public class AdminDAOImpl implements AdminDAO {
 
         try {
             String sql_movie = "update movie set title = ? , story = ? , director = ? , " +
-                    "runtime = ? , opendate = ? , schedule = ? ,price = ? where tno = ?";
+                    "runtime = ? , opendate = ? , schedule = ? ,price = ?,actor = ? where tno = ?";
             int rowCnt;
             conn = ConnectionUtil.INSTANCE.getConnection();
             conn.setAutoCommit(false);
@@ -147,7 +150,8 @@ public class AdminDAOImpl implements AdminDAO {
             pstmt_movie.setDate(5, new Date(movie.getOpenDate().getTime()));
             pstmt_movie.setTimestamp(6, movie.getSchedule());
             pstmt_movie.setInt(7, movie.getPrice());
-            pstmt_movie.setInt(8, movie.getTno());
+            pstmt_movie.setString(8,movie.getActor());
+            pstmt_movie.setInt(9, movie.getTno());
             rowCnt = pstmt_movie.executeUpdate();
             if (rowCnt != 1) {
                 throw new Exception();

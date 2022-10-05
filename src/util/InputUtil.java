@@ -179,6 +179,14 @@ public enum InputUtil implements Errorable {
             tmp = inputStr(minNum,maxNum,keyword);
             return tmp;
         }
+        //keyword , == actor 입력
+        if(",".equals(keyword)){
+            //,가 마지막에 오면 ,삭제후 저장
+            if(keyword.indexOf(",")==(keyword.length()-1)){
+                tmp=tmp.substring(0,(keyword.length()-1));
+                return tmp;
+            }
+        }
         if(!tmp.contains(keyword)){
             printError(minNum+"에서 "+maxNum+"사이의 "+keyword+"을 포함하는 문자를 입력해주세요");
             tmp=inputStr(minNum,maxNum,keyword);
@@ -241,7 +249,7 @@ public enum InputUtil implements Errorable {
         String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
         return Pattern.matches(pattern,str);
     }
-    public String any() throws IOException {
-        return bufferedReader.readLine();
+    public void any() throws IOException {
+        bufferedReader.readLine();
     }
 }

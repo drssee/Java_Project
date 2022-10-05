@@ -43,8 +43,10 @@ public class Admin implements Viewable, Errorable{
         movie.setDirector(tmpStr);
         tmpInt1 = InputForm.INSTANCE.inputMovieRuntime();
         movie.setRuntime(tmpInt1);
+        tmpStr = InputForm.INSTANCE.inputActor();
+        movie.setActor(tmpStr);
 
-        System.out.println("5.영화의 오픈 날짜를 입력해주세요(년도 월 일)");
+        System.out.println("6.영화의 오픈 날짜를 입력해주세요(년도 월 일)");
         tmpInt1=InputForm.INSTANCE.inputYear();
 
         tmpInt2=InputForm.INSTANCE.inputMonth();
@@ -53,7 +55,7 @@ public class Admin implements Viewable, Errorable{
 
         movie.setOpenDate(InputUtil.INSTANCE.inputCal(tmpInt1,tmpInt2,tmpInt3).getTime());
 
-        System.out.println("6.영화의 상영일자를 입력해 주세요(년도 월 일 시 분)");
+        System.out.println("7.영화의 상영일자를 입력해 주세요(년도 월 일 시 분)");
         tmpInt1=InputForm.INSTANCE.inputYear();
 
         tmpInt2=InputForm.INSTANCE.inputMonth();
@@ -107,8 +109,8 @@ public class Admin implements Viewable, Errorable{
         Calendar cal = Calendar.getInstance();
         InputForm.INSTANCE.detailMovie(movie,40,analysis);
         System.out.println("수정하고 싶은 옵션을 선택해주세요");
-        System.out.print("1.영화제목 2.감독 3.런타임 4.개봉일&상영스케줄 5.스토리요약\t");
-        tmpInt1 = InputUtil.INSTANCE.inputMenuNum(1,5);
+        System.out.print("1.영화제목 2.감독 3.배우목록 4.런타임 5.개봉일&상영스케줄 6.스토리요약\t");
+        tmpInt1 = InputUtil.INSTANCE.inputMenuNum(1,6);
         if(tmpInt1==-1){
             return null;
         }
@@ -122,10 +124,13 @@ public class Admin implements Viewable, Errorable{
                 movie.setDirector(tmpStr);
                 break;
             } case 3:{
+                tmpStr = InputForm.INSTANCE.inputActor();
+                movie.setActor(tmpStr);
+            } case 4:{
                 tmpInt1 = InputForm.INSTANCE.inputMovieRuntime();
                 movie.setRuntime(tmpInt1);
                 break;
-            } case 4:{
+            } case 5:{
                 System.out.println("개봉일&상영스케줄");
                 System.out.println("4-1.영화의 오픈 날짜를 입력해주세요(년도 월 일)");
                 tmpInt1=InputForm.INSTANCE.inputYear();
@@ -163,7 +168,7 @@ public class Admin implements Viewable, Errorable{
 
                 break;
 
-            } case 5: {
+            } case 6: {
                 tmpStr=InputForm.INSTANCE.inputMovieStory();
                 movie.setStory(tmpStr);
                 break;

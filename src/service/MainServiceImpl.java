@@ -1,5 +1,6 @@
 package service;
 
+import controller.MainController;
 import dao.MainDAO;
 import dao.MainDAOImpl;
 import domain.Movie;
@@ -53,19 +54,23 @@ public class MainServiceImpl implements MainService{
         mainDAO.deleteReservation(rno,user,price);
     }
     @Override
-    public boolean checkTime(Movie movie,List<Reservation> reservations_byUser) {
+    public Integer checkValidMovie(Movie movie, List<Reservation> reservations_byUser) {
+        User loginedUser = MainController.loginedUser;
         //분단위 영화의 런타임을 초단위로 바꿈
         Long duration = Long.valueOf(movie.getRuntime()*60);
         Long scheduledTime = movie.getSchedule().getTime();
         for(int i=0;i<reservations_byUser.size();i++){
+            //선택한 영화가 이미 내가 예매한 영화일경우
+            if(reservations_byUser.get(i).getTno()==movie.getTno()){
+                return -1;
+            }
             Long reservatedTime = reservations_byUser.get(i).getSchedule().getTime();
-            //예약된 리스트의 상영시간들중에 ,
-            //지금 예약하려고 고른 영화의 런타임이 겹칠때
+            //나의 예매된 리스트의 상영시간과 지금 선택한 영화의 런타임이 겹칠때
             if(scheduledTime<=reservatedTime&&reservatedTime<=(scheduledTime+duration)){
-                return false;
+                return -2;
             }
         }
-        return true;
+        return 1;
     }
     @Override
     public List<String> getIdList_fromRes(Movie movie) throws Exception {
@@ -103,13 +108,13 @@ public class MainServiceImpl implements MainService{
         Set<Integer> keySet = genderMap.keySet();
         for(Integer key : keySet){
             Integer value = genderMap.get(key);
-            result += (key==1?"남성":"여성")+" "+value+"명 ";
+            result += (key==1?" [남성 ":" [여성 ")+value+"명]";
         }
         result += " / ";
         keySet = ageMap.keySet();
         for(Integer key : keySet){
             Integer value = ageMap.get(key);
-            result += key+"0대"+" "+value+"명";
+            result += " ["+key+"0대 "+value+"명]";
         }
         return result+"\n";
     }

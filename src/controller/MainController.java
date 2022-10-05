@@ -79,7 +79,6 @@ public class MainController extends Controller{
                         System.out.println("회원가입");
                         result = userController.register();
                         if(result==1){
-                            InputForm.INSTANCE.success("회원가입");
                             System.out.println("서비스를 이용하시려면 로그인을 해주세요\n");
                         }
                     }
@@ -171,13 +170,19 @@ public class MainController extends Controller{
                                     printError();
                                     continue;
                                 }
-
+                                //선택한 영화가 이미 유저가 예매한 영화면 예매불가
                                 //선택한 영화의 시간이 기존에 예매한 영화의 시간과 겹치면 알려줌
-                                if(!MainServiceUtil.INSTANCE.mainService.checkTime(movie,reservations_byUser)){
-                                    printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
-                                            loginedUser.getId()+"님이 예약하신 영화가 이미 존재합니다");
-                                    printError();
-                                    continue;
+                                result = MainServiceUtil.INSTANCE.mainService.checkValidMovie(movie,reservations_byUser);
+                                if(result!=1){
+                                    if(result==-1){
+                                        printError("이미 "+loginedUser.getId()+"님이 예약한 영화입니다");
+                                    }
+                                    else if(result==-2) {
+                                        printError("선택하신 "+movie.getTitle()+ "의 상영시간에 "+
+                                                loginedUser.getId()+"님이 예약하신 영화가 이미 존재합니다");
+                                        printError();
+                                    }
+                                    continue ;
                                 }
 
                                 //db의 reservation 테이블을 조회해서 title,schedule이 일치하는 리스트를 가져옴
@@ -190,14 +195,6 @@ public class MainController extends Controller{
                                     //내가 선택한 영화의 모든 예약 리스트를 가져옴
                                     List<Reservation> reservationList = MainServiceUtil.INSTANCE.mainService
                                             .getReservationList(movie.getTno());
-
-                                    //선택한 영화가 이미 유저가 예매한 영화면 예매불가
-                                    for(int i=0;i<reservationList.size();i++){
-                                        if(reservationList.get(i).getId().equals(loginedUser.getId())){
-                                            printError("이미 "+loginedUser.getId()+"님이 예약한 영화입니다");
-                                            continue outer;
-                                        }
-                                    }
 
                                     //최대 예약가능한 좌석수가 다 차면 불가능
                                     if(reservationList.size()>=RESERVATION_SIZE){
@@ -220,7 +217,6 @@ public class MainController extends Controller{
                                 }
                                 //여기까지 온 selected는 유효한 숫자
                                 //selected를 seatnum로 써야함
-                                //reservation 객체를 조립해서 줘야함
                                 if(mainView.confirm(movie)){
                                     //결제기능으로
                                     MainServiceUtil.INSTANCE.mainService.reservation(selected,movie,loginedUser);
