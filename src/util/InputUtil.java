@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.regex.Pattern;
 
-public enum InputUtil implements Errorable {
+public enum InputUtil implements Util,Errorable {
     INSTANCE;
     BufferedReader bufferedReader;
     InputUtil(){

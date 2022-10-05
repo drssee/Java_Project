@@ -6,7 +6,7 @@ import domain.User;
 
 import java.util.List;
 
-public interface MainService {
+public interface MainService extends Service {
     List<Reservation> getReservationList(int tno) throws Exception;
     Integer getReservationCnt(int tno) throws Exception;
     void reservation(int selected, Movie movie, User user) throws Exception;

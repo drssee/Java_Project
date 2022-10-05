@@ -6,7 +6,7 @@ import domain.Reservation;
 
 import java.util.List;
 
-public interface AdminService {
+public interface AdminService extends Service {
     Integer insertMovie(Movie movie) throws Exception;
     List<Movie> getMovieList(PageRequest pageRequest) throws Exception;
     List<Movie> getSearchedMovieList(PageRequest pageRequest,String keyword) throws Exception;

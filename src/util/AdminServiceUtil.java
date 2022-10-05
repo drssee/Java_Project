@@ -3,7 +3,7 @@ package util;
 import service.AdminService;
 import service.AdminServiceImpl;
 
-public enum AdminServiceUtil {
+public enum AdminServiceUtil implements Util {
     INSTANCE;
     public AdminService adminService;
     AdminServiceUtil(){

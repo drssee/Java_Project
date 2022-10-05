@@ -1,6 +1,7 @@
 drop database if exists movie_db;
 create database movie_db;
 use movie_db;
+set SQL_SAFE_UPDATES = 0;
 
 create table movie
 (

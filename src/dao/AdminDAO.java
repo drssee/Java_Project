@@ -7,7 +7,7 @@ import domain.User;
 
 import java.util.List;
 
-public interface AdminDAO {
+public interface AdminDAO extends DAO {
     Integer insertMovie_byAdmin(Movie movie) throws Exception;
     List<Movie> selectMovieList_byAdmin(PageRequest pageRequest) throws Exception;
     List<Movie> searchedMovieList_byAdmin(PageRequest pageRequest, String keyword) throws Exception;

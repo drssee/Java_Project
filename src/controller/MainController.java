@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 public class MainController extends Controller{
     AdminController adminController;
     UserController userController;
-    MainView mainView = new MainView();
+    MainView mainView;
     public MainController(){
+        mainView = new MainView();
         outer:
         while(result!=0){
 

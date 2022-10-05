@@ -2,7 +2,7 @@ package util;
 
 import java.lang.reflect.*;
 
-public enum ClassUtil {
+public enum ClassUtil implements Util {
     INSTANCE;
     ClassUtil(){}
     public void exitWithError(String className , String msg){

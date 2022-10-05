@@ -6,7 +6,7 @@ import domain.User;
 
 import java.util.List;
 
-public interface MovieService {
+public interface MovieService extends Service {
     List<Movie> getMovieList(PageRequest pageRequest) throws Exception;
     List<Movie> getSearchedMovieList(PageRequest pageRequest,String keyword) throws Exception;
     Integer getTotalCnt() throws Exception;

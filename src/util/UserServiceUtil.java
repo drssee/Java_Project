@@ -2,7 +2,7 @@ package util;
 
 import service.UserServiceImpl;
 
-public enum UserServiceUtil {
+public enum UserServiceUtil implements Util{
     INSTANCE;
     public UserServiceImpl userService;
     UserServiceUtil(){

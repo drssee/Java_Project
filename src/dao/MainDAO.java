@@ -7,7 +7,7 @@ import domain.User;
 import java.util.List;
 import java.util.Map;
 
-public interface MainDAO {
+public interface MainDAO extends DAO {
     void deleteReservation(int rno, User user, int price) throws Exception;
     List<Reservation> selectAll_reservation(int tno) throws Exception;
     Integer getReservationCount(int tno) throws Exception;
