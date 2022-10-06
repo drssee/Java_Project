@@ -139,6 +139,8 @@ set story = '거짓말 못하는 ‘진실의 주둥이’ 컴백! 이번엔 2�
 주둥이 대폭발 코미디가 돌아왔다!'
 where title = '정직한후보2';
 
+
+
 insert into movie_db.movie (title, story, director, runtime
                          , opendate, schedule, regDate ,price, actor)
 values ('듄','1','드니 빌뢰브',155,'2022-10-05','2022-10-07 21:30','2022-10-01',13000,'티모시 샬라메,레베카 퍼거슨,오스카 아이삭');
@@ -175,6 +177,8 @@ set story = '“듄을 지배하는 자가 우주를 지배한다!”
 위대한 자는 부름에 응답한다, 두려움에 맞서라, 이것은 위대한 시작이다!'
 where title = '듄';
 
+
+
 insert into movie_db.movie (title, story, director, runtime
                          , opendate, schedule, regDate ,price, actor)
 values ('인터스텔라','1','크리스토퍼 놀란',169,'2022-10-05','2022-10-07 09:50','2022-10-03',9000,'앤 해서웨이,제시카 차스테인,매튜 맥커너히');
@@ -207,6 +211,8 @@ set story = '“우린 답을 찾을 거야, 늘 그랬듯이”
 사랑하는 가족들을 뒤로 한 채 인류라는 더 큰 가족을 위해, 그들은 이제 희망을 찾아 우주로 간다.
 그리고 우린 답을 찾을 것이다. 늘 그랬듯이…'
 where title = '인터스텔라';
+
+
 
 
 insert into movie_db.movie (title, story, director, runtime
@@ -242,6 +248,8 @@ set story = '‘미스테리오’의 계략으로 세상에 정체가 탄로난
 ‘닥터 옥토퍼스’를 비롯해 스파이더맨에게 깊은 원한을 가진 숙적들의 강력한 공격에
 ‘피터 파커’는 사상 최악의 위기를 맞게 되는데…'
 where title = '스파이더맨-노 웨이 홈, 펀버전';
+
+
 
 insert into movie_db.movie (title, story, director, runtime
                          , opendate, schedule, regDate ,price, actor)
@@ -287,6 +295,8 @@ set story = '공조 이즈 백! 이번엔 삼각 공조다!
 각자의 목적으로 뭉친 그들의 짜릿한 공조 수사가 시작된다!'
 where title = '공조2-인터내셔날';
 
+
+
 insert into movie_db.movie (title, story, director, runtime
                          , opendate, schedule, regDate ,price, actor)
 values ('기생충','1','봉준호',131,'2022-09-11','2022-10-01 18:20','2022-09-06',13000,'송강호,이선균,조여정,최우식,박소담,장혜진');
@@ -322,6 +332,8 @@ set story = '“폐 끼치고 싶진 않았어요”
 젊고 아름다운 사모님 연교(조여정)가 기우를 맞이한다.
 그러나 이렇게 시작된 두 가족의 만남 뒤로, 걷잡을 수 없는 사건이 기다리고 있었으니…'
 where title = '기생충';
+
+
 
 insert into movie_db.movie (title, story, director, runtime
                          , opendate, schedule, regDate ,price, actor)
@@ -363,6 +375,8 @@ set story = '“느낌 오지? 이 놈 잡아야 하는 거”
 나쁜 놈들 잡는 데 국경 없다!
 통쾌하고 화끈한 범죄 소탕 작전이 다시 펼쳐진다! '
 where title = '범죄도시2';
+
+
 
 # 관리자
 insert into movie_db.user (id, pwd, name, phone, email, regDate, gender, age)
@@ -421,3 +435,5 @@ values ('듄','2022-10-12 10:20',99,18,'bochoja',11000);
 
 insert into reservation (title, schedule, seatnum, tno, id, price)
 values ('듄','2022-10-12 10:20',5,18,'nene',11000);
+
+set SQL_SAFE_UPDATES = 1;
