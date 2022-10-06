@@ -422,13 +422,13 @@ insert into reservation (title, schedule, seatnum, tno, id, price)
 values ('범죄도시2','2022-11-15 09:50',55,48,'durian',9000);
 
 insert into reservation (title, schedule, seatnum, tno, id, price)
-values ('스파이더맨-노 웨이 홈','2022-10-12 10:20',28,27,'mintchoco',9000);
+values ('스파이더맨-노 웨이 홈, 펀버전','2022-10-12 10:20',28,27,'mintchoco',9000);
 
 insert into reservation (title, schedule, seatnum, tno, id, price)
-values ('스파이더맨-노 웨이 홈','2022-10-12 10:20',1,27,'aether',9000);
+values ('스파이더맨-노 웨이 홈, 펀버전','2022-10-12 10:20',1,27,'aether',9000);
 
 insert into reservation (title, schedule, seatnum, tno, id, price)
-values ('스파이더맨-노 웨이 홈','2022-10-12 10:20',100,27,'mwosigi',9000);
+values ('스파이더맨-노 웨이 홈, 펀버전','2022-10-12 10:20',100,27,'mwosigi',9000);
 
 insert into reservation (title, schedule, seatnum, tno, id, price)
 values ('듄','2022-10-12 10:20',99,18,'bochoja',11000);

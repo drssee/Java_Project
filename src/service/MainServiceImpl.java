@@ -24,6 +24,10 @@ public class MainServiceImpl implements MainService{
         return mainDAO.selectAll_reservation(tno);
     }
     @Override
+    public List<Reservation> getReservationList(String title) throws Exception {
+        return mainDAO.selectAll_reservation(title);
+    }
+    @Override
     public Integer getReservationCnt(int tno) throws Exception {
         return mainDAO.getReservationCount(tno);
     }
@@ -74,7 +78,7 @@ public class MainServiceImpl implements MainService{
     }
     @Override
     public List<String> getIdList_fromRes(Movie movie) throws Exception {
-        List<Reservation> reservationList = getReservationList(movie.getTno());
+        List<Reservation> reservationList = getReservationList(movie.getTitle());
         List<String> idList = new ArrayList<>();
         for(Reservation r : reservationList){
             idList.add(r.getId());
@@ -93,16 +97,17 @@ public class MainServiceImpl implements MainService{
     }
 
     @Override
-    public String analysis(List<User> userList,int tno) throws Exception {
+    public String analysis(List<User> userList,String title) throws Exception {
+
         //gender age 통계 가져오기
         if(userList.size()<1){
             return null;
         }
         String result = "";
         //<gender1or2><count>
-        Map<Integer,Integer> genderMap = mainDAO.groupByGender(userList,tno);
+        Map<Integer,Integer> genderMap = mainDAO.groupByGender(userList,title);
         //<age><count>
-        Map<Integer,Integer> ageMap = mainDAO.groupByAge(userList,tno);
+        Map<Integer,Integer> ageMap = mainDAO.groupByAge(userList,title);
 
         //string으로 반환
         Set<Integer> keySet = genderMap.keySet();
@@ -123,7 +128,7 @@ public class MainServiceImpl implements MainService{
     public String getAnalysis(Movie movie) throws Exception {
         List<String> idList = MainServiceUtil.INSTANCE.mainService.getIdList_fromRes(movie);
         List<User> userList = MainServiceUtil.INSTANCE.mainService.getUserList_fromRes(idList);
-        int tno = movie.getTno();
-        return MainServiceUtil.INSTANCE.mainService.analysis(userList,tno);
+        String title = movie.getTitle();
+        return MainServiceUtil.INSTANCE.mainService.analysis(userList,title);
     }
 }

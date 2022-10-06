@@ -45,6 +45,32 @@ public class MainDAOImpl implements MainDAO{
     }
 
     @Override
+    public List<Reservation> selectAll_reservation(String title) throws Exception {
+        String sql = "select * from reservation where title=?";
+        List<Reservation> reservationList = new ArrayList<>();
+        Connection conn = ConnectionUtil.INSTANCE.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,title);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            Reservation reservation = new Reservation();
+            reservation.setRno(rs.getInt(1));
+            reservation.setTitle(rs.getString(2));
+            reservation.setSchedule(rs.getTimestamp(3));
+            reservation.setSeatNum(rs.getInt(4));
+            reservation.setTno(rs.getInt(5));
+            reservation.setId(rs.getString(6));
+            reservation.setPrice(rs.getInt(7));
+            reservation.setRegDate(rs.getTimestamp(8));
+            reservationList.add(reservation);
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return reservationList;
+    }
+
+    @Override
     public Integer getReservationCount(int tno) throws Exception {
         String sql = "select count(*) from reservation where tno = ?";
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
@@ -204,18 +230,18 @@ public class MainDAOImpl implements MainDAO{
     }
 
     @Override
-    public Map<Integer, Integer> groupByGender(List<User> userList,int tno) throws Exception {
+    public Map<Integer, Integer> groupByGender(List<User> userList,String title) throws Exception {
         String sql = "select gender , count(*)\n" +
                 "from reservation\n" +
                 "    inner join user\n" +
                 "    on reservation.id = user.id\n" +
-                "where tno = ?\n" +
+                "where title = ?\n" +
                 "group by 1\n"+
                 "order by 1;";
         Map<Integer,Integer> genderMap = new HashMap<>();
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1,tno);
+        pstmt.setString(1,title);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
             genderMap.put(rs.getInt(1),rs.getInt(2));
@@ -227,18 +253,18 @@ public class MainDAOImpl implements MainDAO{
     }
 
     @Override
-    public Map<Integer, Integer> groupByAge(List<User> userList,int tno) throws Exception {
+    public Map<Integer, Integer> groupByAge(List<User> userList,String title) throws Exception {
         String sql = "select TRUNCATE(age/10,0) , count(*)\n" +
                 "from reservation\n" +
                 "    inner join user\n" +
                 "    on reservation.id = user.id\n" +
-                "where tno = ?\n" +
+                "where title = ?\n" +
                 "group by 1\n"+
                 "order by 1";
         Map<Integer,Integer> ageMap = new HashMap<>();
         Connection conn = ConnectionUtil.INSTANCE.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1,tno);
+        pstmt.setString(1,title);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
             ageMap.put(rs.getInt(1),rs.getInt(2));
