@@ -11,5 +11,3 @@
 * Intellij IDEA Ultimate
 * Java 11
 * MySQL
-
-## 자세한 내용은 첨부된 ppt를 참조해 주세요
