@@ -11,3 +11,5 @@
 * Intellij IDEA Ultimate
 * Java 11
 * MySQL
+
+##자세한 내용은 영화예매 프로그램.pptx 에 첨부했습니다
